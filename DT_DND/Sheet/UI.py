@@ -76,83 +76,97 @@ class size:
     h_wallet = 35
 
 
-
 class tag:
-    core = "window_core"
-    health = "window_health"
-    proficiencies = "window_proficiencies"
-    character = "window_character"
-    buffer1 = "window_buffer1"
-    attributes = "window_attributes"
-    initiative = "window_initiative"
-    armor_class = "window_armorclass"
-    vision = "window_vision"
-    speed = "window_speed"
-    conditions = "window_conditions"
-    rest = "window_rest"
-    buffer2 = "window_buffer2"
-    skills = "window_skills"
-    inventory = "window_inventory"
-    block = "window_block"
-    wallet = "window_wallet"
-    
-    level_val = "core_level_val"
-    pb_val = "core_pb_val"
+    class Base:
+        prefix = None
 
-    race_select = "core_race_select"
-    subrace_select = "core_subrace_select"
-    class_select = "core_class_select"
-    subclass_select = "core_subclass_select"
-    background_select = "core_background_select"
-    
-    
-    hp_val = "health_hp_val"
-    hp_temp_val = "health_temp_val"
-    hp_max = "health_hp_max"
-    
-    
-    initiative_val = "initiative_val"
-    armor_class_val = "armor_class_val"
-    
-    vision_main = "vision_main_label"
-    speed_main = "speed_main_label"
+        @classmethod
+        def build(cls, item=None, suffix=None):
+            if cls.prefix is None: raise NotImplementedError("Subclasses must define prefix")
+            if suffix is None: raise ValueError("Suffix must be provided")
+            return f"{cls.prefix}_{item}_{suffix}" if item else f"{cls.prefix}_{suffix}"
 
-    condition_label = "conditions_label"
+        @classmethod
+        def select(cls, item=None): return cls.build(item, "select")
+        @classmethod
+        def val(cls, item=None): return cls.build(item, "val")
+        @classmethod
+        def label(cls, item=None): return cls.build(item, "label")
+        @classmethod
+        def button(cls, item=None): return cls.build(item, "button")
+        @classmethod
+        def source(cls, item=None): return cls.build(item, "source")
+        @classmethod
+        def toggle(cls, item=None): return cls.build(item, "toggle")
+        @classmethod
+        def max(cls, item=None): return cls.build(item, "max")
+        @classmethod
+        def input(cls, item=None): return cls.build(item, "input")
+        @classmethod
+        def text(cls, item=None): return cls.build(item, "text")
+        @classmethod
+        def mod(cls, item=None): return cls.build(item, "mod")
+        @classmethod
+        def sum(cls, item=None): return cls.build(item, "sum")
+        @classmethod
+        def sub(cls, item=None): return cls.build(item, "sub")
+        @classmethod
+        def main(cls, item=None): return cls.build(item, "main")
+        @classmethod
+        def window(cls, item=None): return cls.build(item, "window")
+
+        @classmethod
+        def cell(cls, item1, item2):
+            if cls.prefix is None: raise NotImplementedError("Subclasses must define prefix")
+            return f"{cls.prefix}_{item1}_{item2}_cell"
+        @classmethod
+        def element(cls, *, item=None, suffix=None):
+            if cls.prefix is None: raise NotImplementedError("Subclasses must define prefix")
+            if suffix is None: raise ValueError("Suffix must be provided")
+            return f"{cls.prefix}_{item}_{suffix}" if item else f"{cls.prefix}_{suffix}"
 
 
-
-    @staticmethod
-    def element(*args):
-        parents = args[:-2]
-        item = args[-2]
-        element = args[-1]
-        return f'{"_".join(parents)}_{item}_{element}'
-        
-    @staticmethod
-    def proficiencies(category: str, item: str, element: str):
-        return f"proficiencies_{category}_{item}_{element}"
-
-    @staticmethod
-    def wallet_val(coin: str):
-        return f"wallet_{coin}_val"
-    
-
+        @classmethod
+        def multi(cls, *parents, suffix):
+            if cls.prefix is None: raise NotImplementedError("Subclasses must define prefix")
+            return f"{cls.prefix}_{'_'.join(parents)}_{suffix}"
 
     @staticmethod
-    def conditions(item: str, element: str):
-        return f"conditions_{item}_{element}"
-
-    @staticmethod
-    def rest(item: str):
-        return f"rest_{item}_button"
-
-    @staticmethod
-    def source(parent: str, source: str):
-        return f"{parent}_{source}_source"
+    def gen(parents, items, suffix):
+        parts = []
+        if parents:parts.extend(parents)
+        if items: parts.extend(items)
+        return "_".join(parts) + f"_{suffix}"
     
-    @staticmethod
-    def label(parent: str, source: str):
-        return f"{parent}_{source}_label"
+    class core(Base):   prefix = "core"
+    class health(Base): prefix = "health"
+    class prof(Base):   prefix = "proficiencies"
+    class char(Base):   prefix = "character"
+    class pdesc(Base):  prefix = "pdescription"
+    class buffer1(Base):prefix = "buffer1"
+    class buffer2(Base):prefix = "buffer2"
+    class atr(Base):    prefix = "attributes"
+    class init(Base):   prefix = "initiative"
+    class ac(Base):     prefix = "armor_class"
+    class vision(Base): prefix = "vision"
+    class speed(Base):  prefix = "speed"
+    class cond(Base):   prefix = "condition"
+    class rest(Base):   prefix = "rest"
+    class skill(Base):  prefix = "skills"
+    class inve(Base):   prefix = "inventory"
+    class block(Base):  prefix = "block"
+    class wallet(Base): prefix = "wallet"
+    
+    class rfeature(Base):   prefix = "block_feature_race"
+    class cfeature(Base):   prefix = "block_feature_class"
+    class mfeature(Base):   prefix = "block_feature_milestone"
+    class bfeature(Base):   prefix = "block_feature_background"
+    
+    class wactions(Base):   prefix = "block_actions_weapon"
+
+
+
+
 
 
         
@@ -273,9 +287,9 @@ def create_attribute_row(stat: str):
     label_width=40
     value_width=30
 
-    tSum = tag.element("atr", stat, "sum")
-    tMod = tag.element("atr", stat, "mod")
-    tBase_combo = tag.element("atr", stat, "base_select")
+    tSum = tag.atr.sum(stat)
+    tMod = tag.atr.mod(stat)
+    tBase_combo = tag.atr.element(item=stat, suffix="base_select")
 
     with group(horizontal=True):
         add_button(label=stat, enabled=False, width=label_width)
@@ -291,7 +305,7 @@ def create_attribute_row(stat: str):
         for source in ["Base", "Race", "Feat"]:
             with group(horizontal=True):
                 add_button(label=source, enabled=False, width=label_width)
-                tSource = tag.element("atr", stat, source.lower())
+                tSource = tag.atr.source(stat, source.lower())
                 add_button(label="", enabled=False, width=25, tag=tSource)
 
 
@@ -300,10 +314,10 @@ def create_skill_row(skill: str):
     label_width = 113
     mod_width = 30
 
-    tLabel = tag.element("skill", skill, "label")
-    tBool = tag.element("skill", skill, "bool")
-    tMod = tag.element("skill", skill, "mod")
-    tSource = tag.element("skill", skill, "source")
+    tLabel = tag.skill.label(skill)
+    tBool = tag.skill.toggle(skill)
+    tMod = tag.skill.mod(skill)
+    tSource = tag.skill.source(skill)
     
     with group(horizontal=True): 
         add_button(label=skill, enabled=False, width=label_width, tag=tLabel)
@@ -320,16 +334,16 @@ def create_skill_row(skill: str):
 
 
 def create_pdescription():
-    tLabel = tag.element("pdescription", "main", "label")
+    tLabel = tag.pdesc.label("main", "label")
     with popup(tLabel, mousebutton=mvMouseButton_Left):
         for item in g.list_Description: 
-            tInput = tag.element("pdescription", item, "input")
+            tInput = tag.input(item)
             with group(horizontal=True):
                 add_button(label=item, enabled=False, width=size.w_l_btn)
                 add_input_text(default_value="", on_enter=True, width = 70, user_data=["Description", item], callback=cbh, tag=tInput)
     with tooltip(tLabel):
         for item in g.list_Description: 
-            tText = tag.element("pdescription", item, "text")
+            tText = tag.pdesc.text(item)
             with group(horizontal=True):
                 add_button(label=item, enabled=False, width=size.w_l_btn)
                 add_text("", color=c_h2, wrap=400, tag=tText)
@@ -338,9 +352,9 @@ def create_pdescription():
 
 
 def create_ideals(name: str):
-    tLabel = tag.element("character", name, "label")
-    tInput = tag.element("character", name, "input")
-    tText = tag.element("character", name, "text")
+    tLabel = tag.char.label("character", name, "label")
+    tInput = tag.char.input("character", name, "input")
+    tText = tag.char.text("character", name, "text")
     with popup(tLabel, mousebutton=mvMouseButton_Left): add_input_text(default_value="", on_enter=True, user_data=["Characteristic", name], callback=cbh, tag=tInput)
     with tooltip(tLabel): add_text("", tag=tText, wrap=400)
 
@@ -353,7 +367,7 @@ def create_proficiency_popup(tLabel: str, proficiency_map: dict):
                     add_text(category)
                     add_separator()
                     for item in items:
-                        tSelectable = tag.element(category, item, "selectable")
+                        tSelectable = tag.prof.multi(category, item, suffix="toggle")
                         add_selectable(label=g.pName(item), default_value=False, user_data=["Player Prof Input", category, item], callback=cbh, tag=tSelectable)
 
     with tooltip(tLabel):
@@ -363,80 +377,80 @@ def create_proficiency_popup(tLabel: str, proficiency_map: dict):
                     add_text(category)
                     add_separator()
                     for item in items:
-                        tText = tag.element(category, item, "text")
+                        tText = tag.prof.multi(category, item, suffix="text")
                         add_text(g.pName(item), color=(0, 0, 0), tag=tText)
 
 
 def W_Skeleton():
-    with window(no_title_bar=True, no_close=True, autosize=True, tag=tag.main):
+    with window(no_title_bar=True, no_close=True, autosize=True, tag="window_main"):
         with group(horizontal=True):
             with group(horizontal=False):
                 with group(horizontal=True):
                     with group(horizontal=False):
-                        add_child_window(tag=tag.core, width=size.w_core, height=size.h_core, border=True, no_scrollbar=True)
-                        add_child_window(tag=tag.health, width=size.w_health, height=size.h_health, border=True)
-                        add_child_window(tag=tag.proficiencies, width=size.w_proficiencies, height=size.h_proficiencies, border=True)
-                        add_child_window(tag=tag.character, width=size.w_character, height=size.h_character, border=True)
-                        add_child_window(tag=tag.buffer1, width=size.w_buffer_2, height=size.h_buffer_2, border=True, no_scrollbar=True)
+                        add_child_window(tag=tag.core.window(), width=size.w_core, height=size.h_core, border=True, no_scrollbar=True)
+                        add_child_window(tag=tag.health.window(), width=size.w_health, height=size.h_health, border=True)
+                        add_child_window(tag=tag.prof.window(), width=size.w_proficiencies, height=size.h_proficiencies, border=True)
+                        add_child_window(tag=tag.char.window(), width=size.w_character, height=size.h_character, border=True)
+                        add_child_window(tag=tag.buffer1.window(), width=size.w_buffer_2, height=size.h_buffer_2, border=True, no_scrollbar=True)
                     with group(horizontal=False):
-                        add_child_window(tag=tag.attributes, width=size.w_attributes, height=size.h_attributes, border=True)
+                        add_child_window(tag=tag.atr.window(), width=size.w_attributes, height=size.h_attributes, border=True)
                         with group(horizontal=True):
-                            add_child_window(tag=tag.initiative, width=size.w_initiative, height=size.h_initiative, border=True)
-                            add_child_window(tag=tag.armor_class, width=size.w_armor_class, height=size.h_armor_class, border=True)
+                            add_child_window(tag=tag.init.window(), width=size.w_initiative, height=size.h_initiative, border=True)
+                            add_child_window(tag=tag.ac.window(), width=size.w_armor_class, height=size.h_armor_class, border=True)
                         with group(horizontal=True):
-                            add_child_window(tag=tag.vision, width=size.w_vision, height=size.h_vision, border=True)
-                            add_child_window(tag=tag.speed, width=size.w_speed, height=size.h_speed, border=True)
-                        add_child_window(tag=tag.conditions, width=size.w_conditions, height=size.h_conditions, border=True)
-                        add_child_window(tag=tag.rest, width=size.w_rest, height=size.h_rest, border=True)
-                        add_child_window(tag=tag.buffer2, width=size.w_buffer_1, height=size.h_buffer_1, border=True, no_scrollbar=True)
+                            add_child_window(tag=tag.vision.window(), width=size.w_vision, height=size.h_vision, border=True)
+                            add_child_window(tag=tag.speed.window(), width=size.w_speed, height=size.h_speed, border=True)
+                        add_child_window(tag=tag.cond.window(), width=size.w_conditions, height=size.h_conditions, border=True)
+                        add_child_window(tag=tag.rest.window(), width=size.w_rest, height=size.h_rest, border=True)
+                        add_child_window(tag=tag.buffer2.window(), width=size.w_buffer_1, height=size.h_buffer_1, border=True, no_scrollbar=True)
                     with group(horizontal=False):
-                        add_child_window(tag=tag.skills, width=size.w_skills, height=size.h_skills, border=True, no_scrollbar=True)
+                        add_child_window(tag=tag.skill.window(), width=size.w_skills, height=size.h_skills, border=True, no_scrollbar=True)
                 with group(horizontal=False):
-                    add_child_window(tag=tag.inventory, width=size.w_inventory, height=size.h_inventory + 12, border=True, no_scrollbar=True)
+                    add_child_window(tag=tag.inve.window(), width=size.w_inventory, height=size.h_inventory + 12, border=True, no_scrollbar=True)
             with group(horizontal=False):
-                add_child_window(tag=tag.block, width=size.w_block, height=size.h_block, border=True, no_scrollbar=True)
-                add_child_window(tag=tag.wallet, width=size.w_wallet, height=size.h_wallet, border=True, no_scrollbar=True)
+                add_child_window(tag=tag.block.window(), width=size.w_block, height=size.h_block, border=True, no_scrollbar=True)
+                add_child_window(tag=tag.wallet.window(), width=size.w_wallet, height=size.h_wallet, border=True, no_scrollbar=True)
 
 def w_wallet():
-    with group(parent=tag.wallet):
+    with group(parent=tag.wallet.window()):
         with group(horizontal=True):
             for i in g.list_Coins:
                 with group(horizontal=True):
                     add_button(label=i)
-                    add_text("0", color=c_h9, tag=tag.wallet_val(i))
+                    add_text("0", color=c_h9, tag=tag.wallet.val(i))
 
 
 def w_CORE():
     w_max=size.w_core-16
     h_max=size.h_core-16
-    with group(parent=tag.core):
+    with group(parent=tag.core.window()):
         add_button(label="Character info", enabled=False, width=w_max, height = size.h_header)
         with group(horizontal=True):
             add_button(label="Level", enabled=False, width=50)
             add_button(label="<", user_data=["Level Input", -1], callback=cbh)
-            add_button(label="", width=25, tag=tag.level_val)
+            add_button(label="", width=25, tag=tag.core.val("level"))
             add_button(label=">", user_data=["Level Input", 1], callback=cbh)
-            add_button(label="", enabled=False, width=55, tag=tag.pb_val)
+            add_button(label="", enabled=False, width=55, tag=tag.core.val("pb"))
             with group(horizontal=True):
                 add_button(label="Race", enabled=False, width=80)
-                add_combo(width=w_max-88, no_arrow_button=True, user_data=[f"Core Race"], callback = cbh, tag=tag.race_select)
+                add_combo(width=w_max-88, no_arrow_button=True, user_data=[f"Core Race"], callback = cbh, tag=tag.core.select("race"))
             with group(horizontal=True):
                 add_button(label="Subrace", enabled=False, width=80)
-                add_combo(width=w_max-88, no_arrow_button=True, user_data=[f"Core Subrace"], callback = cbh, tag=tag.subrace_select)
+                add_combo(width=w_max-88, no_arrow_button=True, user_data=[f"Core Subrace"], callback = cbh, tag=tag.core.select("subrace"))
             with group(horizontal=True):
                 add_button(label="Class", enabled=False, width=80)
-                add_combo(width=w_max-88, no_arrow_button=True, user_data=[f"Core Class"], callback = cbh, tag=tag.class_select)        
+                add_combo(width=w_max-88, no_arrow_button=True, user_data=[f"Core Class"], callback = cbh, tag=tag.core.select("class"))        
             with group(horizontal=True):
                 add_button(label="Subclass", enabled=False, width=80)
-                add_combo(width=w_max-88, no_arrow_button=True, user_data=[f"Core Subclass"], callback = cbh, tag=tag.subclass_select)        
+                add_combo(width=w_max-88, no_arrow_button=True, user_data=[f"Core Subclass"], callback = cbh, tag=tag.core.select("subclass"))        
             with group(horizontal=True):
                 add_button(label="Background", enabled=False, width=80)
-                add_combo(width=w_max-88, no_arrow_button=True, user_data=[f"Core Background"], callback = cbh, tag=tag.background_select)
+                add_combo(width=w_max-88, no_arrow_button=True, user_data=[f"Core Background"], callback = cbh, tag=tag.core.select("background"))
 
 
                 
 def w_ATRB():
-    with group(parent=tag.attributes):
+    with group(parent=tag.atr.window()):
         w_max=size.w_atr-16
         add_button(label="Attributes", enabled=False, width=w_max, height=size.h_header)
         for stat in g.list_Atr:
@@ -445,7 +459,7 @@ def w_ATRB():
 
 
 def w_HEAL():
-    with group(parent=tag.health):
+    with group(parent=tag.health.window()):
         w_max=size.w_health-16
         h_max=size.h_health-15
         add_button(label="Health", enabled=False, width=w_max, height=size.h_header)
@@ -457,126 +471,125 @@ def w_HEAL():
                 add_button(label="+", width=size.w_s_btn, user_data=["HP","Temp", 1], callback=cbh)
             with group(horizontal=True):
                 add_button(label="-", width=size.w_s_btn, user_data=["HP","HP", -1], callback=cbh)
-                add_button(label="", enabled=False, width=w_max-108, tag=tag.hp_val)
-                add_button(label="", enabled=False, width=w_max-150, tag=tag.hp_temp_val)
+                add_button(label="", enabled=False, width=w_max-108, tag=tag.health.val("hp"))
+                add_button(label="", enabled=False, width=w_max-150, tag=tag.health.val("temp"))
                 add_button(label="-", width=size.w_s_btn, user_data=["HP","Temp", -1], callback=cbh)
     
     with popup("health_label", mousebutton=mvMouseButton_Left):
         add_button(label="Max", width=size.w_l_btn)
-        add_input_int(default_value=0, width=90, user_data=["Player HP Mod"], callback=cbh, tag=tag.hp_max)
+        add_input_int(default_value=0, width=90, user_data=["Player HP Mod"], callback=cbh, tag=tag.health.max("hp"))
         
 
 def w_SKIL():
     w_max=tag.w_skill-16
     h_max=tag.w_skill-15
-    with group(parent=tag.skill):
+    with group(parent=tag.skill.window()):
         add_button(label="Skills", enabled=False, width=w_max, height=size.h_header)
         for skill in g.list_Skill:
             create_skill_row(skill)
 
 
 def w_INIT():
-    with group(parent=tag.initiative):
-        add_button(label="Init", enabled=False, width=size.w_m_btn)
-        add_button(label="", enabled=False, width=size.w_m_btn, tag=tag.initiative_val)
-    with tooltip(tag.initiative_val):
+    with group(parent=tag.init.window()):
+        add_button(label="Init", enabled=False, width=size.w_m_btn, tag=tag.init.label())
+        add_button(label="", enabled=False, width=size.w_m_btn, tag=tag.init.val())
+    with tooltip(tag.init.label()):
         for source in ["Dex", "Race", "Class"]:
             with group(horizontal=True):
                 add_button(label=source, enabled=False, width=40)
-                add_button(label="", enabled=False, width=25, tag=tag.source("initiative",source))
+                add_button(label="", enabled=False, width=25, tag=tag.init.source(source))
 
 def w_ARMO():
-    with group(parent=tag.armor_class):
-        add_button(label="AC", enabled=False, width=size.w_m_btn)
-        add_button(label="", enabled=False, width=size.w_m_btn, tag=tag.armor_class_val)
+    with group(parent=tag.ac.window()):
+        add_button(label="AC", enabled=False, width=size.w_m_btn, tag=tag.ac.label())
+        add_button(label="", enabled=False, width=size.w_m_btn, tag=tag.ac.val())
 
-        with tooltip(tag.armor_class_val):
+        with tooltip(tag.ac.label()):
             with group(horizontal=True):
                 add_button(label="Base", enabled=False, width=50)
-                add_button(label="", enabled=False, width=40, tag=tag.source("armor_class","base"))
+                add_button(label="", enabled=False, width=40, tag=tag.ac.source("base"))
             with group(horizontal=True):
                 add_button(label="Dex", enabled=False, width=50)
-                add_button(label="", enabled=False, width=40, tag=tag.source("armor_class","dex"))
+                add_button(label="", enabled=False, width=40, tag=tag.ac.source("dex"))
 
 
 
 def w_VISI():
-    with group(parent=tag.vision):
-        add_button(label="Vision", enabled=False, width=size.w_m_btn)
-        add_button(label="", enabled=False, width=size.w_m_btn, tag=tag.vision_main)
-    with tooltip(tag.vision_main):
+    with group(parent=tag.vision.window()):
+        add_button(label="Vision", enabled=False, width=size.w_m_btn, tag = tag.vision.label())
+        add_button(label="", enabled=False, width=size.w_m_btn, tag=tag.vision.val())
+    with tooltip(tag.vision.label()):
         for i in g.list_Vision:
             with group(horizontal=True):
                 add_button(label=i, enabled=False, width=50)
-                add_button(label="", enabled=False, width=40, tag=tag.source("vision",i))
+                add_button(label="", enabled=False, width=40, tag=tag.vision.source(i))
 
 def w_SPEE():
-    with group(parent=tag.speed):
-        add_button(label="Speed", enabled=False, width=size.w_m_btn)
-        add_button(label="", enabled=False, width=size.w_m_btn, tag=tag.speed_main)
-    with tooltip(tag.speed_main):
+    with group(parent=tag.speed.window()):
+        add_button(label="Speed", enabled=False, width=size.w_m_btn, tag = tag.speed.label())
+        add_button(label="", enabled=False, width=size.w_m_btn, tag=tag.speed.val())
+    with tooltip(tag.speed.label()):
         for i in g.list_Speed:
             with group(horizontal=True):
                 add_button(label=i, enabled=False, width=50)
-                add_button(label="", enabled=False, width=40, tag=tag.source("speed",i))
+                add_button(label="", enabled=False, width=40, tag=tag.speed.source(i))
 
 
 
 def w_COND():
-    with group(parent=tag.conditions):
-        add_button(label="Conditions", enabled=False, width=size.w_header_2, height=26, tag=tag.condition_label)
-    with popup(tag.condition_label, mousebutton=mvMouseButton_Left):
+    with group(parent=tag.conditions.window()):
+        add_button(label="Conditions", enabled=False, width=size.w_header_2, height=26, tag=tag.cond.label())
+    with popup(tag.cond.label(), mousebutton=mvMouseButton_Left):
         with child_window(auto_resize_x=True, auto_resize_y=True, border=True):
             for i in g.list_Condition:
-                add_selectable(label=i, default_value=False, user_data=["Condition", i], callback=cbh, tag=tag.conditions(i, "selectable"))
-    with tooltip(tag.condition_label):
+                add_selectable(label=i, default_value=False, user_data=["Condition", i], callback=cbh, tag=tag.cond.toggle(i))
+    with tooltip(tag.cond.label()):
         with child_window(auto_resize_x=True, auto_resize_y=True, border=True):
             for i in g.list_Condition:
-                add_text(i, color=(0, 0, 0), tag=tag.conditions(i, "text"))
+                add_text(i, color=(0, 0, 0), tag=tag.cond.text(i))
 
 
 def w_REST():
-    with group(parent=tag.rest):
-        add_button(label="Short Rest", width=size.w_header_2, height=30, user_data=["Short Rest"], callback=cbh, tag=tag.rest("short"))
-        add_button(label="Long Rest", width=size.w_header_2, height=30, user_data=["Long Rest"], callback=cbh, tag=tag.rest("long"))
+    with group(parent=tag.rest.window()):
+        add_button(label="Short Rest", width=size.w_header_2, height=30, user_data=["Short Rest"], callback=cbh, tag=tag.rest.button("short"))
+        add_button(label="Long Rest", width=size.w_header_2, height=30, user_data=["Long Rest"], callback=cbh, tag=tag.rest.button("short"))
 
 
 def w_BUFF():
     pass
 
-tag.proficiencies_label()
 
 def w_PROF():
     w_max=size.w_proficiencies-16
     h_max=size.w_proficiencies-15
     btn_w = w_max-101
-    with group(parent=tag.proficiencies):
+    with group(parent=tag.prof.window()):
         add_button(label="Proficiencies", enabled=False, width=w_max, height=size.h_header)
         with group(horizontal=True):
-            add_button(label="Weapons", width=btn_w, tag=tag.label("proficiencies","weapon"))
-            add_button(label="Armor", width=btn_w, tag=tag.label("proficiencies","armor"))
+            add_button(label="Weapons", width=btn_w, tag=tag.prof.label("weapon"))
+            add_button(label="Armor", width=btn_w, tag=tag.prof.label("armor"))
         with group(horizontal=True):
-            add_button(label="Tools", width=btn_w, tag=tag.label("proficiencies","tool"))
-            add_button(label="Languages", width=btn_w, tag=tag.label("proficiencies","lang"))
+            add_button(label="Tools", width=btn_w, tag=tag.prof.label("tool"))
+            add_button(label="Languages", width=btn_w, tag=tag.prof.label("lang"))
 
     # Create popups using the helper
-    create_proficiency_popup(tag.label("proficiencies","weapon"), {k: set(q.w.prof("Weapon")) & set(q.w.cat(k)) for k in ["Simple", "Martial"]})
-    create_proficiency_popup(tag.label("proficiencies","armor"), {"Armor": q.w.prof("Armor")})
-    create_proficiency_popup(tag.label("proficiencies","tool"), {"Artisan": g.list_Job, "Gaming": g.list_Game, "Musical": g.list_Music})
-    create_proficiency_popup(tag.label("proficiencies","lang"), {"Languages": g.list_Lang})
+    create_proficiency_popup(tag.label(tag.prof.label("weapon")), {k: set(q.w.prof("Weapon")) & set(q.w.cat(k)) for k in ["Simple", "Martial"]})
+    create_proficiency_popup(tag.label(tag.prof.label("armor")), {"Armor": q.w.prof("Armor")})
+    create_proficiency_popup(tag.prof.label("tool"), {"Artisan": g.list_Job, "Gaming": g.list_Game, "Musical": g.list_Music})
+    create_proficiency_popup(tag.prof.label("lang"), {"Languages": g.list_Lang})
 
 def w_CHAR():
     w_max=size.w_character-16
     h_max=size.h_character-15
     btn_w = w_max-101
-    with group(parent=tag.character):
-        add_button(label="Characteristics", enabled=False, width=w_max, height=size.h_header, tag=tag.label("pdescription","main"))
+    with group(parent=tag.char.window()):
+        add_button(label="Characteristics", enabled=False, width=w_max, height=size.h_header, tag=tag.pdesc.label())
         with group(horizontal=True):
-            add_button(label="Traits", width=btn_w, tag=tag.label("character","traits"))
-            add_button(label="Ideals", width=btn_w, tag=tag.label("character","ideals"))
+            add_button(label="Traits", width=btn_w, tag=tag.char.label("traits"))
+            add_button(label="Ideals", width=btn_w, tag=tag.char.label("ideals"))
         with group(horizontal=True):
-            add_button(label="Bonds", width=btn_w, tag=tag.label("character","bonds"))
-            add_button(label="Flaws", width=btn_w, tag=tag.label("character","flaws"))
+            add_button(label="Bonds", width=btn_w, tag=tag.char.label("bonds"))
+            add_button(label="Flaws", width=btn_w, tag=tag.char.label("flaws"))
     for i in g.list_Ideals: create_ideals(i)
     create_pdescription()
 
@@ -590,38 +603,38 @@ def w_BLOC():
     w2 = w1 - 16
     h1 = size.H_block - 40
     h2 = h1 - 15
-    with group(parent=tag.block):
+    with group(parent=tag.block.window()):
         with tab_bar(tag="block_tabbar"):
             with tab(label="Features/Traits"):
                 with child_window(width=w1, height=h1, border=True):
                     add_separator(label="Race")
-                    with child_window(auto_resize_y=True, width=w2, border=True, tag = "features_race_sub"):
+                    with child_window(auto_resize_y=True, width=w2, border=True, tag = tag.rfeature.sub()):
                         with group(horizontal=True):
                             add_text("Ability Score Increase: +1/+2", color=c_h1)
-                            add_combo(items=g.list_Atr, default_value="",  width=50, no_arrow_button=True, user_data=["Race Asi", 0], callback=cbh, tag="features_race_asi_0")
-                            add_combo(items=g.list_Atr, default_value="",  width=50, no_arrow_button=True, user_data=["Race Asi", 1], callback=cbh, tag="features_race_asi_0")
-                            add_button(label="Clear", enabled=True, width=50, user_data=["Race Asi","Clear"], callback=cbh, tag="button.fRace.Asi.Clear")
-                    add_child_window(auto_resize_y=True, width=w2, border=True, tag="features_race_main")
+                            add_combo(items=g.list_Atr, default_value="",  width=50, no_arrow_button=True, user_data=["Race Asi", 0], callback=cbh, tag=tag.rfeature.select("asi_0"))
+                            add_combo(items=g.list_Atr, default_value="",  width=50, no_arrow_button=True, user_data=["Race Asi", 1], callback=cbh, tag=tag.rfeature.select("asi_1"))
+                            add_button(label="Clear", enabled=True, width=50, user_data=["Race Asi","Clear"], callback=cbh, tag=tag.rfeature.button("asi_clear"))
+                    add_child_window(auto_resize_y=True, width=w2, border=True, tag=tag.rfeature.main())
                     add_separator(label="Class")
-                    add_child_window(auto_resize_y=True, width=w2, border=True, tag="features_class_sub")
-                    add_child_window(auto_resize_y=True, width=w2, border=True, tag="features_class_main")
+                    add_child_window(auto_resize_y=True, width=w2, border=True, tag=tag.cfeature.sub())
+                    add_child_window(auto_resize_y=True, width=w2, border=True, tag=tag.cfeature.main())
                     add_separator(label="Feat")
                     with child_window(auto_resize_y=True, width=w2, border=False):
                         with collapsing_header(label="Milestones"):
-                            add_child_window(auto_resize_y=True, width=w2, border=True, tag="features_milestone_sub")
-                    add_child_window(auto_resize_y=True, width=w2, border=True, tag="features_milestone_main")
+                            add_child_window(auto_resize_y=True, width=w2, border=True, tag=tag.mfeature.sub())
+                    add_child_window(auto_resize_y=True, width=w2, border=True, tag=tag.mfeature.main())
                     add_separator(label="Background")
-                    add_child_window(auto_resize_y=True, width=w2, border=True, tag="features_background_sub")
-                    add_child_window(auto_resize_y=True, width=w2, border=True, tag="features_background_main")
+                    add_child_window(auto_resize_y=True, width=w2, border=True, tag=tag.bfeature.sub())
+                    add_child_window(auto_resize_y=True, width=w2, border=True, tag=tag.bfeature.main())
             with tab(label="Actions"):
                 with child_window(auto_resize_x=True, auto_resize_y=True, border=True):
                     with child_window(auto_resize_y=True, width=w2, border=True):
                         add_separator(label="Weapons")
-                        add_child_window(auto_resize_y=True, width=w2, border=True, tag="action_weapons")
+                        add_child_window(auto_resize_y=True, width=w2, border=True, tag=tag.wactions.window())
 
 
 def CW_BLOC_Actions_Weapons():
-    with group(parent="action_weapons"):
+    with group(parent=tag.wactions.window()):
         with table(header_row=True, row_background=False, borders_innerH=True, borders_outerH=True, borders_innerV=True, resizable=True,borders_outerV=True):
             add_table_column(label="Weapon", width_stretch=True, init_width_or_weight=0)
             add_table_column(label="Range", width_stretch=True, init_width_or_weight=0)
@@ -633,24 +646,24 @@ def CW_BLOC_Actions_Weapons():
             for i in range(2):
                 with table_row():
                     for j in g.list_weapon_attributes:
-                        add_table_cell(tag=f"cell_{j}_{i}")
+                        add_table_cell(tag=tag.wactions.cell(j,i))
 
 
 def w_INVE():
     h=size.h_inventory
-    with group(parent=tag.inventory):
+    with group(parent=tag.inve.window()):
         with tab_bar():
             with tab(label="Equip"):
-                add_child_window(height=h-28, border=True, no_scrollbar=True, tag="inventory_equip")
+                add_child_window(height=h-28, border=True, no_scrollbar=True, tag=tag.inve.window("equip"))
             with tab(label="Backpack"):
-                add_child_window(height=h-80, border=True, no_scrollbar=True, tag="inventory_backpack")
-                add_child_window(height=h-294, border=True, tag="inventory_backpack_totals")
+                add_child_window(height=h-80, border=True, no_scrollbar=True, tag=tag.inve.window("backpack"))
+                add_child_window(height=h-294, border=True, tag=tag.inve.window("backpack_totals"))
             with tab(label="Bazaar"):
-                add_child_window(height=h-26, border=True, no_scrollbar=True,  tag="inventory_bazaar")
+                add_child_window(height=h-26, border=True, no_scrollbar=True,  tag=tag.inve.window("bazaar"))
 
 
 def CW_INVE_Bazaar():
-    with group(parent="inventory_bazaar"):
+    with group(parent=tag.inve.window("bazaar")):
         with tab_bar():
             for equipment_type in g.list_equip_type:
                 with tab(label=equipment_type):
