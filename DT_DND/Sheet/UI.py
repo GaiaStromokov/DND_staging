@@ -8,6 +8,7 @@ import math as math
 from Sheet.sizing import *
 from colorist import *
 
+#ANCHOR - size
 class size:
     w_max = 1350
     h_max = 880
@@ -19,7 +20,7 @@ class size:
     w_header_2 = 188
     w_header_3 = 116
 
-    w_avg_wrap = 640
+    gwrap = 640
 
     w_s_btn = 20
     w_m_btn = 46
@@ -63,8 +64,8 @@ class size:
     w_rest = 132
     h_rest = 80
 
-    w_skills = 194
-    h_skills = 449
+    w_skill = 194
+    h_skill = 449
 
     w_speed = 62
     h_speed = 58
@@ -75,101 +76,145 @@ class size:
     w_wallet = 412
     h_wallet = 35
 
-
+#ANCHOR -  tag
 class tag:
     class Base:
         prefix = None
 
         @classmethod
-        def build(cls, item=None, suffix=None):
+        def build(cls, items=None, suffix=None):
             if cls.prefix is None: raise NotImplementedError("Subclasses must define prefix")
             if suffix is None: raise ValueError("Suffix must be provided")
-            return f"{cls.prefix}_{item}_{suffix}" if item else f"{cls.prefix}_{suffix}"
+            items_str = "_".join(items) if isinstance(items, (list, tuple)) else str(items) if items else ""
+            return f"{cls.prefix}_{items_str}_{suffix}" if items_str else f"{cls.prefix}_{suffix}"
+
+        
+        @classmethod
+        def select(cls, *items): return cls.build(items if items else None, "select")
+        @classmethod
+        def val(cls, *items): return cls.build(items if items else None, "val")
+        @classmethod
+        def label(cls, *items): return cls.build(items if items else None, "label")
+        @classmethod
+        def button(cls, *items): return cls.build(items if items else None, "button")
+        @classmethod
+        def source(cls, *items): return cls.build(items if items else None, "source")
+        @classmethod
+        def toggle(cls, *items): return cls.build(items if items else None, "toggle")
+        @classmethod
+        def max(cls, *items): return cls.build(items if items else None, "max")
+        @classmethod
+        def input(cls, *items): return cls.build(items if items else None, "input")
+        @classmethod
+        def text(cls, *items): return cls.build(items if items else None, "text")
+        @classmethod
+        def mod(cls, *items): return cls.build(items if items else None, "mod")
+        @classmethod
+        def sum(cls, *items): return cls.build(items if items else None, "sum")
+        @classmethod
+        def sub(cls, *items): return cls.build(items if items else None, "sub")
+        @classmethod
+        def main(cls, *items): return cls.build(items if items else None, "main")
+        @classmethod
+        def window(cls, *items): return cls.build(items if items else None, "window")
+        @classmethod
+        def tabbar(cls, *items): return cls.build(items if items else None, "tabbar")
+        @classmethod
+        def tab(cls, *items): return cls.build(items if items else None, "tab")
+        @classmethod
+        def known(cls, *items): return cls.build(items if items else None, "known")
+        @classmethod
+        def available(cls, *items): return cls.build(items if items else None, "available")
+        @classmethod
+        def current(cls, *items): return cls.build(items if items else None, "current")
+        @classmethod
+        def tooltip(cls, *items): return cls.build(items if items else None, "tooltip")
+        @classmethod
+        def popup(cls, *items): return cls.build(items if items else None, "popup")
+        @classmethod
+        def header(cls, *items): return cls.build(items if items else None, "header")
 
         @classmethod
-        def select(cls, item=None): return cls.build(item, "select")
-        @classmethod
-        def val(cls, item=None): return cls.build(item, "val")
-        @classmethod
-        def label(cls, item=None): return cls.build(item, "label")
-        @classmethod
-        def button(cls, item=None): return cls.build(item, "button")
-        @classmethod
-        def source(cls, item=None): return cls.build(item, "source")
-        @classmethod
-        def toggle(cls, item=None): return cls.build(item, "toggle")
-        @classmethod
-        def max(cls, item=None): return cls.build(item, "max")
-        @classmethod
-        def input(cls, item=None): return cls.build(item, "input")
-        @classmethod
-        def text(cls, item=None): return cls.build(item, "text")
-        @classmethod
-        def mod(cls, item=None): return cls.build(item, "mod")
-        @classmethod
-        def sum(cls, item=None): return cls.build(item, "sum")
-        @classmethod
-        def sub(cls, item=None): return cls.build(item, "sub")
-        @classmethod
-        def main(cls, item=None): return cls.build(item, "main")
-        @classmethod
-        def window(cls, item=None): return cls.build(item, "window")
+        def wlevel(cls, level): 
+            if cls.prefix is None: raise NotImplementedError("Subclasses must define prefix")
+            return f"{cls.prefix}_Level_{level}_window"
+
 
         @classmethod
         def cell(cls, item1, item2):
-            if cls.prefix is None: raise NotImplementedError("Subclasses must define prefix")
+            if cls.prefix is None:
+                raise NotImplementedError("Subclasses must define prefix")
             return f"{cls.prefix}_{item1}_{item2}_cell"
+
         @classmethod
         def element(cls, *, item=None, suffix=None):
-            if cls.prefix is None: raise NotImplementedError("Subclasses must define prefix")
-            if suffix is None: raise ValueError("Suffix must be provided")
+            if cls.prefix is None:
+                raise NotImplementedError("Subclasses must define prefix")
+            if suffix is None:
+                raise ValueError("Suffix must be provided")
             return f"{cls.prefix}_{item}_{suffix}" if item else f"{cls.prefix}_{suffix}"
-
 
         @classmethod
         def multi(cls, *parents, suffix):
-            if cls.prefix is None: raise NotImplementedError("Subclasses must define prefix")
+            if cls.prefix is None:
+                raise NotImplementedError("Subclasses must define prefix")
             return f"{cls.prefix}_{'_'.join(parents)}_{suffix}"
 
+        @classmethod
+        def gen(cls, parents, items, suffix):
+            parts = []
+            if parents: parts.extend(parents)
+            if items: parts.extend(items)
+            return "_".join(parts) + f"_{suffix}"
+
+        @classmethod
+        def bazaar(cls, equip_type, rank):
+            return f"bazaar_{equip_type}_{rank}"
+
+
+
+        @classmethod
+        def equip(cls, item):
+            item = item.lower()
+            return f"{item}_equip"
+
     @staticmethod
-    def gen(parents, items, suffix):
-        parts = []
-        if parents:parts.extend(parents)
-        if items: parts.extend(items)
-        return "_".join(parts) + f"_{suffix}"
-    
-    class core(Base):   prefix = "core"
-    class health(Base): prefix = "health"
-    class prof(Base):   prefix = "proficiencies"
-    class char(Base):   prefix = "character"
-    class pdesc(Base):  prefix = "pdescription"
-    class buffer1(Base):prefix = "buffer1"
-    class buffer2(Base):prefix = "buffer2"
-    class atr(Base):    prefix = "attributes"
-    class init(Base):   prefix = "initiative"
-    class ac(Base):     prefix = "armor_class"
-    class vision(Base): prefix = "vision"
-    class speed(Base):  prefix = "speed"
-    class cond(Base):   prefix = "condition"
-    class rest(Base):   prefix = "rest"
-    class skill(Base):  prefix = "skills"
-    class inve(Base):   prefix = "inventory"
-    class block(Base):  prefix = "block"
-    class wallet(Base): prefix = "wallet"
-    
-    class rfeature(Base):   prefix = "block_feature_race"
-    class cfeature(Base):   prefix = "block_feature_class"
-    class mfeature(Base):   prefix = "block_feature_milestone"
-    class bfeature(Base):   prefix = "block_feature_background"
-    
-    class wactions(Base):   prefix = "block_actions_weapon"
+    def icon(item):
+        item = item.lower()
+        return f"{item}_icon"
 
+    @staticmethod
+    def img(item):
+        item = item.lower()
+        return f"{item}_img"
+    class core(Base):      prefix = "core"
+    class health(Base):    prefix = "health"
+    class prof(Base):      prefix = "proficiencies"
+    class char(Base):      prefix = "character"
+    class pdesc(Base):     prefix = "pdescription"
+    class buffer1(Base):   prefix = "buffer1"
+    class buffer2(Base):   prefix = "buffer2"
+    class atr(Base):       prefix = "attributes"
+    class init(Base):      prefix = "initiative"
+    class ac(Base):        prefix = "armor_class"
+    class vision(Base):    prefix = "vision"
+    class speed(Base):     prefix = "speed"
+    class cond(Base):      prefix = "condition"
+    class rest(Base):      prefix = "rest"
+    class skill(Base):     prefix = "skills"
+    class inve(Base):      prefix = "inventory"
+    class block(Base):     prefix = "block"
+    class wallet(Base):    prefix = "wallet"
+    class rfeature(Base):  prefix = "block_feature_race"
+    class cfeature(Base):  prefix = "block_feature_class"
+    class mfeature(Base):  prefix = "block_feature_milestone"
+    class bfeature(Base):  prefix = "block_feature_background"
+    class wactions(Base):  prefix = "block_actions_weapon"
+    class spell(Base):     prefix = "block_spells"
+    class scast(Base):     prefix = "block_spells_cast"
+    class slearn(Base):    prefix = "block_spells_learn"
+    class sprepare(Base):  prefix = "block_spells_prepare"
 
-
-
-
-
-        
 
 #ANCHOR - Backend Import
 from Sheet.backend import (
@@ -289,7 +334,7 @@ def create_attribute_row(stat: str):
 
     tSum = tag.atr.sum(stat)
     tMod = tag.atr.mod(stat)
-    tBase_combo = tag.atr.element(item=stat, suffix="base_select")
+    tCombo = tag.atr.select(stat)
 
     with group(horizontal=True):
         add_button(label=stat, enabled=False, width=label_width)
@@ -299,7 +344,7 @@ def create_attribute_row(stat: str):
     with popup(tSum, mousebutton=mvMouseButton_Left):
         with group(horizontal=True):
             add_button(label="Base", enabled=False, width=label_width)
-            add_combo(items=g.list_Base_Atr, default_value="", width=value_width, no_arrow_button=True, user_data=["Base Atr", stat], callback=cbh, tag=tBase_combo)
+            add_combo(items=g.list_Base_Atr, default_value="", width=value_width, no_arrow_button=True, user_data=["Base Atr", stat], callback=cbh, tag=tCombo)
 
     with tooltip(tSum):
         for source in ["Base", "Race", "Feat"]:
@@ -317,7 +362,7 @@ def create_skill_row(skill: str):
     tLabel = tag.skill.label(skill)
     tBool = tag.skill.toggle(skill)
     tMod = tag.skill.mod(skill)
-    tSource = tag.skill.source(skill)
+    
     
     with group(horizontal=True): 
         add_button(label=skill, enabled=False, width=label_width, tag=tLabel)
@@ -330,14 +375,16 @@ def create_skill_row(skill: str):
         for source in ["Player", "Race", "Class", "BG", "Feat"]:
             with group(horizontal=True):
                 add_button(label=source, enabled=False, width=50)
+                
+                tSource = tag.skill.source(source)
                 add_checkbox(default_value=False, enabled=False, user_data=[], callback=cbh, tag=tSource)
 
 
 def create_pdescription():
-    tLabel = tag.pdesc.label("main", "label")
+    tLabel = tag.pdesc.label()
     with popup(tLabel, mousebutton=mvMouseButton_Left):
         for item in g.list_Description: 
-            tInput = tag.input(item)
+            tInput = tag.pdesc.input(item)
             with group(horizontal=True):
                 add_button(label=item, enabled=False, width=size.w_l_btn)
                 add_input_text(default_value="", on_enter=True, width = 70, user_data=["Description", item], callback=cbh, tag=tInput)
@@ -352,14 +399,17 @@ def create_pdescription():
 
 
 def create_ideals(name: str):
-    tLabel = tag.char.label("character", name, "label")
-    tInput = tag.char.input("character", name, "input")
-    tText = tag.char.text("character", name, "text")
+    name = name.lower()
+    
+    tLabel = tag.char.label(name)
+    tInput = tag.char.input(name)
+    tText = tag.char.text(name)
+    print(tLabel, tInput, tText)
     with popup(tLabel, mousebutton=mvMouseButton_Left): add_input_text(default_value="", on_enter=True, user_data=["Characteristic", name], callback=cbh, tag=tInput)
     with tooltip(tLabel): add_text("", tag=tText, wrap=400)
 
 
-def create_proficiency_popup(tLabel: str, proficiency_map: dict):
+def create_proficiency_addons(tLabel: str, proficiency_map: dict):
     with popup(tLabel, mousebutton=mvMouseButton_Left):
         with group(horizontal=True):
             for category, items in proficiency_map.items():
@@ -381,7 +431,7 @@ def create_proficiency_popup(tLabel: str, proficiency_map: dict):
                         add_text(g.pName(item), color=(0, 0, 0), tag=tText)
 
 
-def W_Skeleton():
+def init_window_Skeleton():
     with window(no_title_bar=True, no_close=True, autosize=True, tag="window_main"):
         with group(horizontal=True):
             with group(horizontal=False):
@@ -404,14 +454,14 @@ def W_Skeleton():
                         add_child_window(tag=tag.rest.window(), width=size.w_rest, height=size.h_rest, border=True)
                         add_child_window(tag=tag.buffer2.window(), width=size.w_buffer_1, height=size.h_buffer_1, border=True, no_scrollbar=True)
                     with group(horizontal=False):
-                        add_child_window(tag=tag.skill.window(), width=size.w_skills, height=size.h_skills, border=True, no_scrollbar=True)
+                        add_child_window(tag=tag.skill.window(), width=size.w_skill, height=size.h_skill, border=True, no_scrollbar=True)
                 with group(horizontal=False):
                     add_child_window(tag=tag.inve.window(), width=size.w_inventory, height=size.h_inventory + 12, border=True, no_scrollbar=True)
             with group(horizontal=False):
                 add_child_window(tag=tag.block.window(), width=size.w_block, height=size.h_block, border=True, no_scrollbar=True)
                 add_child_window(tag=tag.wallet.window(), width=size.w_wallet, height=size.h_wallet, border=True, no_scrollbar=True)
 
-def w_wallet():
+def init_window_wallet():
     with group(parent=tag.wallet.window()):
         with group(horizontal=True):
             for i in g.list_Coins:
@@ -420,11 +470,11 @@ def w_wallet():
                     add_text("0", color=c_h9, tag=tag.wallet.val(i))
 
 
-def w_CORE():
+def init_window_core():
     w_max=size.w_core-16
     h_max=size.h_core-16
     with group(parent=tag.core.window()):
-        add_button(label="Character info", enabled=False, width=w_max, height = size.h_header)
+        add_button(label="Character info", enabled=False, width=w_max, height = size.h_header_1)
         with group(horizontal=True):
             add_button(label="Level", enabled=False, width=50)
             add_button(label="<", user_data=["Level Input", -1], callback=cbh)
@@ -449,20 +499,20 @@ def w_CORE():
 
 
                 
-def w_ATRB():
+def init_window_attributes():
     with group(parent=tag.atr.window()):
-        w_max=size.w_atr-16
-        add_button(label="Attributes", enabled=False, width=w_max, height=size.h_header)
+        w_max=size.w_attributes-16
+        add_button(label="Attributes", enabled=False, width=w_max, height=size.h_header_1)
         for stat in g.list_Atr:
             create_attribute_row(stat)
 
 
 
-def w_HEAL():
+def init_window_health():
     with group(parent=tag.health.window()):
         w_max=size.w_health-16
         h_max=size.h_health-15
-        add_button(label="Health", enabled=False, width=w_max, height=size.h_header)
+        add_button(label="Health", enabled=False, width=w_max, height=size.h_header_1)
         with group(horizontal=False):
             with group(horizontal=True):
                 add_button(label="+", width=size.w_s_btn, user_data=["HP","HP", 1], callback=cbh)
@@ -480,16 +530,16 @@ def w_HEAL():
         add_input_int(default_value=0, width=90, user_data=["Player HP Mod"], callback=cbh, tag=tag.health.max("hp"))
         
 
-def w_SKIL():
-    w_max=tag.w_skill-16
-    h_max=tag.w_skill-15
+def init_window_skills():
+    w_max=size.w_skill-16
+    h_max=size.w_skill-15
     with group(parent=tag.skill.window()):
-        add_button(label="Skills", enabled=False, width=w_max, height=size.h_header)
+        add_button(label="Skills", enabled=False, width=w_max, height=size.h_header_1)
         for skill in g.list_Skill:
             create_skill_row(skill)
 
 
-def w_INIT():
+def init_window_initiatives():
     with group(parent=tag.init.window()):
         add_button(label="Init", enabled=False, width=size.w_m_btn, tag=tag.init.label())
         add_button(label="", enabled=False, width=size.w_m_btn, tag=tag.init.val())
@@ -499,7 +549,7 @@ def w_INIT():
                 add_button(label=source, enabled=False, width=40)
                 add_button(label="", enabled=False, width=25, tag=tag.init.source(source))
 
-def w_ARMO():
+def init_window_armor():
     with group(parent=tag.ac.window()):
         add_button(label="AC", enabled=False, width=size.w_m_btn, tag=tag.ac.label())
         add_button(label="", enabled=False, width=size.w_m_btn, tag=tag.ac.val())
@@ -514,7 +564,7 @@ def w_ARMO():
 
 
 
-def w_VISI():
+def init_window_vision():
     with group(parent=tag.vision.window()):
         add_button(label="Vision", enabled=False, width=size.w_m_btn, tag = tag.vision.label())
         add_button(label="", enabled=False, width=size.w_m_btn, tag=tag.vision.val())
@@ -524,7 +574,7 @@ def w_VISI():
                 add_button(label=i, enabled=False, width=50)
                 add_button(label="", enabled=False, width=40, tag=tag.vision.source(i))
 
-def w_SPEE():
+def init_window_speed():
     with group(parent=tag.speed.window()):
         add_button(label="Speed", enabled=False, width=size.w_m_btn, tag = tag.speed.label())
         add_button(label="", enabled=False, width=size.w_m_btn, tag=tag.speed.val())
@@ -536,8 +586,8 @@ def w_SPEE():
 
 
 
-def w_COND():
-    with group(parent=tag.conditions.window()):
+def init_window_conditions():
+    with group(parent=tag.cond.window()):
         add_button(label="Conditions", enabled=False, width=size.w_header_2, height=26, tag=tag.cond.label())
     with popup(tag.cond.label(), mousebutton=mvMouseButton_Left):
         with child_window(auto_resize_x=True, auto_resize_y=True, border=True):
@@ -549,22 +599,22 @@ def w_COND():
                 add_text(i, color=(0, 0, 0), tag=tag.cond.text(i))
 
 
-def w_REST():
+def init_window_rest():
     with group(parent=tag.rest.window()):
         add_button(label="Short Rest", width=size.w_header_2, height=30, user_data=["Short Rest"], callback=cbh, tag=tag.rest.button("short"))
-        add_button(label="Long Rest", width=size.w_header_2, height=30, user_data=["Long Rest"], callback=cbh, tag=tag.rest.button("short"))
+        add_button(label="Long Rest", width=size.w_header_2, height=30, user_data=["Long Rest"], callback=cbh, tag=tag.rest.button("long"))
 
 
-def w_BUFF():
+def init_window_buffer():
     pass
 
 
-def w_PROF():
+def init_window_proficienices():
     w_max=size.w_proficiencies-16
     h_max=size.w_proficiencies-15
     btn_w = w_max-101
     with group(parent=tag.prof.window()):
-        add_button(label="Proficiencies", enabled=False, width=w_max, height=size.h_header)
+        add_button(label="Proficiencies", enabled=False, width=w_max, height=size.h_header_1)
         with group(horizontal=True):
             add_button(label="Weapons", width=btn_w, tag=tag.prof.label("weapon"))
             add_button(label="Armor", width=btn_w, tag=tag.prof.label("armor"))
@@ -573,17 +623,17 @@ def w_PROF():
             add_button(label="Languages", width=btn_w, tag=tag.prof.label("lang"))
 
     # Create popups using the helper
-    create_proficiency_popup(tag.label(tag.prof.label("weapon")), {k: set(q.w.prof("Weapon")) & set(q.w.cat(k)) for k in ["Simple", "Martial"]})
-    create_proficiency_popup(tag.label(tag.prof.label("armor")), {"Armor": q.w.prof("Armor")})
-    create_proficiency_popup(tag.prof.label("tool"), {"Artisan": g.list_Job, "Gaming": g.list_Game, "Musical": g.list_Music})
-    create_proficiency_popup(tag.prof.label("lang"), {"Languages": g.list_Lang})
+    create_proficiency_addons(tag.prof.label("weapon"), {k: set(q.w.prof("Weapon")) & set(q.w.cat(k)) for k in ["Simple", "Martial"]})
+    create_proficiency_addons(tag.prof.label("armor"), {"Armor": q.w.prof("Armor")})
+    create_proficiency_addons(tag.prof.label("tool"), {"Artisan": g.list_Job, "Gaming": g.list_Game, "Musical": g.list_Music})
+    create_proficiency_addons(tag.prof.label("lang"), {"Languages": g.list_Lang})
 
-def w_CHAR():
+def init_window_characteristics():
     w_max=size.w_character-16
     h_max=size.h_character-15
     btn_w = w_max-101
     with group(parent=tag.char.window()):
-        add_button(label="Characteristics", enabled=False, width=w_max, height=size.h_header, tag=tag.pdesc.label())
+        add_button(label="Characteristics", enabled=False, width=w_max, height=size.h_header_1, tag=tag.pdesc.label())
         with group(horizontal=True):
             add_button(label="Traits", width=btn_w, tag=tag.char.label("traits"))
             add_button(label="Ideals", width=btn_w, tag=tag.char.label("ideals"))
@@ -598,13 +648,13 @@ def w_CHAR():
 
 
 
-def w_BLOC():
+def init_window_block():
     w1 = size.w_block - 16
     w2 = w1 - 16
     h1 = size.H_block - 40
     h2 = h1 - 15
     with group(parent=tag.block.window()):
-        with tab_bar(tag="block_tabbar"):
+        with tab_bar(tag=tag.block.tabbar()):
             with tab(label="Features/Traits"):
                 with child_window(width=w1, height=h1, border=True):
                     add_separator(label="Race")
@@ -633,7 +683,7 @@ def w_BLOC():
                         add_child_window(auto_resize_y=True, width=w2, border=True, tag=tag.wactions.window())
 
 
-def CW_BLOC_Actions_Weapons():
+def init_window_block_actions_weapons():
     with group(parent=tag.wactions.window()):
         with table(header_row=True, row_background=False, borders_innerH=True, borders_outerH=True, borders_innerV=True, resizable=True,borders_outerV=True):
             add_table_column(label="Weapon", width_stretch=True, init_width_or_weight=0)
@@ -649,7 +699,7 @@ def CW_BLOC_Actions_Weapons():
                         add_table_cell(tag=tag.wactions.cell(j,i))
 
 
-def w_INVE():
+def init_window_inventory():
     h=size.h_inventory
     with group(parent=tag.inve.window()):
         with tab_bar():
@@ -662,16 +712,16 @@ def w_INVE():
                 add_child_window(height=h-26, border=True, no_scrollbar=True,  tag=tag.inve.window("bazaar"))
 
 
-def CW_INVE_Bazaar():
+def init_window_inventory_bazaar():
     with group(parent=tag.inve.window("bazaar")):
         with tab_bar():
             for equipment_type in g.list_equip_type:
                 with tab(label=equipment_type):
                     with tab_bar():
-                        for rank in range(5):
-                            rarity = g.item_rarity(rank)
-                            with tab(label=rarity):
-                                add_child_window(height=size.h_inventory - 85, border=True, no_scrollbar=True, tag=f"bazaar_{equipment_type}_{rarity}")
+                        for rarity in range(5):
+                            rank = g.item_rarity(rarity)
+                            with tab(label=rank):
+                                add_child_window(height=size.h_inventory - 85, border=True, no_scrollbar=True, tag=tag.bazaar(equipment_type, rank))
 def load_icons():
     figure_w, figure_h, figure_channel, figure_data = load_image("image/Figure_Icon.png")
     armor_w, armor_h, armor_channel, armor_data = load_image("image/Armor_Icon.png")
@@ -689,120 +739,78 @@ def load_icons():
     feet_w, feet_h, feet_channel, feet_data = load_image("image/Feet_Icon.png")
 
     with texture_registry(show=False):
-        add_static_texture(width=figure_w, height=figure_h, default_value=figure_data, tag="st_icon_figure")
-        add_static_texture(width=armor_w, height=armor_h, default_value=armor_data, tag="st_icon_armor")
-        add_static_texture(width=arms_w, height=arms_h, default_value=arms_data, tag="st_icon_arms")
-        add_static_texture(width=body_w, height=body_h, default_value=body_data, tag="st_icon_body")
-        add_static_texture(width=face_w, height=face_h, default_value=face_data, tag="st_icon_face")
-        add_static_texture(width=hands_w, height=hands_h, default_value=hands_data, tag="st_icon_hands")
-        add_static_texture(width=head_w, height=head_h, default_value=head_data, tag="st_icon_Head")
-        add_static_texture(width=mainhand_w, height=mainhand_h, default_value=mainhand_data, tag="st_icon_hand_1")
-        add_static_texture(width=offhand_w, height=offhand_h, default_value=offhand_data, tag="st_icon_hand_2")
-        add_static_texture(width=ring_w, height=ring_h, default_value=ring_data, tag="st_icon_ring")
-        add_static_texture(width=shoulders_w, height=shoulders_h, default_value=shoulders_data, tag="st_icon_shoulders")
-        add_static_texture(width=throat_w, height=throat_h, default_value=throat_data, tag="st_icon_throat")
-        add_static_texture(width=waist_w, height=waist_h, default_value=waist_data, tag="st_icon_waist")
-        add_static_texture(width=feet_w, height=feet_h, default_value=feet_data, tag="st_icon_feet")
-
-def CW_INVE_Equip():
+        add_static_texture(width=figure_w, height=figure_h, default_value=figure_data, tag=tag.icon("figure"))
+        add_static_texture(width=armor_w, height=armor_h, default_value=armor_data, tag=tag.icon("armor"))
+        add_static_texture(width=arms_w, height=arms_h, default_value=arms_data, tag=tag.icon("arms"))
+        add_static_texture(width=body_w, height=body_h, default_value=body_data, tag=tag.icon("body"))
+        add_static_texture(width=face_w, height=face_h, default_value=face_data, tag=tag.icon("face"))
+        add_static_texture(width=hands_w, height=hands_h, default_value=hands_data, tag=tag.icon("hands"))
+        add_static_texture(width=head_w, height=head_h, default_value=head_data, tag=tag.icon("head"))
+        add_static_texture(width=mainhand_w, height=mainhand_h, default_value=mainhand_data, tag=tag.icon("hand_1"))
+        add_static_texture(width=offhand_w, height=offhand_h, default_value=offhand_data, tag=tag.icon("hand_2"))
+        add_static_texture(width=ring_w, height=ring_h, default_value=ring_data, tag=tag.icon("ring"))
+        add_static_texture(width=shoulders_w, height=shoulders_h, default_value=shoulders_data, tag=tag.icon("shoulders"))
+        add_static_texture(width=throat_w, height=throat_h, default_value=throat_data, tag=tag.icon("throat"))
+        add_static_texture(width=waist_w, height=waist_h, default_value=waist_data, tag=tag.icon("waist"))
+        add_static_texture(width=feet_w, height=feet_h, default_value=feet_data, tag=tag.icon("feet"))
+        
+def init_window_inventory_equip():
     wbtn = 98
+    # (left_side, right_side)
+    equipment_pairs = [
+        ("Face", "Head"),
+        ("Throat", "Shoulders"),
+        ("Body", "Armor"),
+        ("Hands", "Arms"),
+        ("Waist", "Ring_1"),
+        ("Feet", "Ring_2"),
+        ("Hand_1", "Hand_2"),
+    ]
+    
     with group(parent="inventory_equip"):
         with group(horizontal=False):
             with group(horizontal=True):
+                # Left side
                 with group(horizontal=False):
-                    with group(horizontal=True):
-                        add_image_button("st_icon_face", callback=cbh, user_data=["Clear Equip", "Face", "Clear"], tag="img_face")
-                        with child_window(auto_resize_x=True, height=35, border=True, no_scrollbar=True):
-                            add_combo(width=wbtn, no_arrow_button=True, user_data=["Equip Equip", "Face"], callback=cbh, tag=f'equip_face')  
-                    with group(horizontal=True):
-                        add_image_button("st_icon_throat", callback=cbh, user_data=["Clear Equip", "Throat", "Clear"], tag="img_throat")
-                        with child_window(auto_resize_x=True, auto_resize_y=True, border=True, no_scrollbar=True):
-                            add_combo(width=wbtn, no_arrow_button=True, user_data=["Equip Equip", "Throat"], callback=cbh, tag=f'equip_throat')
-                    with group(horizontal=True):
-                        add_image_button("st_icon_body", callback=cbh, user_data=["Clear Equip", "Body", "Clear"], tag="img_body")
-                        with child_window(auto_resize_x=True, auto_resize_y=True, border=True, no_scrollbar=True):
-                            add_combo(width=wbtn, no_arrow_button=True, user_data=["Equip Equip", "Body"], callback=cbh, tag=f'equip_body')
-                    with group(horizontal=True):
-                        add_image_button("st_icon_hands", callback=cbh, user_data=["Clear Equip", "Hands", "Clear"], tag="img_hands")
-                        with child_window(auto_resize_x=True, auto_resize_y=True, border=True, no_scrollbar=True):
-                            add_combo(width=wbtn, no_arrow_button=True, user_data=["Equip Equip", "Hands"], callback=cbh, tag=f'equip_hands')
-                    with group(horizontal=True):
-                        add_image_button("st_icon_waist", callback=cbh, user_data=["Clear Equip", "Waist", "Clear"], tag="img_faist")
-                        with child_window(auto_resize_x=True, auto_resize_y=True, border=True, no_scrollbar=True):
-                            add_combo(width=wbtn, no_arrow_button=True, user_data=["Equip Equip", "Waist"], callback=cbh, tag=f'equip_waist')
-                    with group(horizontal=True):
-                        add_image_button("st_icon_feet", callback=cbh, user_data=["Clear Equip", "Feet", "Clear"], tag="img_feet")
-                        with child_window(auto_resize_x=True, auto_resize_y=True, border=True, no_scrollbar=True):
-                            add_combo(width=wbtn, no_arrow_button=True, user_data=["Equip Equip", "Feet"], callback=cbh, tag=f'equip_feet')
-                    with group(horizontal=True):
-                        add_image_button("st_icon_hand_1", callback=cbh, user_data=["Clear Equip", "Hand_1", "Clear"], tag="img_hand_1")
-                        with child_window(auto_resize_x=True, auto_resize_y=True, border=True, no_scrollbar=True):
-                            add_combo(width=wbtn, no_arrow_button=True, user_data=["Equip Equip", "Hand_1"], callback=cbh, tag=f'equip_hand_1')
-                add_image("st_icon_figure")
+                    for left_slot, right_slot in equipment_pairs:
+                        with group(horizontal=True):
+                            add_image_button(tag.icon(left_slot), callback=cbh, user_data=["Clear Equip", left_slot, "Clear"], tag=tag.img(left_slot))
+                            with child_window(auto_resize_x=True, auto_resize_y=True, border=True, no_scrollbar=True):
+                                add_combo(width=wbtn, no_arrow_button=True, user_data=["Equip Equip", left_slot], callback=cbh, tag=tag.equip(left_slot))
+                # Center
+                add_image(tag.icon("figure"))
+                # Right side
                 with group(horizontal=False):
-                    with group(horizontal=True):
-                        with child_window(auto_resize_x=True, auto_resize_y=True, border=True, no_scrollbar=True):
-                            add_combo(width=wbtn, no_arrow_button=True, user_data=["Equip Equip", "Head"], callback=cbh, tag=f'equip_head')
-                        add_image_button("st_icon_head", callback=cbh, user_data=["Clear Equip", "Head", "Clear"], tag="img_head")
-                    with group(horizontal=True):
-                        with child_window(auto_resize_x=True, auto_resize_y=True, border=True, no_scrollbar=True):
-                            add_combo(width=wbtn, no_arrow_button=True, user_data=["Equip Equip", "Shoulders"], callback=cbh, tag=f'equip_shoulders')
-                        add_image_button("st_icon_shoulders", callback=cbh, user_data=["Clear Equip", "Shoulders", "Clear"], tag="img_shoulders")
-                    with group(horizontal=True):
-                        with child_window(auto_resize_x=True, auto_resize_y=True, border=True, no_scrollbar=True):
-                            add_combo(width=wbtn, no_arrow_button=True, user_data=["Equip Equip", "Armor"], callback=cbh, tag=f'equip_armor')
-                        add_image_button("st_icon_armor", callback=cbh, user_data=["Clear Equip", "Armor", "Clear"], tag="img_armor")
-                    with group(horizontal=True):
-                        with child_window(auto_resize_x=True, auto_resize_y=True, border=True, no_scrollbar=True):
-                            add_combo(width=wbtn, no_arrow_button=True, user_data=["Equip Equip", "Arms"], callback=cbh, tag=f'equip_arms')
-                        add_image_button("st_icon_arms", callback=cbh, user_data=["Clear Equip", "Arms", "Clear"], tag="img_arms")
-                    with group(horizontal=True):
-                        with child_window(auto_resize_x=True, auto_resize_y=True, border=True, no_scrollbar=True):
-                            add_combo(width=wbtn, no_arrow_button=True, user_data=["Equip Equip", "Ring_1"], callback=cbh, tag=f'equip_ring_1')
-                        add_image_button("st_icon_ring", callback=cbh, user_data=["Clear Equip", "Ring_1", "Clear"], tag="img_ring_1")
-                    with group(horizontal=True):
-                        with child_window(auto_resize_x=True, auto_resize_y=True, border=True, no_scrollbar=True):
-                            add_combo(width=wbtn, no_arrow_button=True, user_data=["Equip Equip", "Ring_2"], callback=cbh, tag=f'equip_ring_2')
-                        add_image_button("st_icon_ring", callback=cbh, user_data=["Clear Equip", "Ring_2", "Clear"], tag="img_ring_2")
-                    with group(horizontal=True):
-                        with child_window(auto_resize_x=True, auto_resize_y=True, border=True, no_scrollbar=True):
-                            add_combo(width=wbtn, no_arrow_button=True, user_data=["Equip Equip", "Hand_2"], callback=cbh, tag=f'equip_hand_2')
-                        add_image_button("st_icon_hand_2", callback=cbh, user_data=["Clear Equip", "Hand_2", "Clear"], tag="img_hand_2")
-
+                    for left_slot, right_slot in equipment_pairs:
+                        with group(horizontal=True):
+                            with child_window(auto_resize_x=True, auto_resize_y=True, border=True, no_scrollbar=True):
+                                add_combo(width=wbtn, no_arrow_button=True, user_data=["Equip Equip", right_slot], callback=cbh, tag=tag.equip(right_slot))
+                            add_image_button(tag.icon(right_slot), callback=cbh, user_data=["Clear Equip", right_slot, "Clear"], tag=tag.img(right_slot))
 
 
 #ANCHOR - Initiative the UI
 def init_ui():
-    init_ui_main()
-    init_ui_W()
-    init_ui_CW()
-
-
-def init_ui_main():
     load_icons()
-    W_Skeleton()
-    
-def init_ui_W():
-    w_CORE()
-    w_HEAL()
-    w_PROF()
-    w_CHAR()
-    w_BUFF()
-    w_ATRB()
-    w_INIT()
-    w_ARMO()
-    w_VISI()
-    w_SPEE()
-    w_COND()
-    w_REST()
-    w_SKIL()
-    w_BLOC()
-    w_INVE()
-    w_WALL()
-def init_ui_CW():
-    CW_BLOC_Actions_Weapons()
-    CW_INVE_Bazaar()
-    CW_INVE_Equip()
+    init_window_Skeleton()
+    init_window_core()
+    init_window_health()
+    init_window_proficienices()
+    init_window_characteristics()
+    init_window_buffer()
+    init_window_attributes()
+    init_window_armor()
+    init_window_vision()
+    init_window_speed()
+    init_window_conditions()
+    init_window_rest()
+    init_window_skills()
+    init_window_block()
+    init_window_block_actions_weapons()
+    init_window_inventory()
+    init_window_inventory_bazaar()
+    init_window_inventory_equip()
+    init_window_wallet()
+
 
 
 # #ANCHOR - Populate Start
@@ -857,50 +865,50 @@ def populate_All():
 
 def populate_Race():
     populate_generic()
-    UI_fRace()
-    UI_fMilestone()
+    ui_upd_fRace()
+    ui_upd_fMilestone()
     
 def populate_Class():
     populate_generic()
-    UI_fClass()
-    UI_Spells()
+    ui_upd_fClass()
+    ui_upd_spells()
 
 
 def populate_Background():
     populate_generic()
-    UI_fBackground()
+    ui_upd_fBackground()
 
 
 
 def populate_Atr():
-    UI_ATRB()
-    UI_SKIL()
-    UI_INIT()
-    UI_BLOC_Actions()
-    UI_fRace()
-    UI_fClass()
-    UI_fMilestone()
-    UI_Spells()
+    ui_upd_attributes()
+    ui_upd_skills()
+    ui_upd_initiative()
+    ui_upd_block_actions()
+    ui_upd_fRace()
+    ui_upd_fClass()
+    ui_upd_fMilestone()
+    ui_upd_spells()
 
 def populate_Spell():
-    UI_Spells_Learn()
-    UI_Spells_Prepare()
-    UI_Spells_Cast()
+    ui_upd_spells_learn()
+    ui_upd_spells_prepare()
+    ui_upd_spells_cast()
     
     
-    UI_fClass()
+    ui_upd_fClass()
 
 def populate_generic():
-    UI_CORE()
-    UI_SKIL()
-    UI_HEAL()
-    UI_INIT()
-    UI_VISI()
-    UI_SPEE()
-    UI_PROF()
+    ui_upd_core()
+    ui_upd_skills()
+    ui_upd_health()
+    ui_upd_initiative()
+    ui_upd_vision()
+    ui_upd_speed()
+    ui_upd_proficiencies()
 
 def populate_HP():
-    UI_HEAL()
+    ui_upd_health()
     
 def populate_Arcane_Ward():
     HP = q.db.Clasq.pc.Abil["Arcane Ward"]["HP"]
@@ -910,80 +918,80 @@ def populate_Milestone():
     populate_Atr()
 
 def populate_Condition():
-    UI_COND()
+    ui_upd_conditions()
 
 def fields_static():
-    UI_CORE()
-    UI_ATRB()
-    UI_SKIL()
-    UI_HEAL()
-    UI_ARMO()
-    UI_INIT()
-    UI_VISI()
-    UI_SPEE()
-    UI_COND()
-    UI_PROF()
-    UI_CHAR()
-    UI_INVE_Bazaar()
+    ui_upd_core()
+    ui_upd_attributes()
+    ui_upd_skills()
+    ui_upd_health()
+    ui_upd_armor_class()
+    ui_upd_initiative()
+    ui_upd_vision()
+    ui_upd_speed()
+    ui_upd_conditions()
+    ui_upd_proficiencies()
+    ui_upd_character()
+    ui_upd_INVE_Bazaar()
 
 def fields_dynamic():
-    UI_BLOC()
-    UI_INVE()
+    ui_upd_block()
+    ui_upd_INVE()
 
 def populate_characteristics():
-    UI_CHAR()
+    ui_upd_character()
 
 def populate_Inventory():
-    UI_INVE()
+    ui_upd_INVE()
 
 def populate_Backpack():
     ensure_Backpack()
 
 def populate_Equip():
-    UI_BLOC_Actions()
-    UI_INVE_Equip()
+    ui_upd_block_actions()
+    ui_upd_INVE_Equip()
     
 
 
 def populate_Armor():
-    UI_ARMO()
+    ui_upd_armor_class()
 
 # # #--------------------------------------------------------------------
 
 
 # #ANCHOR - Static Functions
 
-def UI_CORE():
+def ui_upd_core():
     core = q.db.Core
-    configure_item(tag.level_val, label=core.L)
-    configure_item(tag.pb_val, label = f"PB: +{core.PB}")
-    configure_item(tag.race_select, items=g.list_Race, default_value=core.R)
-    configure_item(tag.subrace_select, items=g.option_Race[core.R], default_value=core.SR)
-    configure_item(tag.class_select, items=g.list_Class, default_value=core.C)
-    configure_item(tag.subclass_select, items=g.option_Class[core.C] if g.valid_class() else [], default_value=core.SC)
-    configure_item(tag.background_select, items=g.list_Background, default_value=g.Background())
+    configure_item(tag.core.val("level"), label=core.L)
+    configure_item(tag.core.val("pb"), label = f"PB: +{core.PB}")
+    configure_item(tag.core.select("Race"), items=g.list_Race, default_value=core.R)
+    configure_item(tag.core.select("Subrace"), items=g.option_Race[core.R], default_value=core.SR)
+    configure_item(tag.core.select("Class"), items=g.list_Class, default_value=core.C)
+    configure_item(tag.core.select("Subclass"), items=g.option_Class[core.C] if g.valid_class() else [], default_value=core.SC)
+    configure_item(tag.core.select("Background"), items=g.list_Background, default_value=g.Background())
 
 
 
-def UI_ATRB():
+def ui_upd_attributes():
     data=q.db.Atr
     for atr in g.list_Atr:
         cdata=data[atr]
-        
-        configure_item(f"button.ATRB.{atr}.Sum", label = cdata.Val)
-        configure_item(f"button.ATRB.{atr}.Mod", label = cdata.Mod)
-        configure_item(f"combo.ATRB.{atr}.Base", default_value = cdata.Base)
-        configure_item(f"button.ATRB.{atr}.Base", label = cdata.Base)
-        configure_item(f"button.ATRB.{atr}.Race", label = cdata.Rasi)
-        configure_item(f"button.ATRB.{atr}.Feat", label = cdata.Milestone)
+        configure_item(tag.atr.sum(atr), label = cdata.Val)
+        configure_item(tag.atr.mod(atr), label = cdata.Mod)
+        configure_item(tag.atr.select(atr), default_value = cdata.Base)
+        configure_item(tag.atr.source("Base"), label = cdata.Base)
+        configure_item(tag.atr.source("Race"), label = cdata.Rasi)
+        configure_item(tag.atr.source("feat"), label = cdata.Milestone)
 
 
 
-def UI_SKIL():
+def ui_upd_skills():
     for skill in g.list_Skill:
         cdata=q.pc.Skill[skill]
-        configure_item(f"checkbox.SKIL.{skill}", default_value=cdata)
-        configure_item(f"button.SKIL.{skill}.Mod", label=g.skill_text(skill))
+        
+        configure_item(tag.skill.toggle(skill), default_value=cdata)
+        configure_item(tag.skill.mod(skill), label=g.skill_text(skill))
         # configure_item(f"skill_Player_{skill}", default_value=skill in cdata["Player"])
         # configure_item(f"skill_Race_{skill}", default_value=skill in cdata["Race"])
         # configure_item(f"skill_Class_{skill}", default_value=skill in cdata["Class"])
@@ -996,95 +1004,97 @@ def UI_SKIL():
 
 
 
-def UI_HEAL():
+def ui_upd_health():
     hp = q.db.HP
-    configure_item("button.HEAL.HP.Val", label = f"{hp["Current"]} / {hp["Sum"]}")
-    configure_item("button.HEAL.HP.Temp", label = hp["Temp"])
-    set_value("input.HEAL.HP.Max", hp["Player"])
+    configure_item(tag.health.val("hp"), label = f"{hp["Current"]} / {hp["Sum"]}")
+    configure_item(tag.health.val("temp"), label = hp["Temp"])
+    set_value(tag.health.max("hp"), hp["Player"])
     
 
     
-def UI_INIT():
-    configure_item("button.INIT.Val", label = g.Initiative_text())
-    configure_item("button.INIT.Dex", label = q.db.Atr["DEX"]["Mod"])
-    configure_item("button.INIT.Race", label = q.db.Initiative["Race"])
-    configure_item("button.INIT.Class", label = q.db.Initiative["Class"])
+def ui_upd_initiative():
+    configure_item(tag.init.val(), label = g.Initiative_text())
+    configure_item(tag.init.source("dex"), label = q.db.Atr["DEX"]["Mod"])
+    configure_item(tag.init.source("race"), label = q.db.Initiative["Race"])
+    configure_item(tag.init.source("class"), label = q.db.Initiative["Class"])
     
-def UI_VISI():
+def ui_upd_vision():
     cdata=q.pc.Vision
-    configure_item("button.VISI.Main",label = cdata["Dark"])
-    for i in g.list_Vision:configure_item(f"button.VISI.{i}",label = cdata[i])
+    configure_item(tag.vision.val(),label = cdata["Dark"])
+    for i in g.list_Vision:configure_item(tag.vision.source(i),label = cdata[i])
 
-def UI_SPEE():
+def ui_upd_speed():
     cdata=q.pc.Speed
-    configure_item("button.SPEE.Main",label = cdata["Walk"])
-    for i in g.list_Speed: configure_item(f"button.SPEE.{i}",label = cdata[i])
+    configure_item(tag.speed.val(),label = cdata["Walk"])
+    for i in g.list_Speed: configure_item(tag.speed.source(i),label = cdata[i])
 
-def UI_ARMO():
+def ui_upd_armor_class():
     ac=q.db.AC
-    configure_item("button.ARMO.Val", label = ac.Sum)
-    configure_item("button.ARMO.Base", label = ac.Base)
-    configure_item("button.ARMO.Dex", label = ac.Dex)
+    configure_item(tag.ac.val(), label = ac.Sum)
+    configure_item(tag.ac.source("base"), label = ac.Base)
+    configure_item(tag.ac.source("dex"), label = ac.Dex)
 
 
-def UI_COND():
+def ui_upd_conditions():
     for i in g.list_Condition:
-        configure_item(f"selectable.COND.{i}",default_value = q.db.Condition[i])
-        configure_item(f"text.COND.{i}", color = g.condition_color(i))
+        configure_item(tag.cond.toggle(i),default_value = q.db.Condition[i])
+        configure_item(tag.cond.text(i), color = g.condition_color(i))
 
-def UI_CHAR():
+def ui_upd_character():
     cdata=q.db.Characteristic
     for i in g.list_Ideals:
-        configure_item(f"input.CHAR.{i}", default_value=cdata[i])
-        configure_item(f"text.CHAR.{i}", default_value=cdata[i])
+        configure_item(tag.char.input(i), default_value=cdata[i])
+        configure_item(tag.char.test(i), default_value=cdata[i])
     
     cdata=q.db.Description
     for i in g.list_Description:
-        configure_item(f"input.DESC.{i}", default_value=cdata[i])
-        configure_item(f"text.DESC.{i}", default_value=cdata[i])
+        configure_item(tag.pdesc.input(i), default_value=cdata[i])
+        configure_item(tag.pdesc.test(i), default_value=cdata[i])
 
 
-
-
-def UI_PROF():
+def ui_upd_proficiencies():
     cdata = q.pc.Prof
     for i in set(q.w.prof("Weapon")) & set(q.w.cat("Simple")):
-        configure_item(f"selectable.prof.Simple.{i}", default_value=i in cdata["Weapon"])
-        configure_item(f"text.prof.Simple.{i}", color=g.prof_color("Weapon", i))
+        configure_item(tag.prof.multi("Simple", i, suffix="toggle"), default_value=i in cdata["Weapon"])
+        configure_item(tag.prof.multi("Simple", i, suffix="text"), color=g.prof_color("Weapon", i))
+
     for i in set(q.w.prof("Weapon")) & set(q.w.cat("Martial")):
-        configure_item(f"selectable.prof.Martial.{i}", default_value=i in cdata["Weapon"])
-        configure_item(f"text.prof.Martial.{i}", color=g.prof_color("Weapon", i))
+        configure_item(tag.prof.multi("Martial", i, suffix="toggle"), default_value=i in cdata["Weapon"])
+        configure_item(tag.prof.multi("Martial", i, suffix="text"), color=g.prof_color("Weapon", i))
+
     for i in q.w.prof("Armor"):
-        configure_item(f"selectable.prof.Armor.{i}", default_value=i in cdata["Armor"])
-        configure_item(f"text.prof.Armor.{i}", color=g.prof_color("Armor", i))
+        configure_item(tag.prof.multi("Armor", i, suffix="toggle"), default_value=i in cdata["Armor"])
+        configure_item(tag.prof.multi("Armor", i, suffix="text"), color=g.prof_color("Armor", i))
+
     for i in g.list_Job:
-        configure_item(f"selectable.prof.Artisan.{i}", default_value=i in cdata["Tool"])
-        configure_item(f"text.prof.Artisan.{i}", color=g.prof_color("Tool", i))
+        configure_item(tag.prof.multi("Artisan", i, suffix="toggle"), default_value=i in cdata["Tool"])
+        configure_item(tag.prof.multi("Artisan", i, suffix="text"), color=g.prof_color("Tool", i))
+
     for i in g.list_Game:
-        configure_item(f"selectable.prof.Gaming.{i}", default_value=i in cdata["Tool"])
-        configure_item(f"text.prof.Gaming.{i}", color=g.prof_color("Tool", i))
+        configure_item(tag.prof.multi("Gaming", i, suffix="toggle"), default_value=i in cdata["Tool"])
+        configure_item(tag.prof.multi("Gaming", i, suffix="text"), color=g.prof_color("Tool", i))
+
     for i in g.list_Music:
-        configure_item(f"selectable.prof.Musical.{i}", default_value=i in cdata["Tool"])
-        configure_item(f"text.prof.Musical.{i}", color=g.prof_color("Tool", i))
+        configure_item(tag.prof.multi("Musical", i, suffix="toggle"), default_value=i in cdata["Tool"])
+        configure_item(tag.prof.multi("Musical", i, suffix="text"), color=g.prof_color("Tool", i))
+
     for i in g.list_Lang:
-        configure_item(f"selectable.prof.Languages.{i}", default_value=i in cdata["Lang"])
-        configure_item(f"text.prof.Languages.{i}", color=g.prof_color("Lang", i))
-
-
-
-def UI_BLOC():
-    UI_BLOC_Actions()
-    UI_Features()
-    UI_Spells()
+        configure_item(tag.prof.multi("Languages", i, suffix="toggle"), default_value=i in cdata["Lang"])
+        configure_item(tag.prof.multi("Languages", i, suffix="text"), color=g.prof_color("Lang", i))
 
 
 
 
-# #ANCHOR - Spell Functions
+def ui_upd_block():
+    ui_upd_block_actions()
+    ui_upd_features()
+    ui_upd_spells()
 
 
 
-def UI_BLOC_Actions():
+
+
+def ui_upd_block_actions():
     clear_BLOC_Action()
 
     Hand_1 = q.db.Inventory.Equip["Hand_1"]
@@ -1131,81 +1141,85 @@ def clear_BLOC_Action():
 
 
 
-def UI_Spells():
-    w1 = swBlock - 16
+
+
+#ANCHOR - SPELLS
+def ui_upd_spells():
+    w1 = size.w_block - 16
     w2 = w1 - 18
-    h1 = shBlock - 40
+    h1 = size.w_block - 40
     h2 = h1 - 95
     if g.valid_spellclass():
-        if not does_item_exist("tab.BLOC.Spells"):
-            with tab(label="Spell", tag="tab.BLOC.Spells", parent="tabbar.BLOC"):
+        if not does_item_exist(tag.spell.tabbar()):
+            with tab(label="Spell", tag=tag.spell.tab(), parent=tag.block.tabbar()):
                 with child_window(auto_resize_y=True, width=w1, height=h1, no_scrollbar=True, border=True):
                     with tab_bar():
                         with tab(label="Cast"):
-                            with child_window(auto_resize_y=True, width=w2, height=45, no_scrollbar=True, border=True, tag="cw.sCast.Sub"):
+                            with child_window(auto_resize_y=True, width=w2, height=45, no_scrollbar=True, border=True, tag=tag.scast.sub()):
                                 with group(horizontal=True):
                                     add_button(label="Abil", enabled=False, width=40)
-                                    add_text("", color=c_h2, tag="text.Spell.Abil")
+                                    add_text("", color=c_h2, tag=tag.spell.text("Abil"))
                                     add_button(label="Atk", enabled=False, width=40)
-                                    add_text("", color=c_h2, tag="text.Spell.ATK")
+                                    add_text("", color=c_h2, tag=tag.spell.text("atk"))
                                     add_button(label="DC", enabled=False, width=40)
-                                    add_text("", color=c_h2, tag="text.Spell.DC")
-                            add_child_window(auto_resize_y=True, width=w2, height=h2, no_scrollbar=True, border=True, tag="cw.sCast.Main")
+                                    add_text("", color=c_h2, tag=tag.spell.text("dc"))
+                            add_child_window(auto_resize_y=True, width=w2, height=h2, no_scrollbar=True, border=True, tag=tag.scast.main())
                         with tab(label="Learn"):
-                            with child_window(auto_resize_y=True, width=w2, height=45, no_scrollbar=True, border=True, tag="cw.sLearn.Sub"):
+                            with child_window(auto_resize_y=True, width=w2, height=45, no_scrollbar=True, border=True, tag=tag.slearn.sub()):
                                 with group(horizontal=True):
                                     add_text("Cantrips", color=c_h1)
-                                    add_text("", color=c_text, tag="text.sLearn.Cantrip.Known")
+                                    add_text("", color=c_text, tag=tag.slearn.known("cantrip"))
                                     add_text("/", color=c_text)
-                                    add_text("", color=c_text, tag="text.sLearn.Cantrip.Available")
+                                    add_text("", color=c_text, tag=tag.slearn.available("cantrip"))
                                     add_text("Spells", color=c_h1)
-                                    add_text("", color=c_text, tag="text.sLearn.Spell.Known")
+                                    add_text("", color=c_text, tag=tag.slearn.known("spell"))
                                     add_text("/", color=c_text)
-                                    add_text("", color=c_text, tag="text.sLearn.Spell.Available")
-                            with child_window(auto_resize_y=True, width=w2, height=h2, no_scrollbar=True, border=True, tag="cw.sLearn.Main"):
+                                    add_text("", color=c_text, tag=tag.slearn.available("spell"))
+                            with child_window(auto_resize_y=True, width=w2, height=h2, no_scrollbar=True, border=True, tag=tag.slearn.main()):
                                 with tab_bar():
                                     for i in [1,2,3,4,5,6,7,8,9]:
                                         with tab(label=f"Level {i}"):
-                                            add_child_window(auto_resize_y=True, width=w2-20, height=h2-40, no_scrollbar=True, border=True, tag=f"cw.sLearn.L{i}")
+                                            add_child_window(auto_resize_y=True, width=w2-20, height=h2-40, no_scrollbar=True, border=True, tag=tag.slearn.wlevel(i))
                         with tab(label="Prepare"):
-                            with child_window(auto_resize_y=True, width=w2, height=45, no_scrollbar=True, border=True, tag="cw.sPrepare.Sub"):
+                            with child_window(auto_resize_y=True, width=w2, height=45, no_scrollbar=True, border=True, tag=tag.sprepare.sub()):
                                 with group(horizontal=True):
                                     add_text("Prepared", color=c_h1)
-                                    add_text("", color=c_text, tag="text.sPrepare.Current")
+                                    add_text("", color=c_text, tag=tag.sprepare.current())
                                     add_text("/", color=c_text)
-                                    add_text("", color=c_text, tag="text.sPrepare.Available")
-                            with child_window(auto_resize_y=True, width=w2, height=h2, no_scrollbar=True, border=True, tag="cw.sPrepare.Main"):
+                                    add_text("", color=c_text, tag=tag.sprepare.available())
+                            with child_window(auto_resize_y=True, width=w2, height=h2, no_scrollbar=True, border=True, tag=tag.sprepare.main()):
                                 with tab_bar():
                                     for i in [1,2,3,4,5,6,7,8,9]:
                                         with tab(label=f"Level {i}"):
-                                            add_child_window(auto_resize_y=True, width=w2-20, height=h2-40, no_scrollbar=True, border=True, tag=f"cw.sPrepare.L{i}")
-        UI_Spells_Learn()
-        UI_Spells_Prepare()  
-        UI_Spells_Cast()
-    else: item_delete("tab.BLOC.Spells")
+                                            add_child_window(auto_resize_y=True, width=w2-20, height=h2-40, no_scrollbar=True, border=True, tag=tag.sprepare.wlevel(i))
+        ui_upd_spells_learn()
+        ui_upd_spells_prepare()  
+        ui_upd_spells_cast()
+    else: item_delete(tag.spell.tab())
 
-def UI_Spells_Learn():
-    UI_Spells_Learn_Sub()
-    UI_Spells_Learn_Main()
+def ui_upd_spells_learn():
+    ui_upd_spells_learn_sub()
+    ui_upd_spells_learn_main()
     
-def UI_Spells_Prepare():
-    UI_Spells_Prepare_Sub()
-    UI_Spells_Prepare_Main()
+def ui_upd_spells_prepare():
+    ui_upd_spells_prepare_sub()
+    ui_upd_spells_prepare_main()
     
-def UI_Spells_Cast():
-    UI_Spells_Cast_Sub()
-    UI_Spells_Cast_Main()
+def ui_upd_spells_cast():
+    ui_upd_spells_cast_sub()
+    ui_upd_spells_cast_main()
 
     
-def UI_Spells_Cast_Sub(): 
-    configure_item("text.Spell.Abil", default_value=q.pc.Class.spell_data["abil"])
-    configure_item("text.Spell.ATK", default_value=q.pc.Class.spell_data["atk"])
-    configure_item("text.Spell.DC", default_value=q.pc.Class.spell_data["dc"])
+def ui_upd_spells_cast_sub():
+    cdata = q.pc.Class.spell_data
+    configure_item(tag.spell.text("abil"), default_value=cdata["abil"])
+    configure_item(tag.spell.text("atk"), default_value=cdata["atk"])
+    configure_item(tag.spell.text("dc"), default_value=cdata["dc"])
 
-def UI_Spells_Cast_Main():
+def ui_upd_spells_cast_main():
     
-    item_clear("cw.sCast.Main")
-    with group(parent="cw.sCast.Main"):
+    item_clear(tag.scast.main())
+    with group(parent=tag.scast.main()):
         for level in range(0, q.pc.Class.spell_data["max_spell_level"] + 1):
             spell_list = q.db.Spell["Book"][0] if level == 0 else q.db.Spell["Prepared"][level]
             if not spell_list: continue
@@ -1214,17 +1228,17 @@ def UI_Spells_Cast_Main():
                     add_text(g.list_spell_header[level], color=c_h1)
                     if level > 0:
                         for idx, value in enumerate(q.db.Spell["Slot"][level]): 
-                            add_checkbox(default_value=value, enabled=False, tag=f"checkbox.sCast.Slot.{level}.{idx}")
+                            add_checkbox(default_value=value, enabled=False, tag=tag.scast.toggle(level,idx))
 
                     button_label = "Cast" if level > 0 else "Will"
 
                 for spell in spell_list:
                     with group(horizontal=True):
-                        add_button(label=button_label, width=50, user_data=["Spell Cast", level, spell], callback=cbh, tag=f"button.sCast.{level}.{spell}")
-                        add_text(spell, color=c_h2, tag=f"text.sCast.{level}.{spell}")
-                        tooltip_tag = f"tooltip.sCast.{level}.{spell}"
+                        add_button(label=button_label, width=50, user_data=["Spell Cast", level, spell], callback=cbh, tag=tag.scast.button(level,spell))
+                        add_text(spell, color=c_h2, tag=tag.scast.text(level,spell))
+                        tooltip_tag = tag.scast.tooltip(level,spell)
                         item_delete(tooltip_tag)
-                        with tooltip(f"text.sCast.{level}.{spell}", tag=tooltip_tag):
+                        with tooltip(tag.scast.text(level,spell), tag=tooltip_tag):
                             spell_detail(spell)
                 
             add_separator()
@@ -1232,73 +1246,73 @@ def UI_Spells_Cast_Main():
 # LEARN TAB FUNCTIONS
 
 
-def UI_Spells_Learn_Sub():
-    configure_item("text.sLearn.Cantrip.Known", default_value=g.cantrips_known())
-    configure_item("text.sLearn.Cantrip.Available", default_value=q.pc.Class.spell_data["cantrips_available"])
-    configure_item("text.sLearn.Spell.Known", default_value=g.spells_known())
-    configure_item("text.sLearn.Spell.Available", default_value=q.pc.Class.spell_data["spells_available"])
+def ui_upd_spells_learn_sub():
+    configure_item(tag.slearn.known("cantrip"), default_value=g.cantrips_known())
+    configure_item(tag.slearn.available("cantrip"), default_value=q.pc.Class.spell_data["cantrips_available"])
+    configure_item(tag.slearn.known("spell"), default_value=g.spells_known())
+    configure_item(tag.slearn.available("spell"), default_value=q.pc.Class.spell_data["spells_available"])
 
-def UI_Spells_Learn_Main():
+def ui_upd_spells_learn_main():
     for level in range(1, q.pc.Class.spell_data["max_spell_level"] + 1):
         available_spells = g.List_Spells(q.pc.Class.spell_data["Caster"], level)
-        item_clear(f"cw.sLearn.L{level}")
+        item_clear(tag.slearn.wlevel(level))
         if not available_spells: continue
-        with group(parent=f"cw.sLearn.L{level}"):
+        with group(parent=tag.slearn.wlevel(level)):
             for spell in available_spells:
                 is_known = spell in q.db.Spell["Book"][level]
-                add_selectable(label=spell, default_value=is_known, width=680, user_data=["Spell Learn", spell, level], callback=cbh, tag=f"selectable.sLearn.{level}.{spell}")
-                tooltip_tag = f"tooltip.sLearn.{level}.{spell}"
+                add_selectable(label=spell, default_value=is_known, width=680, user_data=["Spell Learn", spell, level], callback=cbh, tag=tag.slearn.toggle(level,spell))
+                tooltip_tag = tag.slearn.tooltip(level,spell)
                 item_delete(tooltip_tag)
-                with tooltip(f"selectable.sLearn.{level}.{spell}", tag=tooltip_tag):
+                with tooltip(tag.slearn.toggle(level,spell), tag=tooltip_tag):
                     spell_detail(spell)
 
 
 
 
-def UI_Spells_Prepare_Sub():
-    configure_item("text.sPrepare.Current", default_value=g.spells_prepared())
-    configure_item("text.sPrepare.Available", default_value=q.pc.Class.spell_data["prepared_available"])
+def ui_upd_spells_prepare_sub():
+    configure_item(tag.slearn.current(), default_value=g.spells_prepared())
+    configure_item(tag.sprepare.available(), default_value=q.pc.Class.spell_data["prepared_available"])
 
-def UI_Spells_Prepare_Main():
+def ui_upd_spells_prepare_main():
     for level in range(1, q.pc.Class.spell_data["max_spell_level"] + 1):
-        item_clear(f"cw.sPrepare.L{level}")
+        item_clear(tag.sprepare.wlevel(level))
         known_spells = q.db.Spell["Book"][level]
         if not known_spells: continue
-        with group(parent=f"cw.sPrepare.L{level}"):
+        with group(parent=tag.sprepare.wlevel(level)):
             for spell in known_spells:
                 is_prepared = spell in q.db.Spell["Prepared"][level]
-                add_selectable(label=spell, default_value=is_prepared, width=680, user_data=["Spell Prepare", spell, level], callback=cbh, tag=f"selectable.sPrepare.{level}.{spell}")
-                tooltip_tag = f"tooltip.sPrepare.{level}.{spell}"
+                add_selectable(label=spell, default_value=is_prepared, width=680, user_data=["Spell Prepare", spell, level], callback=cbh, tag=tag.sprepare.toggle(level,spell))
+                tooltip_tag = tag.sprepare.tooltip(level,spell)
                 item_delete(tooltip_tag)
-                with tooltip(f"selectable.sPrepare.{level}.{spell}", tag=tooltip_tag):
+                with tooltip(tag.sprepare.toggle(level,spell), tag=tooltip_tag):
                     spell_detail(spell)
 
-def UI_Spells_Learn_Update():
+def ui_upd_spells_learn_Update():
     for level in range(0, q.pc.Class.spell_data["max_spell_level"] + 1):
         for spell in g.List_Spells(q.pc.Class.spell_data["Caster"], level):
-            tag = f"selectable.sLearn.{level}.{spell}"
+            tag = tag.slearn.toggle(level,spell)
             if does_item_exist(tag): configure_item(tag, default_value=spell in q.db.Spell["Book"][level])
 
-def UI_Spells_Prepare_Update():
+def ui_upd_spells_prepare_Update():
     """Update prepare checkboxes without rebuilding UI"""
     for level in range(1, q.pc.Class.spell_data["max_spell_level"] + 1):
         for spell in q.db.Spell["Book"][level]:
-            tag = f"selectable.sPrepare.{level}.{spell}"
+            tag = tag.sprepare.toggle(level,spell)
             if does_item_exist(tag): configure_item(tag, default_value=spell in q.db.Spell["Prepared"][level])
 
-def UI_Spells_Update_Cast_Slots():
+def ui_upd_spells_Update_Cast_Slots():
     """Update just the spell slot checkboxes"""
     for level in range(1, q.pc.Class.spell_data["max_spell_level"] + 1):
         for idx, slot_used in enumerate(q.db.Spell["Slot"][level]):
-            tag = f"checkbox.sCast.Slot.{level}.{idx}"
+            tag = tag.scast.toggle(level,idx)
             if does_item_exist(tag): configure_item(tag, default_value=slot_used)
 
-def UI_Spells_Update_Stats():
+def ui_upd_spells_Update_Stats():
     """Update just the stat displays"""
     stats_map = {
-        "text.sCast.Abil": q.pc.Class.spell_data["abil"],
-        "text.sCast.Atk": q.pc.Class.spell_data["atk"], 
-        "text.sCast.DC": q.pc.Class.spell_data["dc"]
+        tag.scast.text("abil"): q.pc.Class.spell_data["abil"],
+        tag.scast.text("atk"): q.pc.Class.spell_data["atk"], 
+        tag.scast.text("dc"): q.pc.Class.spell_data["dc"]
     }
     for tag, value in stats_map.items():
         if does_item_exist(tag):
@@ -1306,79 +1320,80 @@ def UI_Spells_Update_Stats():
 
 
 # #ANCHOR - Features and traits
-def UI_Features():
-    UI_fMilestone()
-    UI_fRace()
-    UI_fClass()
-    UI_fBackground()
+def ui_upd_features():
+    ui_upd_fMilestone()
+    ui_upd_fRace()
+    ui_upd_fClass()
+    ui_upd_fBackground()
 
-def UI_fRace():
-    UI_fRace_Sub()
-    item_clear("cw.fRace.Main")
-    globals()[f"UI_Race_{g.Race()}"]()
+def ui_upd_fRace():
+    ui_upd_fRace_sub()
+    item_clear(tag.rfeature.main())
+    globals()[f"ui_upd_Race_{g.Race()}"]()
 
 
-def UI_fRace_Sub():
-    configure_item("combo.fRace.Asi.0", default_value = q.db.Race.Rasi[0])
-    configure_item("combo.fRace.Asi.1", default_value = q.db.Race.Rasi[1])
+def ui_upd_fRace_sub():
+    configure_item(tag.rfeature.toggle("asi_0"), default_value = q.db.Race.Rasi[0])
+    configure_item(tag.rfeature.toggle("asi_1"), default_value = q.db.Race.Rasi[1])
 
-def UI_fClass():
-    UI_fClass_Sub()
-    item_clear("cw.fClass.Main")
-    globals()[f"UI_Class_{q.db.Core.C}"]()
+def ui_upd_fClass():
+    ui_upd_fClass_sub()
+    item_clear(tag.cfeature.main())
+    globals()[f"ui_upd_Class_{q.db.Core.C}"]()
 
-def UI_fClass_Sub():
-    item_clear("cw.fClass.Sub")
-    with group(parent="cw.fClass.Sub"):
+def ui_upd_fClass_sub():
+    item_clear(tag.cfeature.sub())
+    with group(parent=tag.cfeature.sub()):
         with group(horizontal=True):
             add_text("Skill Select", color=c_h1)
             for idx, key in enumerate(q.db.Class["Skill Select"]):
-                add_combo(items=g.dict_Class_Skills[q.db.Core.C], default_value=key,  width=100, no_arrow_button=True, user_data=["Class Skill Select",idx], callback=cbh, tag=f"combo.fClass.sSelect.{idx}")
-            add_button(label = "Clear", user_data=["Class Skill Select", "Clear"], callback=cbh, tag="button.fClass.sSelect.Clear")
+                add_combo(items=g.dict_Class_Skills[q.db.Core.C], default_value=key,  width=100, no_arrow_button=True, user_data=["Class Skill Select",idx], callback=cbh, tag=tag.cfeature.toggle("skill_select",idx))
+            add_button(label = "Clear", user_data=["Class Skill Select", "Clear"], callback=cbh, tag=tag.cfeature.button("skill_select","Clear"))
 
-def UI_fMilestone():
-    UI_fMilestone_Sub()
-    item_clear("cw.fMilestone.Main")
+def ui_upd_fMilestone():
+    ui_upd_fMilestone_sub()
+    item_clear(tag.mfeature.main())
     for feat in q.db.Milestone["Feat"]:
         if feat:
-            func = f"UI_Feat_{feat.replace(' ', '_')}"
+            func = f"ui_upd_Feat_{feat.replace(' ', '_')}"
             if func in globals():
                 globals()[func]()
 
-def UI_fMilestone_Sub():
-    item_clear("cw.fMilestone.Sub")
-    with group(parent="cw.fMilestone.Sub"):
+def ui_upd_fMilestone_sub():
+    cdata = q.pc.milestone
+    item_clear(tag.mfeature.sub())
+    with group(parent=tag.mfeature.sub()):
         for i in range(q.pc.milestone_count):
             with group(horizontal=True):
                 add_text(f"Milestone {i}: ", color=c_h1)
-                data = q.db.Milestone["Select"][i]
-                add_combo(items=["Feat", "Asi", "Clear"], default_value=data,  width=50, no_arrow_button=True, user_data=["Milestone Level Select", i], callback=cbh, tag=f"combo.fMilestone.Lq.pc.Type.{i}")
+                data = cdata["Select"][i]
+                add_combo(items=["Feat", "Asi", "Clear"], default_value=data,  width=50, no_arrow_button=True, user_data=["Milestone Level Select", i], callback=cbh, tag=tag.mfeature.select("level", i))
                 if data == "Feat":
-                    cdata = q.db.Milestone["Feat"][i]
-                    add_combo(items=g.list_Feat, default_value=cdata,  width=150, no_arrow_button=True, user_data=["Milestone Feat Select", i], callback=cbh, tag=f"combo.fMilestone.Lq.pc.Feat.{i}")
+                    cdata = cdata["Feat"][i]
+                    add_combo(items=g.list_Feat, default_value=cdata,  width=150, no_arrow_button=True, user_data=["Milestone Feat Select", i], callback=cbh, tag=tag.mfeature.select("feat", i))
                 elif data == "Asi":
-                    cdata = q.db.Milestone["Asi"][i]
-                    add_combo(items=g.list_Atr, default_value=cdata[0],  width=50, no_arrow_button=True, user_data=["Milestone Asi Select", i, 0], callback=cbh, tag=f"combo.fMilestone.Lq.pc.Asi.{i}.0")
-                    add_combo(items=g.list_Atr, default_value=cdata[1],  width=50, no_arrow_button=True, user_data=["Milestone Asi Select", i, 1], callback=cbh, tag=f"combo.fMilestone.Lq.pc.Asi.{i}.1")
+                    cdata = cdata["Asi"][i]
+                    add_combo(items=g.list_Atr, default_value=cdata[0],  width=50, no_arrow_button=True, user_data=["Milestone Asi Select", i, 0], callback=cbh, tag=tag.mfeature.select("asi_0", i))
+                    add_combo(items=g.list_Atr, default_value=cdata[1],  width=50, no_arrow_button=True, user_data=["Milestone Asi Select", i, 1], callback=cbh, tag=tag.mfeature.select("asi_1", i))
 
 # #ANCHOR - FT Background
-def UI_fBackground():
-    UI_fBackground_Sub()
-    UI_fBackground_Main()
+def ui_upd_fBackground():
+    ui_upd_fBackground_sub()
+    ui_upd_fBackground_main()
 
-def UI_fBackground_Sub():
-    item_clear("cw.fBackground.Sub")
+def ui_upd_fBackground_sub():
+    item_clear(tag.bfeature.sub())
     data = q.db.Background["Prof"]
-    with group(parent="cw.fBackground.Sub"):
+    with group(parent=tag.bfeature.sub()):
         with group(horizontal=True):
             add_text("Proficiency Select", color=c_h1)
             for key in data:
                 for idx, val in enumerate(data[key]["Select"]):
-                    tag_combo = f"combo.fBackground.Pq.pc.{key}.{idx}"
+                    tag_combo = tag.bfeature.select(key,idx)
                     add_combo(items=["Clear"] + g.dict_Background_Skills[q.db.Core.BG], default_value=val, width=100, no_arrow_button=True, user_data=["Background Prof Select", key, idx], callback=cbh, tag=tag_combo)
 
-def UI_fBackground_Main():
-    item_clear("cw.fBackground.Main")
+def ui_upd_fBackground_main():
+    item_clear(tag.bfeature.main())
     Background_Feature_Map = {
         "Empty": ["No Feature", "You have no special feature from your background."],
         "Acolyte": ["Shelter of the Faithful", "As an acolyte, you command the respect of those who share your faith, and you can perform the religious ceremonies of your deity. You and your adventuring companions can expect to receive free healing and care at a temple, shrine, or other established presence of your faith, though you must provide any material components needed for Spell. Those who share your religion will support you (but only you) at a modest lifestyle. You might also have ties to a specific temple dedicated to your chosen deity or pantheon, and you have a residence there. This could be the temple where you used to serve, if you remain on good terms with it, or a temple where you have found a new home. While near your temple, you can call upon the priests for assistance, provided the assistance you ask for is not hazardous and you remain in good standing with your temple."],
@@ -1401,13 +1416,13 @@ def UI_fBackground_Main():
     desc = data[1]
     
     
-    with group(parent="cw.fBackground.Main"):
-        tag_text = "text.fBackground.Main.Name"
-        tag_tooltip = "tooltip.fBackground.Main.Detail"
+    with group(parent=tag.bfeature.main()):
+        tag_text = tag.bfeature.text("main","name")
+        tag_tooltip = tag.bfeature.tooltip("main","name")
         add_text(name, color=c_h1, tag=tag_text)
         item_delete(tag_tooltip)
         with tooltip(tag_text, tag=tag_tooltip):
-            add_text(desc, color=c_text, wrap=avg_wrap)
+            add_text(desc, color=c_text, wrap=size.gwrap)
 
 
 
@@ -1418,390 +1433,390 @@ def UI_fBackground_Main():
 
 # #ANCHOR - FEATS
 
-def UI_Feat_Actor():
+def ui_upd_Feat_Actor():
     feat = "Actor"
     tag = feat
     d1 = "Gain advantage on Deception and Performance checks when trying to pass yourself off as a different person."
     d2 = f"You can mimic the speech of another person or the sounds made by other creature. You must have heard the person speaking, or heard the creature make the sound, for at least 1 minute. A successful Wisdom Insight check contested by your {q.db.Skill['Deception']['Mod']:+d} Deception check allows a listener to determine that the effect is faked."
-    with group(parent="cw.fMilestone.Main"):
-        add_text(feat, color=c_h1, tag=f"text.fMilestone.{tag}.Header")
-        add_text(d1, color=c_text, wrap=avg_wrap, tag=f"text.fMilestone.{tag}.0")
-        add_text(d2, color=c_text, wrap=avg_wrap, tag=f"text.fMilestone.{tag}.1")
+    with group(parent=tag.mfeature.main()):
+        add_text(feat, color=c_h1, tag=tag.mfeature.header(tag))
+        add_text(d1, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"0"))
+        add_text(d2, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"1"))
 
-def UI_Feat_Alert():
+def ui_upd_Feat_Alert():
     feat = "Alert"
     tag = feat
     d1 = "You can't be surprised while you are consciouse."
     d2 = "Other creatures don't gain advantage on attack rolls against you as a result of being unseen by you."
-    with group(parent="cw.fMilestone.Main"):
-        add_text(feat, color=c_h1, tag=f"text.fMilestone.{tag}.Header")
-        add_text(d1, color=c_text, wrap=avg_wrap, tag=f"text.fMilestone.{tag}.0")
-        add_text(d2, color=c_text, wrap=avg_wrap, tag=f"text.fMilestone.{tag}.1")
+    with group(parent=tag.mfeature.main()):
+        add_text(feat, color=c_h1, tag=tag.mfeature.header(tag))
+        add_text(d1, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"0"))
+        add_text(d2, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"1"))
 
-def UI_Feat_Athlete():
+def ui_upd_Feat_Athlete():
     feat = "Athlete"
     tag = feat
     d1 = "When you are prone, standing up uses only 5 feet of your movement."
     d2 = "Climbing doesn't cost you extra movement."
     d3 = "You can make a running long jump or a running high jump after moving only 5 feet on foot, rather than 10 feet."
-    tag_header = f"text.fMilestone.{tag}.Header"
-    tag_popup = f"popup.fMilestone.{tag}.Select"
-    with group(parent="cw.fMilestone.Main"):
-        add_text(feat, color=c_h1, tag=tag_header)
-        add_text(d1, color=c_text, wrap=avg_wrap, tag=f"text.fMilestone.{tag}.0")
-        add_text(d2, color=c_text, wrap=avg_wrap, tag=f"text.fMilestone.{tag}.1")
-        add_text(d3, color=c_text, wrap=avg_wrap, tag=f"text.fMilestone.{tag}.2")
+    t1_header = tag.mfeature.header(tag)
+    tag_popup = tag.mfeature.popup(tag)
+    with group(parent=tag.mfeature.main()):
+        add_text(feat, color=c_h1, tag=t1_header)
+        add_text(d1, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"0"))
+        add_text(d2, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"1"))
+        add_text(d3, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"2"))
         item_delete(tag_popup)
-        with popup(tag_header, mousebutton=mvMouseButton_Left, max_size=[500,400], tag=tag_popup):
+        with popup(t1_header, mousebutton=mvMouseButton_Left, max_size=[500,400], tag=tag_popup):
             with group(horizontal=False):
-                add_combo(items=["Clear"]+g.dict_Feat_Lists[feat], default_value=q.db.Milestone.Data[feat]["Select"][0], width=50, no_arrow_button=True, user_data=["Milestone Feat Choice",feat, 0], callback=cbh, tag=f"combo.fMilestone.{tag}.Choice.0")
+                add_combo(items=["Clear"]+g.dict_Feat_Lists[feat], default_value=q.db.Milestone.Data[feat]["Select"][0], width=50, no_arrow_button=True, user_data=["Milestone Feat Choice",feat, 0], callback=cbh, tag=tag.mfeature.select(tag,"0"))
 
-def UI_Feat_Charger():
+def ui_upd_Feat_Charger():
     feat = "Charger"
     tag = feat
     d1 = "When you use your action to Dash, you can use a bonus action to make one melee weapon attack or shove a creature, and if you moved at least 10 feet in a straight line immediately before taking this bonus action, you gain a +5 bonus to the attack's damage roll or push the target with extra force."
-    with group(parent="cw.fMilestone.Main"):
-        add_text(feat, color=c_h1, tag=f"text.fMilestone.{tag}.Header")
-        add_text(d1, color=c_text, wrap=avg_wrap, tag=f"text.fMilestone.{tag}.0")
+    with group(parent=tag.mfeature.main()):
+        add_text(feat, color=c_h1, tag=tag.mfeature.header(tag))
+        add_text(d1, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"0"))
 
-def UI_Feat_Crossbow_Expert():
+def ui_upd_Feat_Crossbow_Expert():
     feat = "Crossbow Expert"
     tag = feat.replace(" ", "_")
     d1 = "You ignore the loading quality of crossbows with which you are proficient."
     d2 = "Being within 5 feet of a hostile creature doesn't impose disadvantage on your ranged attack rollq.pc."
     d3 = "When you use the Attack action and attack with a one-handed weapon, you can use a bonus action to fire a hand crossbow you are holding."
-    with group(parent="cw.fMilestone.Main"):
-        add_text(feat, color=c_h1, tag=f"text.fMilestone.{tag}.Header")
-        add_text(d1, color=c_text, wrap=avg_wrap, tag=f"text.fMilestone.{tag}.0")
-        add_text(d2, color=c_text, wrap=avg_wrap, tag=f"text.fMilestone.{tag}.1")
-        add_text(d3, color=c_text, wrap=avg_wrap, tag=f"text.fMilestone.{tag}.2")
+    with group(parent=tag.mfeature.main()):
+        add_text(feat, color=c_h1, tag=tag.mfeature.header(tag))
+        add_text(d1, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"0"))
+        add_text(d2, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"1"))
+        add_text(d3, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"2"))
 
-def UI_Feat_Defensive_Duelist():
+def ui_upd_Feat_Defensive_Duelist():
     feat = "Defensive Duelist"
     tag = feat.replace(" ", "_")
     d1 = "When you are wielding a finesse weapon with which you are proficient and another creature hits you with a melee attack, you can use your reaction to add your proficiency bonus to your AC for that attack, potentially causing the attack to miss you."
-    with group(parent="cw.fMilestone.Main"):
-        add_text(feat, color=c_h1, tag=f"text.fMilestone.{tag}.Header")
-        add_text(d1, color=c_text, wrap=avg_wrap, tag=f"text.fMilestone.{tag}.0")
+    with group(parent=tag.mfeature.main()):
+        add_text(feat, color=c_h1, tag=tag.mfeature.header(tag))
+        add_text(d1, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"0"))
 
-def UI_Feat_Dual_Wielder():
+def ui_upd_Feat_Dual_Wielder():
     feat = "Dual Wielder"
     tag = feat.replace(" ", "_")
     d1 = "You gain a +1 bonus to AC while you are wielding a separate melee weapon in each hand."
     d2 = "You can use two-weapon fighting even when the one-handed melee weapons you are wielding aren't light."
     d3 = "You can draw or stow two one-handed weapons when you would normally be able to draw or stow only one."
-    with group(parent="cw.fMilestone.Main"):
-        add_text(feat, color=c_h1, tag=f"text.fMilestone.{tag}.Header")
-        add_text(d1, color=c_text, wrap=avg_wrap, tag=f"text.fMilestone.{tag}.0")
-        add_text(d2, color=c_text, wrap=avg_wrap, tag=f"text.fMilestone.{tag}.1")
-        add_text(d3, color=c_text, wrap=avg_wrap, tag=f"text.fMilestone.{tag}.2")
+    with group(parent=tag.mfeature.main()):
+        add_text(feat, color=c_h1, tag=tag.mfeature.header(tag))
+        add_text(d1, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"0"))
+        add_text(d2, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"1"))
+        add_text(d3, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"2"))
 
-def UI_Feat_Dungeon_Delver():
+def ui_upd_Feat_Dungeon_Delver():
     feat = "Dungeon Delver"
     tag = feat.replace(" ", "_")
     d1 = "You have advantage on Wisdom (Perception) and Intelligence (Investigation) checks made to detect the presence of secret doorq.pc."
     d2 = "You have advantage on saving throws made to avoid or resist trapq.pc."
     d3 = "You take no damage from traps that would normally deal half damage on a successful save."
-    with group(parent="cw.fMilestone.Main"):
-        add_text(feat, color=c_h1, tag=f"text.fMilestone.{tag}.Header")
-        add_text(d1, color=c_text, wrap=avg_wrap, tag=f"text.fMilestone.{tag}.0")
-        add_text(d2, color=c_text, wrap=avg_wrap, tag=f"text.fMilestone.{tag}.1")
-        add_text(d3, color=c_text, wrap=avg_wrap, tag=f"text.fMilestone.{tag}.2")
+    with group(parent=tag.mfeature.main()):
+        add_text(feat, color=c_h1, tag=tag.mfeature.header(tag))
+        add_text(d1, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"0"))
+        add_text(d2, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"1"))
+        add_text(d3, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"2"))
 
-def UI_Feat_Durable():
+def ui_upd_Feat_Durable():
     feat = "Durable"
     tag = feat
     d1 = f"When you roll a Hit Die to regain hit points, the minimum number of hit points you regain from the roll equals {q.db.Atr['CON']['Mod'] * 2}."
-    with group(parent="cw.fMilestone.Main"):
-        add_text(feat, color=c_h1, tag=f"text.fMilestone.{tag}.Header")
-        add_text(d1, color=c_text, wrap=avg_wrap, tag=f"text.fMilestone.{tag}.0")
+    with group(parent=tag.mfeature.main()):
+        add_text(feat, color=c_h1, tag=tag.mfeature.header(tag))
+        add_text(d1, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"0"))
 
-def UI_Feat_Elemental_Adept():
+def ui_upd_Feat_Elemental_Adept():
     feat = "Elemental Adept"
     tag = "ElementalAdept"
     value = q.db.Milestone["Data"][tag]["Select"][0]
     d1 = f"Spells you cast ignore resistance to {value} damage."
     d2 = f"When you roll damage for a spell you cast that deals {value} damage, you treat any 1 on a damage die as a 2."
-    tag_header = f"text.fMilestone.{tag}.Header"
-    tag_popup = f"popup.fMilestone.{tag}.Select"
-    with group(parent="cw.fMilestone.Main"):
-        add_text(feat, color=c_h1, tag=tag_header)
-        add_text(d1, color=c_text, wrap=avg_wrap, tag=f"text.fMilestone.{tag}.0")
-        add_text(d2, color=c_text, wrap=avg_wrap, tag=f"text.fMilestone.{tag}.1")
+    t1_header = tag.mfeature.header(tag)
+    tag_popup = tag.mfeature.popup(tag)
+    with group(parent=tag.mfeature.main()):
+        add_text(feat, color=c_h1, tag=t1_header)
+        add_text(d1, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"0"))
+        add_text(d2, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"1"))
         item_delete(tag_popup)
-        with popup(tag_header, mousebutton=mvMouseButton_Left, max_size=[500,400], tag=tag_popup):
+        with popup(t1_header, mousebutton=mvMouseButton_Left, max_size=[500,400], tag=tag_popup):
             with group(horizontal=False):
-                add_combo(items=g.dict_Feat_Lists[tag], default_value=value, width=100, no_arrow_button=True, user_data=["Milestone Feat Choice", tag, 0], callback=cbh, tag=f"combo.fMilestone.{tag}.Choice.0")
+                add_combo(items=g.dict_Feat_Lists[tag], default_value=value, width=100, no_arrow_button=True, user_data=["Milestone Feat Choice", tag, 0], callback=cbh, tag=tag.mfeature.select(tag,"0"))
 
-def UI_Feat_Grappler():
+def ui_upd_Feat_Grappler():
     feat = "Grappler"
     tag = feat
     d1 = "You have advantage on attack rolls against a creature you are grappling."
     d2 = "You can use your action to try to pin a creature grappled by you. To do so, make another grapple check. If you succeed, you and the creature are both restrained until the grapple endq.pc."
-    with group(parent="cw.fMilestone.Main"):
-        add_text(feat, color=c_h1, tag=f"text.fMilestone.{tag}.Header")
-        add_text(d1, color=c_text, wrap=avg_wrap, tag=f"text.fMilestone.{tag}.0")
-        add_text(d2, color=c_text, wrap=avg_wrap, tag=f"text.fMilestone.{tag}.1")
+    with group(parent=tag.mfeature.main()):
+        add_text(feat, color=c_h1, tag=tag.mfeature.header(tag))
+        add_text(d1, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"0"))
+        add_text(d2, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"1"))
 
-def UI_Feat_Great_Weapon_Master():
+def ui_upd_Feat_Great_Weapon_Master():
     feat = "Great Weapon Master"
     tag = feat.replace(" ", "_")
     d1 = "On your turn, when you score a critical hit with a melee weapon or reduce a creature to 0 hit points with one, you can make one melee weapon attack as a bonus action."
     d2 = "Before you make a melee attack with a heavy weapon you are proficient with, you can choose to take a -5 penalty to the attack roll. If the attack hits, you add +10 to the attack's damage."
-    with group(parent="cw.fMilestone.Main"):
-        add_text(feat, color=c_h1, tag=f"text.fMilestone.{tag}.Header")
-        add_text(d1, color=c_text, wrap=avg_wrap, tag=f"text.fMilestone.{tag}.0")
-        add_text(d2, color=c_text, wrap=avg_wrap, tag=f"text.fMilestone.{tag}.1")
+    with group(parent=tag.mfeature.main()):
+        add_text(feat, color=c_h1, tag=tag.mfeature.header(tag))
+        add_text(d1, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"0"))
+        add_text(d2, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"1"))
 
-def UI_Feat_Healer():
+def ui_upd_Feat_Healer():
     feat = "Healer"
     tag = feat
     d1 = "When you use a healer's kit to stabilize a dying creature, that creature also regains 1 hit point."
     d2 = "As an action, you can spend one use of a healer's kit to tend to a creature and restore 1d6 + 4 hit points to it, plus additional hit points equal to the creature's maximum number of Hit Dice. The creature can't regain hit points from this feat again until it finishes a short or long rest."
-    with group(parent="cw.fMilestone.Main"):
-        add_text(feat, color=c_h1, tag=f"text.fMilestone.{tag}.Header")
-        add_text(d1, color=c_text, wrap=avg_wrap, tag=f"text.fMilestone.{tag}.0")
-        add_text(d2, color=c_text, wrap=avg_wrap, tag=f"text.fMilestone.{tag}.1")
+    with group(parent=tag.mfeature.main()):
+        add_text(feat, color=c_h1, tag=tag.mfeature.header(tag))
+        add_text(d1, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"0"))
+        add_text(d2, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"1"))
 
-def UI_Feat_Heavily_Armored():
+def ui_upd_Feat_Heavily_Armored():
     feat = "Heavily Armored"
     tag = feat.replace(" ", "_")
-    with group(parent="cw.fMilestone.Main"):
-        add_text(feat, color=c_h1, tag=f"text.fMilestone.{tag}.Header")
+    with group(parent=tag.mfeature.main()):
+        add_text(feat, color=c_h1, tag=tag.mfeature.header(tag))
 
-def UI_Feat_Heavy_Armor_Master():
+def ui_upd_Feat_Heavy_Armor_Master():
     feat = "Heavy Armor Master"
     tag = feat.replace(" ", "_")
     d1 = "Prerequisite: Proficiency with heavy armor"
     d2 = "While you are wearing heavy armor, bludgeoning, piercing, and slashing damage that you take from nonmagical attacks is reduced by 3."
-    with group(parent="cw.fMilestone.Main"):
-        add_text(feat, color=c_h1, tag=f"text.fMilestone.{tag}.Header")
-        add_text(d1, color=c_text, wrap=avg_wrap, tag=f"text.fMilestone.{tag}.0")
-        add_text(d2, color=c_text, wrap=avg_wrap, tag=f"text.fMilestone.{tag}.1")
+    with group(parent=tag.mfeature.main()):
+        add_text(feat, color=c_h1, tag=tag.mfeature.header(tag))
+        add_text(d1, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"0"))
+        add_text(d2, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"1"))
 
-def UI_Feat_Inspiring_Leader():
+def ui_upd_Feat_Inspiring_Leader():
     feat = "Inspiring Leader"
     tag = feat.replace(" ", "_")
     d1 = f"You can spend 10 minutes inspiring your companions, shoring up their resolve to fight. When you do so, choose up to six friendly creatures (which can include yourself) within 30 feet of you who can see or hear you and who can understand you. Each creature gains temporary hit points equal to your level + {q.db.Atr['CHA']['Mod']}."
-    with group(parent="cw.fMilestone.Main"):
-        add_text(feat, color=c_h1, tag=f"text.fMilestone.{tag}.Header")
-        add_text(d1, color=c_text, wrap=avg_wrap, tag=f"text.fMilestone.{tag}.0")
+    with group(parent=tag.mfeature.main()):
+        add_text(feat, color=c_h1, tag=tag.mfeature.header(tag))
+        add_text(d1, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"0"))
 
-def UI_Feat_Keen_Mind():
+def ui_upd_Feat_Keen_Mind():
     feat = "Keen Mind"
     tag = feat.replace(" ", "_")
     d1 = "You always know which way is north."
     d2 = "You always know the number of hours left before the next sunrise or sunset."
     d3 = "You can accurately recall anything you have seen or heard within the past month."
-    with group(parent="cw.fMilestone.Main"):
-        add_text(feat, color=c_h1, tag=f"text.fMilestone.{tag}.Header")
-        add_text(d1, color=c_text, wrap=avg_wrap, tag=f"text.fMilestone.{tag}.0")
-        add_text(d2, color=c_text, wrap=avg_wrap, tag=f"text.fMilestone.{tag}.1")
-        add_text(d3, color=c_text, wrap=avg_wrap, tag=f"text.fMilestone.{tag}.2")
+    with group(parent=tag.mfeature.main()):
+        add_text(feat, color=c_h1, tag=tag.mfeature.header(tag))
+        add_text(d1, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"0"))
+        add_text(d2, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"1"))
+        add_text(d3, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"2"))
 
-def UI_Feat_Lightly_Armored():
+def ui_upd_Feat_Lightly_Armored():
     feat = "Lightly Armored"
     tag = "LightlyArmored"
-    tag_header = f"text.fMilestone.{tag}.Header"
-    tag_popup = f"popup.fMilestone.{tag}.Select"
-    with group(parent="cw.fMilestone.Main"):
-        add_text(feat, color=c_h1, tag=tag_header)
+    t1_header = tag.mfeature.header(tag)
+    tag_popup = tag.mfeature.popup(tag)
+    with group(parent=tag.mfeature.main()):
+        add_text(feat, color=c_h1, tag=t1_header)
         item_delete(tag_popup)
-        with popup(tag_header, mousebutton=mvMouseButton_Left, max_size=[500,400], tag=tag_popup):
+        with popup(t1_header, mousebutton=mvMouseButton_Left, max_size=[500,400], tag=tag_popup):
             with group(horizontal=False):
-                add_combo(items=g.dict_Feat_Lists[tag], default_value=q.db.Milestone["Data"][tag]["Select"][0], width=50, no_arrow_button=True, user_data=["Milestone Feat Choice", tag, 0], callback=cbh, tag=f"combo.fMilestone.{tag}.Choice.0")
+                add_combo(items=g.dict_Feat_Lists[tag], default_value=q.db.Milestone["Data"][tag]["Select"][0], width=50, no_arrow_button=True, user_data=["Milestone Feat Choice", tag, 0], callback=cbh, tag=tag.mfeature.select(tag,"0"))
 
-def UI_Feat_Lucky():
+def ui_upd_Feat_Lucky():
     feat = "Lucky"
     tag = feat
     use = q.db.Milestone["Data"][feat]["Use"]
     d1 = "You have 3 luck pointq.pc. Whenever you make an attack roll, an ability check, or a saving throw, you can spend one luck point to roll an additional d20. You can choose to spend one of your luck points after you roll the die, but before the outcome is determined. You choose which of the d20s is used for the attack roll, ability check, or saving throw."
     d2 = "You can also spend one luck point when an attack roll is made against you. Roll a d20, and then choose whether the attack uses the attacker's roll or yourq.pc. If more than one creature spends a luck point to influence the outcome of a roll, the points cancel each other out; no additional dice are rolled."
-    with group(parent="cw.fMilestone.Main"):
+    with group(parent=tag.mfeature.main()):
         with group(horizontal=True):
-            add_text(feat, color=c_h1, tag=f"text.fMilestone.{tag}.Header")
+            add_text(feat, color=c_h1, tag=tag.mfeature.header(tag))
             for idx, val in enumerate(use):
                 add_checkbox(default_value=val, enabled=True, user_data=["Milestone Feat Use", feat, idx], callback=cbh, tag=f"checkbox.fMilestone.{tag}.Use.{idx}")
-        add_text(d1, color=c_text, wrap=avg_wrap, tag=f"text.fMilestone.{tag}.0")
-        add_text(d2, color=c_text, wrap=avg_wrap, tag=f"text.fMilestone.{tag}.1")
+        add_text(d1, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"0"))
+        add_text(d2, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"1"))
 
-def UI_Feat_Mage_Slayer():
+def ui_upd_Feat_Mage_Slayer():
     feat = "Mage Slayer"
     tag = feat.replace(" ", "_")
     d1 = "When a creature within 5 feet of you casts a spell, you can use your reaction to make a melee weapon attack against that creature."
     d2 = "When you damage a creature that is concentrating on a spell, that creature has disadvantage on the saving throw it makes to maintain its concentration."
     d3 = "You have advantage on saving throws against spells cast by creatures within 5 feet of you."
-    with group(parent="cw.fMilestone.Main"):
-        add_text(feat, color=c_h1, tag=f"text.fMilestone.{tag}.Header")
-        add_text(d1, color=c_text, wrap=avg_wrap, tag=f"text.fMilestone.{tag}.0")
-        add_text(d2, color=c_text, wrap=avg_wrap, tag=f"text.fMilestone.{tag}.1")
-        add_text(d3, color=c_text, wrap=avg_wrap, tag=f"text.fMilestone.{tag}.2")
+    with group(parent=tag.mfeature.main()):
+        add_text(feat, color=c_h1, tag=tag.mfeature.header(tag))
+        add_text(d1, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"0"))
+        add_text(d2, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"1"))
+        add_text(d3, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"2"))
 
-def UI_Feat_Medium_Armor_Master():
+def ui_upd_Feat_Medium_Armor_Master():
     feat = "Medium Armor Master"
     tag = feat.replace(" ", "_")
     d1 = "Wearing medium armor doesn't impose disadvantage on your Dexterity (Stealth) checkq.pc."
     d2 = "When you wear medium armor, you can add 3, rather than 2, to your AC if you have a Dexterity of 16 or higher."
-    with group(parent="cw.fMilestone.Main"):
-        add_text(feat, color=c_h1, tag=f"text.fMilestone.{tag}.Header")
-        add_text(d1, color=c_text, wrap=avg_wrap, tag=f"text.fMilestone.{tag}.0")
-        add_text(d2, color=c_text, wrap=avg_wrap, tag=f"text.fMilestone.{tag}.1")
+    with group(parent=tag.mfeature.main()):
+        add_text(feat, color=c_h1, tag=tag.mfeature.header(tag))
+        add_text(d1, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"0"))
+        add_text(d2, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"1"))
 
-def UI_Feat_Mobile():
+def ui_upd_Feat_Mobile():
     feat = "Mobile"
     tag = feat
     d1 = "When you use the Dash action, difficult terrain doesn't cost you extra movement on that turn."
     d2 = "When you make a melee attack against a creature, you don't provoke opportunity attacks from that creature for the rest of the turn, whether you hit or not."
-    with group(parent="cw.fMilestone.Main"):
-        add_text(feat, color=c_h1, tag=f"text.fMilestone.{tag}.Header")
-        add_text(d1, color=c_text, wrap=avg_wrap, tag=f"text.fMilestone.{tag}.0")
-        add_text(d2, color=c_text, wrap=avg_wrap, tag=f"text.fMilestone.{tag}.1")
+    with group(parent=tag.mfeature.main()):
+        add_text(feat, color=c_h1, tag=tag.mfeature.header(tag))
+        add_text(d1, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"0"))
+        add_text(d2, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"1"))
 
-def UI_Feat_Moderately_Armored():
+def ui_upd_Feat_Moderately_Armored():
     feat = "Moderately Armored"
     tag = feat.replace(" ", "_")
-    tag_header = f"text.fMilestone.{tag}.Header"
-    tag_popup = f"popup.fMilestone.{tag}.Select"
-    with group(parent="cw.fMilestone.Main"):
-        add_text(feat, color=c_h1, tag=tag_header)
+    t1_header = tag.mfeature.header(tag)
+    tag_popup = tag.mfeature.popup(tag)
+    with group(parent=tag.mfeature.main()):
+        add_text(feat, color=c_h1, tag=t1_header)
         item_delete(tag_popup)
-        with popup(tag_header, mousebutton=mvMouseButton_Left, max_size=[500,400], tag=tag_popup):
+        with popup(t1_header, mousebutton=mvMouseButton_Left, max_size=[500,400], tag=tag_popup):
             with group(horizontal=False):
-                add_combo(items=g.dict_Feat_Lists[tag], default_value=q.db.Milestone["Data"][tag]["Select"][0], width=50, no_arrow_button=True, user_data=["Milestone Feat Choice", tag, 0], callback=cbh, tag=f"combo.fMilestone.{tag}.Choice.0")
+                add_combo(items=g.dict_Feat_Lists[tag], default_value=q.db.Milestone["Data"][tag]["Select"][0], width=50, no_arrow_button=True, user_data=["Milestone Feat Choice", tag, 0], callback=cbh, tag=tag.mfeature.select(tag,"0"))
 
-def UI_Feat_Mounted_Combatant():
+def ui_upd_Feat_Mounted_Combatant():
     feat = "Mounted Combatant"
     tag = feat.replace(" ", "_")
     d1 = "You have advantage on melee attack rolls against any unmounted creature that is smaller than your mount."
     d2 = "You can force an attack targeted at your mount to target you instead."
     d3 = "If your mount is subjected to an effect that allows it to make a Dexterity saving throw to take only half damage, it instead takes no damage if it succeeds on the saving throw, and only half damage if it failq.pc."
-    with group(parent="cw.fMilestone.Main"):
-        add_text(feat, color=c_h1, tag=f"text.fMilestone.{tag}.Header")
-        add_text(d1, color=c_text, wrap=avg_wrap, tag=f"text.fMilestone.{tag}.0")
-        add_text(d2, color=c_text, wrap=avg_wrap, tag=f"text.fMilestone.{tag}.1")
-        add_text(d3, color=c_text, wrap=avg_wrap, tag=f"text.fMilestone.{tag}.2")
+    with group(parent=tag.mfeature.main()):
+        add_text(feat, color=c_h1, tag=tag.mfeature.header(tag))
+        add_text(d1, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"0"))
+        add_text(d2, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"1"))
+        add_text(d3, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"2"))
 
-def UI_Feat_Polearm_Master():
+def ui_upd_Feat_Polearm_Master():
     feat = "Polearm Master"
     tag = feat.replace(" ", "_")
     d1 = "When you take the Attack action and attack with only a glaive, halberd, quarterstaff, or spear, you can use a bonus action to make a melee attack with the opposite end of the weapon. This attack uses the same ability modifier as the primary attack. The weapon's damage die for this attack is a d4, and it deals bludgeoning damage."
     d2 = "While you are wielding a glaive, halberd, pike, quarterstaff, or spear, other creatures provoke an opportunity attack from you when they enter the reach you have with that weapon."
-    with group(parent="cw.fMilestone.Main"):
-        add_text(feat, color=c_h1, tag=f"text.fMilestone.{tag}.Header")
-        add_text(d1, color=c_text, wrap=avg_wrap, tag=f"text.fMilestone.{tag}.0")
-        add_text(d2, color=c_text, wrap=avg_wrap, tag=f"text.fMilestone.{tag}.1")
+    with group(parent=tag.mfeature.main()):
+        add_text(feat, color=c_h1, tag=tag.mfeature.header(tag))
+        add_text(d1, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"0"))
+        add_text(d2, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"1"))
 
-def UI_Feat_Resilient():
+def ui_upd_Feat_Resilient():
     feat = "Resilient"
     tag = feat
-    tag_header = f"text.fMilestone.{tag}.Header"
-    tag_popup = f"popup.fMilestone.{tag}.Select"
-    with group(parent="cw.fMilestone.Main"):
-        add_text(feat, color=c_h1, tag=tag_header)
+    t1_header = tag.mfeature.header(tag)
+    tag_popup = tag.mfeature.popup(tag)
+    with group(parent=tag.mfeature.main()):
+        add_text(feat, color=c_h1, tag=t1_header)
         item_delete(tag_popup)
-        with popup(tag_header, mousebutton=mvMouseButton_Left, max_size=[500,400], tag=tag_popup):
+        with popup(t1_header, mousebutton=mvMouseButton_Left, max_size=[500,400], tag=tag_popup):
             with group(horizontal=False):
-                add_combo(items=g.dict_Feat_Lists[feat], default_value=q.db.Milestone["Data"][feat]["Select"][0], width=50, no_arrow_button=True, user_data=["Milestone Feat Choice", feat, 0], callback=cbh, tag=f"combo.fMilestone.{tag}.Choice.0")
+                add_combo(items=g.dict_Feat_Lists[feat], default_value=q.db.Milestone["Data"][feat]["Select"][0], width=50, no_arrow_button=True, user_data=["Milestone Feat Choice", feat, 0], callback=cbh, tag=tag.mfeature.select(tag,"0"))
 
-def UI_Feat_Savage_Attacker():
+def ui_upd_Feat_Savage_Attacker():
     feat = "Savage Attacker"
     tag = feat.replace(" ", "_")
     d1 = "Once per turn when you roll damage for a melee weapon attack, you can reroll the weapon's damage dice and use either total."
-    with group(parent="cw.fMilestone.Main"):
-        add_text(feat, color=c_h1, tag=f"text.fMilestone.{tag}.Header")
-        add_text(d1, color=c_text, wrap=avg_wrap, tag=f"text.fMilestone.{tag}.0")
+    with group(parent=tag.mfeature.main()):
+        add_text(feat, color=c_h1, tag=tag.mfeature.header(tag))
+        add_text(d1, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"0"))
 
-def UI_Feat_Sentinel():
+def ui_upd_Feat_Sentinel():
     feat = "Sentinel"
     tag = feat
     d1 = "When you hit a creature with an opportunity attack, the creature's speed becomes 0 for the rest of the turn."
     d2 = "Creatures provoke opportunity attacks from you even if they take the Disengage action before leaving your reach."
     d3 = "When a creature within 5 feet of you makes an attack against a target other than you (and that target doesn't have this feat), you can use your reaction to make a melee weapon attack against the attacking creature."
-    with group(parent="cw.fMilestone.Main"):
-        add_text(feat, color=c_h1, tag=f"text.fMilestone.{tag}.Header")
-        add_text(d1, color=c_text, wrap=avg_wrap, tag=f"text.fMilestone.{tag}.0")
-        add_text(d2, color=c_text, wrap=avg_wrap, tag=f"text.fMilestone.{tag}.1")
-        add_text(d3, color=c_text, wrap=avg_wrap, tag=f"text.fMilestone.{tag}.2")
+    with group(parent=tag.mfeature.main()):
+        add_text(feat, color=c_h1, tag=tag.mfeature.header(tag))
+        add_text(d1, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"0"))
+        add_text(d2, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"1"))
+        add_text(d3, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"2"))
 
-def UI_Feat_Sharp_shooter():
+def ui_upd_Feat_Sharp_shooter():
     feat = "Sharpshooter"
     tag = feat
     d1 = "Attacking at long range doesn't impose disadvantage on your ranged weapon attack rollq.pc."
     d2 = "Your ranged weapon attacks ignore half cover and three-quarters cover."
     d3 = "Before you make an attack with a ranged weapon that you are proficient with, you can choose to take a -5 penalty to the attack roll. If the attack hits, you add +10 to the attack's damage."
-    with group(parent="cw.fMilestone.Main"):
-        add_text(feat, color=c_h1, tag=f"text.fMilestone.{tag}.Header")
-        add_text(d1, color=c_text, wrap=avg_wrap, tag=f"text.fMilestone.{tag}.0")
-        add_text(d2, color=c_text, wrap=avg_wrap, tag=f"text.fMilestone.{tag}.1")
-        add_text(d3, color=c_text, wrap=avg_wrap, tag=f"text.fMilestone.{tag}.2")
+    with group(parent=tag.mfeature.main()):
+        add_text(feat, color=c_h1, tag=tag.mfeature.header(tag))
+        add_text(d1, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"0"))
+        add_text(d2, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"1"))
+        add_text(d3, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"2"))
 
-def UI_Feat_Shield_Master():
+def ui_upd_Feat_Shield_Master():
     feat = "Shield Master"
     tag = feat.replace(" ", "_")
     d1 = "If you take the Attack action on your turn, you can use a bonus action to try to shove a creature within 5 feet of you with your shield."
     d2 = "If you aren't incapacitated, you can add your shield's AC bonus to any Dexterity saving throw you make against a spell or other harmful effect that targets only you."
     d3 = "If you are subjected to an effect that allows you to make a Dexterity saving throw to take only half damage, you can use your reaction to take no damage if you succeed on the saving throw, interposing your shield between yourself and the source of the effect."
-    with group(parent="cw.fMilestone.Main"):
-        add_text(feat, color=c_h1, tag=f"text.fMilestone.{tag}.Header")
-        add_text(d1, color=c_text, wrap=avg_wrap, tag=f"text.fMilestone.{tag}.0")
-        add_text(d2, color=c_text, wrap=avg_wrap, tag=f"text.fMilestone.{tag}.1")
-        add_text(d3, color=c_text, wrap=avg_wrap, tag=f"text.fMilestone.{tag}.2")
+    with group(parent=tag.mfeature.main()):
+        add_text(feat, color=c_h1, tag=tag.mfeature.header(tag))
+        add_text(d1, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"0"))
+        add_text(d2, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"1"))
+        add_text(d3, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"2"))
 
-def UI_Feat_Skulker():
+def ui_upd_Feat_Skulker():
     feat = "Skulker"
     tag = feat
     d1 = "You can try to hide when you are lightly obscured from the creature from which you are hiding."
     d2 = "When you are hidden from a creature and miss it with a ranged weapon attack, making the attack doesn't reveal your position."
     d3 = "Dim light doesn't impose disadvantage on your Wisdom (Perception) checks that rely on sight."
-    with group(parent="cw.fMilestone.Main"):
-        add_text(feat, color=c_h1, tag=f"text.fMilestone.{tag}.Header")
-        add_text(d1, color=c_text, wrap=avg_wrap, tag=f"text.fMilestone.{tag}.0")
-        add_text(d2, color=c_text, wrap=avg_wrap, tag=f"text.fMilestone.{tag}.1")
-        add_text(d3, color=c_text, wrap=avg_wrap, tag=f"text.fMilestone.{tag}.2")
+    with group(parent=tag.mfeature.main()):
+        add_text(feat, color=c_h1, tag=tag.mfeature.header(tag))
+        add_text(d1, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"0"))
+        add_text(d2, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"1"))
+        add_text(d3, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"2"))
 
-def UI_Feat_Tavern_Brawler():
+def ui_upd_Feat_Tavern_Brawler():
     feat = "Tavern Brawler"
     tag = feat.replace(" ", "_")
     d1 = f"You are proficient with improvised Weapon. Your unarmed strike uses a d4 for damage. When you hit a creature with an unarmed strike or an improvised weapon on your turn, you can use a bonus action to attempt to grapple the target."
-    with group(parent="cw.fMilestone.Main"):
-        add_text(feat, color=c_h1, tag=f"text.fMilestone.{tag}.Header")
-        add_text(d1, color=c_text, wrap=avg_wrap, tag=f"text.fMilestone.{tag}.0")
+    with group(parent=tag.mfeature.main()):
+        add_text(feat, color=c_h1, tag=tag.mfeature.header(tag))
+        add_text(d1, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"0"))
 
-def UI_Feat_Tough():
+def ui_upd_Feat_Tough():
     feat = "Tough"
     tag = feat
     d1 = "Your hit point maximum increases by an amount equal to twice your level when you gain this feat. Whenever you gain a level thereafter, your hit point maximum increases by an additional 2 hit pointq.pc."
-    with group(parent="cw.fMilestone.Main"):
-        add_text(feat, color=c_h1, tag=f"text.fMilestone.{tag}.Header")
-        add_text(d1, color=c_text, wrap=avg_wrap, tag=f"text.fMilestone.{tag}.0")
+    with group(parent=tag.mfeature.main()):
+        add_text(feat, color=c_h1, tag=tag.mfeature.header(tag))
+        add_text(d1, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"0"))
 
-def UI_Feat_War_Caster():
+def ui_upd_Feat_War_Caster():
     feat = "War Caster"
     tag = feat
     d1 = "You have advantage on Constitution saving throws that you make to maintain your concentration on a spell when you take damage."
     d2 = "You can perform the somatic components of spells even when you have weapons or a shield in one or both handq.pc."
     d3 = "When a hostile creature's movement provokes an opportunity attack from you, you can use your reaction to cast a spell at the creature, rather than making an opportunity attack. The spell must have a casting time of 1 action and must target only that creature."
-    with group(parent="cw.fMilestone.Main"):
-        add_text(feat, color=c_h1, tag=f"text.fMilestone.{tag}.Header")
-        add_text(d1, color=c_text, wrap=avg_wrap, tag=f"text.fMilestone.{tag}.0")
-        add_text(d2, color=c_text, wrap=avg_wrap, tag=f"text.fMilestone.{tag}.1")
-        add_text(d3, color=c_text, wrap=avg_wrap, tag=f"text.fMilestone.{tag}.2")
+    with group(parent=tag.mfeature.main()):
+        add_text(feat, color=c_h1, tag=tag.mfeature.header(tag))
+        add_text(d1, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"0"))
+        add_text(d2, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"1"))
+        add_text(d3, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"2"))
 
-def UI_Feat_Weapon_Master():
+def ui_upd_Feat_Weapon_Master():
     feat = "Weapon Master"
     tag = feat.replace(" ", "_")
     select = q.db.Milestone["Data"][tag]["Select"]
     d1 = "You gain proficiency with four weapons of your choice."
-    tag_header = f"text.fMilestone.{tag}.Header"
-    tag_popup = f"popup.fMilestone.{tag}.Select"
-    with group(parent="cw.fMilestone.Main"):
-        add_text(feat, color=c_h1, tag=tag_header)
-        add_text(d1, color=c_text, wrap=avg_wrap, tag=f"text.fMilestone.{tag}.0")
+    t1_header = tag.mfeature.header(tag)
+    tag_popup = tag.mfeature.popup(tag)
+    with group(parent=tag.mfeature.main()):
+        add_text(feat, color=c_h1, tag=t1_header)
+        add_text(d1, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"0"))
         item_delete(tag_popup)
-        with popup(tag_header, mousebutton=mvMouseButton_Left, max_size=[500,400], tag=tag_popup):
+        with popup(t1_header, mousebutton=mvMouseButton_Left, max_size=[500,400], tag=tag_popup):
             with group(horizontal=False):
                 for i in [0,1,2,3]:
-                    add_combo(items=g.dict_Feat_Lists[tag], default_value=select[i], width=100, no_arrow_button=True, user_data=["Milestone Feat Choice", tag, i], callback=cbh, tag=f"combo.fMilestone.{tag}.Choice.{i}")
+                    add_combo(items=g.dict_Feat_Lists[tag], default_value=select[i], width=100, no_arrow_button=True, user_data=["Milestone Feat Choice", tag, i], callback=cbh, tag=tag.mfeauture.select(tag,i))
 
 # #------------------------------------------------
 
@@ -1845,20 +1860,25 @@ def spell_detail(spell):
 
 # Fixed Race UI Functions with Proper Naming
 
-def UI_Race_Empty():
+def ui_upd_Race_Empty():
+    parent = "empty"
     pass
 
-def UI_Race_Human():
+def ui_upd_Race_Human():
+    parent = "human"
     pass
 
-def UI_Race_Human_Standard():
+def ui_upd_Race_Human_Standard():
+    parent = "human_standard"
     pass
 
-def UI_Race_Human_Variant():
+def ui_upd_Race_Human_Variant():
+    parent = "human_variant"
     pass
 
-def UI_Race_Elf():
-    with group(parent="cw.fRace.Main"):
+def ui_upd_Race_Elf():
+    parent = "elf"
+    with group(parent=tag.rfeature.main()):
         a1 = "Fey Ancestry"
         t1 = a1.replace(" ", "_")
         d1 = "You have advantage on saving throws against being charmed, and magic can't put you to sleep."
@@ -1867,246 +1887,352 @@ def UI_Race_Elf():
         t2 = a2.replace(" ", "_")
         d2 = "You don't need to sleep. Instead, you meditate deeply, remaining semiconscious, for 4 hours a day."
         
-        add_text(a1, color=c_h1, wrap=avg_wrap)
-        add_text(d1, color=c_text, wrap=avg_wrap)
+        add_text(a1, color=c_h1, wrap=size.gwrap)
+        add_text(d1, color=c_text, wrap=size.gwrap)
         
-        add_text(a2, color=c_h1, wrap=avg_wrap)
-        add_text(d2, color=c_text, wrap=avg_wrap)
-    if g.Subrace(): globals()[f"UI_Race_{g.Race()}_{g.Subrace()}"]()
+        add_text(a2, color=c_h1, wrap=size.gwrap)
+        add_text(d2, color=c_text, wrap=size.gwrap)
+    if g.Subrace(): globals()[f"ui_upd_Race_{g.Race()}_{g.Subrace()}"]()
 
-def UI_Race_Elf_High():
-    with group(parent="cw.fRace.Main"):
+def ui_upd_Race_Elf_High():
+    parent = "elf_high"
+    with group(parent=tag.rfeature.main()):
         a1 = "Cantrip"
         cdata1=q.db.Race.Abil["Cantrip"]
         spell = cdata1["Select"][0]
-        tHeader = "text.fRace.Elf.High.Cantrip.Header"
-        tPopup = "popup.fRace.Elf.High.Cantrip"
-        tCombo = "combo.fRace.Elf.High.Cantrip"
-        tSpell_Name = "text.fRace.Elf.High.Cantrip.Name"
-        tTooltip = "tooltip.fRace.Elf.High.Cantrip"
+
+        t1_header = tag.rfeature.header(parent, a1)
+        tag_label = tag.rfeature.label(parent, a1)
+        tag_tooltip = tag=tag.rfeature.tooltip(parent, a1)
+        tag_popup = tag.rfeature.popup(parent, a1)
+        tag_select = tag.rfeature.select(parent, a1)
         with group(horizontal=True):
-            add_text(a1, color=c_h1, wrap=avg_wrap, tag=tHeader)
-            add_text(spell, color=c_h2, wrap=avg_wrap, tag=tSpell_Name)
+            add_text(a1, color=c_h1, wrap=size.gwrap, tag=t1_header)
+            add_text(spell, color=c_h2, wrap=size.gwrap, tag=tag_label)
             if spell:
-                item_delete(tTooltip)
-                with tooltip(tSpell_Name, tag=tTooltip):
+                item_delete(tag_tooltip)
+                with tooltip(tag_label, tag=tag_tooltip):
                     spell_detail(spell)
-        item_delete(tPopup)
-        with popup(tHeader, mousebutton=mvMouseButton_Left, tag=tPopup):
-            add_combo(items=g.list_High_Elf_Cantrip, default_value=spell, width=120, no_arrow_button=True, user_data=["Race Spell Select","Cantrip"], callback=cbh, tag=tCombo)
+        item_delete(tag_popup)
+        with popup(t1_header, mousebutton=mvMouseButton_Left, tag=tag_popup):
+            add_combo(items=g.list_High_Elf_Cantrip, default_value=spell, width=120, no_arrow_button=True, user_data=["Race Spell Select","Cantrip"], callback=cbh, tag=tag_select)
 
 
-def UI_Race_Elf_Wood():
-    with group(parent="cw.fRace.Main"):
+def ui_upd_Race_Elf_Wood():
+    parent = "elf_wood"
+    with group(parent=tag.rfeature.main()):
         a1 = "Mask of the Wild"
         t1 = a1.replace(" ", "_")
         d1 = "You can attempt to hide even when you are only lightly obscured by foliage, heavy rain, falling snow, mist, and other natural phenomena."
-        add_text(a1, color=c_h1, wrap=avg_wrap)
-        add_text(d1, color=c_text, wrap=avg_wrap)
+        add_text(a1, color=c_h1, wrap=size.gwrap)
+        add_text(d1, color=c_text, wrap=size.gwrap)
 
-def UI_Race_Elf_Drow():
-    with group(parent="cw.fRace.Main"):
+def ui_upd_Race_Elf_Drow():
+    parent = "elf_drow"
+    with group(parent=tag.rfeature.main()):
         a1 = "Drow Magic"
         t1 = a1.replace(" ", "_")
         cdata=q.db.Race.Abil["Drow Magic"]
         
-        tSpell_Name = f"text.fRace.Elf.Drow.{t1}.{spell}"
-        tTooltip = f"tooltip.fRace.Elf.Drow.{t1}.{spell}"
+        tag_label = tag.rfeature.label(parent, a1, spell)
+        tag_tooltip = tag.rfeature.tooltip(parent, a1, spell)
         add_text(a1, color=c_h1, wrap=300)
         for spell in cdata.keys():
             with group(horizontal=True):
-                add_text(spell, color=c_h2, wrap=300, tag=tSpell_Name)
+                add_text(spell, color=c_h2, wrap=300, tag=tag.rfeature.label(parent, a1, spell))
                 if "Use" in cdata[spell]:
-                    add_checkbox(default_value=cdata[spell]["Use"][0], enabled=True, user_data=["Race Spell Use",t1,spell], callback=cbh, tag=f"checkbox.fRace.Elf.Drow.{t1}.{spell}")
-            item_delete(tTooltip)
-            with tooltip(tSpell_Name, tag=tTooltip): spell_detail(spell)
+                    tag_toggle = tag.rfeature.toggle(parent, t1, spell)
+                    add_checkbox(default_value=cdata[spell]["Use"][0], enabled=True, user_data=["Race Spell Use",t1,spell], callback=cbh, tag=tag_toggle)
+            item_delete(tag_tooltip)
+            with tooltip(tag_label, tag=tag_tooltip): spell_detail(spell)
 
 
 
-def UI_Race_Elf_ShadarKai():
-    ability_name = "Blessing of the Raven Queen"
-    ability_tag = ability_name.replace(" ", "")
+def ui_upd_Race_Elf_ShadarKai():
+    parent = "elf_shadarkai"
+
+    a1 = "Blessing of the Raven Queen"; t1 = a1.replace(" ", "_")
+    cdata = q.db.Race.Abil[a1]
+    t1_header = tag.rfeature.header(parent,t1)
+    tag_text = tag.rfeature.text(parent,t1)
+    
     if q.db.Core.L < 3:desc = "(Bonus Action) Teleport up to 30 ft to an unoccupied space you can see. You can use this a number of times equal to your proficiency bonus, and you regain all expended uses when you finish a long rest."
     else:desc = "(Bonus Action) Teleport up to 30 ft to an unoccupied space you can see. You can use this a number of times equal to your proficiency bonus, and you regain all expended uses when you finish a long rest. Immediately after you use it, you gain resistance to all damage until the start of your next turn."
-    cdata = q.db.Race.Abil[ability_name]
-    with group(parent="cw.fRace.Main"):
+
+    with group(parent=tag.rfeature.main()):
         with group(horizontal=False):
             with group(horizontal=True):
-                add_text(ability_name, color=c_h1, wrap=avg_wrap, tag=f"text.fRace.Elf.ShadarKai.{ability_tag}.Header")
+                add_text(a1, color=c_h1, wrap=size.gwrap, tag=t1_header)
                 for idx, val in enumerate(cdata["Use"]):
-                    add_checkbox(default_value=val, enabled=True, user_data=["Race Use", ability_name, idx], callback=cbh, tag=f"checkbox.fRace.Elf.ShadarKai.{ability_tag}.Use.{idx}")
-            add_text(desc, color=c_text, wrap=avg_wrap, tag=f"text.fRace.Elf.ShadarKai.{ability_tag}.Desc")
+                    tag_toggle = tag.rfeature.toggle(parent,t1,idx)
+                    add_checkbox(default_value=val, enabled=True, user_data=["Race Use", a1, idx], callback=cbh, tag=tag_toggle)
+            add_text(desc, color=c_text, wrap=size.gwrap, tag=tag_text)
 
-def UI_Race_Dwarf():
-    with group(parent="cw.fRace.Main"):
-        add_text("Dwarven Resilience", color=c_h1, wrap=avg_wrap, tag="text.fRace.Dwarf.DwarvenResilience.Header")
-        add_text("You have advantage on saving throws against poison, and you have resistance against poison damage.", color=c_text, wrap=avg_wrap, tag="text.fRace.Dwarf.DwarvenResilience.Desc")
-        add_text("Stonecunning", color=c_h1, wrap=avg_wrap, tag="text.fRace.Dwarf.Stonecunning.Header")
-        add_text(f"Whenever you make an Intelligence (History) check related to the origin of stonework, you are considered proficient in the History skill and add double your proficiency bonus to the check, instead of your normal proficiency bonuq.pc.", color=c_text, wrap=avg_wrap, tag="text.fRace.Dwarf.Stonecunning.Desc")
-    if g.Subrace(): globals()[f"UI_Race_{g.Race()}_{g.Subrace()}"]()
+def ui_upd_Race_Dwarf():
+    parent = "dwarf"
+    a1 = "Dwarven Resilience"; t1 = a1.replace(" ", "_")
+    d1 = "You have advantage on saving throws against poison, and you have resistance against poison damage."
+    a2 = "Stonecunning"; t2 = a2.replace(" ", "_")
+    d2 = f"Whenever you make an Intelligence (History) check related to the origin of stonework, you are considered proficient in the History skill and add double your proficiency bonus to the check, instead of your normal proficiency bonuq.pc."
+    
+    t1_header = tag.rfeature.header(parent,t1)
+    t1_text = tag.rfeature.text(parent,t1)
 
-def UI_Race_Dwarf_Hill():
-    with group(parent="cw.fRace.Main"):
-        add_text("Dwarven Toughness", color=c_h1, wrap=avg_wrap, tag="text.fRace.Dwarf.Hill.DwarvenToughnesq.pc.Header")
-        add_text("Your hit point maximum increases by 1, and it increases by 1 every time you gain a level.", color=c_text, wrap=avg_wrap, tag="text.fRace.Dwarf.Hill.DwarvenToughnesq.pc.Desc")
+    t2_header = tag.rfeature.header(parent,t2)
+    t2_text = tag.rfeature.text(parent,t2)
+    with group(parent=tag.rfeature.main()):
+        add_text(a1, color=c_h1, wrap=size.gwrap, tag=t1_header)
+        add_text(d1, color=c_text, wrap=size.gwrap, tag=t1_text)
+        add_text(a2, color=c_h1, wrap=size.gwrap, tag=t2_header)
+        add_text(d2, color=c_text, wrap=size.gwrap, tag=t2_text)
+    if g.Subrace(): globals()[f"ui_upd_Race_{g.Race()}_{g.Subrace()}"]()
 
-def UI_Race_Dwarf_Mountain():
+def ui_upd_Race_Dwarf_Hill():
+    parent = "dwarf_hill"
+    
+
+    a1 = "Dwarven Toughness"; t1 = a1.replace(" ", "_")
+    d1 = "Your hit point maximum increases by 1, and it increases by 1 every time you gain a level."
+
+    t1_header = tag.rfeature.header(parent,t1)
+    t1_text = tag.rfeature.text(parent,t1)
+    
+    
+    with group(parent=tag.rfeature.main()):
+        add_text(a1, color=c_h1, wrap=size.gwrap, tag=t1_header)
+        add_text(d1, color=c_text, wrap=size.gwrap, tag=t1_text)
+
+def ui_upd_Race_Dwarf_Mountain():
+    parent = "dwarf_mountain"
     pass
 
-def UI_Race_Halfling():
-    with group(parent="cw.fRace.Main"):
-        add_text("Lucky", color=c_h1, wrap=avg_wrap, tag="text.fRace.Halfling.Lucky.Header")
-        add_text("When you roll a 1 on the d20 for an attack roll, ability check, or saving throw, you can reroll the die and must use the new roll.", color=c_text, wrap=avg_wrap, tag="text.fRace.Halfling.Lucky.Desc")
-        add_text("Brave", color=c_h1, wrap=avg_wrap, tag="text.fRace.Halfling.Brave.Header")
-        add_text("You have advantage on saving throws against being frightened.", color=c_text, wrap=avg_wrap, tag="text.fRace.Halfling.Brave.Desc")
-        add_text("Halfling Nimbleness", color=c_h1, wrap=avg_wrap, tag="text.fRace.Halfling.Nimblenesq.pc.Header")
-        add_text("You can move through the space of any creature that is of a size larger than yourq.pc.", color=c_text, wrap=avg_wrap, tag="text.fRace.Halfling.Nimblenesq.pc.Desc")
-    if g.Subrace(): globals()[f"UI_Race_{g.Race()}_{g.Subrace()}"]()
+def ui_upd_Race_Halfling():
+    parent = "halfling"
+    
+    a1 = "Lucky"; t1 = a1.replace(" ", "_")
+    d1 = "When you roll a 1 on the d20 for an attack roll, ability check, or saving throw, you can reroll the die and must use the new roll."
 
-def UI_Race_Halfling_Lightfoot():
-    with group(parent="cw.fRace.Main"):
-        add_text("Naturally Stealthy", color=c_h1, wrap=avg_wrap, tag="text.fRace.Halfling.Lightfoot.NaturallyStealthy.Header")
-        add_text("You can attempt to hide even when you are obscured only by a creature that is at least one size larger than you.", color=c_text, wrap=avg_wrap, tag="text.fRace.Halfling.Lightfoot.NaturallyStealthy.Desc")
+    a2 = "Brave"; t2 = a2.replace(" ", "_")
+    d2 = "You have advantage on saving throws against being frightened."
 
-def UI_Race_Halfling_Stout():
-    with group(parent="cw.fRace.Main"):
-        add_text("Stout Resilience", color=c_h1, wrap=avg_wrap, tag="text.fRace.Halfling.Stout.StoutResilience.Header")
-        add_text("You have advantage on saving throws against poison, and you have resistance against poison damage.", color=c_text, wrap=avg_wrap, tag="text.fRace.Halfling.Stout.StoutResilience.Desc")
+    a3 = "Halfling Nimbleness"; t3 = a3.replace(" ", "_")
+    d3 = "You can move through the space of any creature that is of a size larger than yours"
+    
+    t1_header = tag.rfeature.header(parent,t1)
+    t1_text = tag.rfeature.text(parent,t1)
 
-def UI_Race_Gnome():
-    with group(parent="cw.fRace.Main"):
-        add_text("Gnome Cunning", color=c_h1, wrap=avg_wrap, tag="text.fRace.Gnome.GnomeCunning.Header")
-        add_text("You have advantage on all Intelligence, Wisdom, and Charisma saving throws against magic.", color=c_text, wrap=avg_wrap, tag="text.fRace.Gnome.GnomeCunning.Desc")
-    if g.Subrace(): globals()[f"UI_Race_{g.Race()}_{g.Subrace()}"]()
+    t2_header = tag.rfeature.header(parent,t2)
+    t2_text = tag.rfeature.text(parent,t2)
 
-def UI_Race_Gnome_Forest():
-    with group(parent="cw.fRace.Main"):
-        add_text("Speak with Small Beasts", color=c_h1, wrap=avg_wrap, tag="text.fRace.Gnome.Forest.SpeakWithSmallBeastq.pc.Header")
-        add_text("Through sounds and gestures, you can communicate simple ideas with Small or smaller beastq.pc.", color=c_text, wrap=avg_wrap, tag="text.fRace.Gnome.Forest.SpeakWithSmallBeastq.pc.Desc")
-        cdata = q.db.Race.Abil["NaturalIllusionist"]
-        legacy = "NaturalIllusionist"
-        for spell in cdata.keys():
-            tag_spell_name = f"text.fRace.Gnome.Forest.{legacy}.{spell}.Name"
-            tag_spell_tip = f"tooltip.fRace.Gnome.Forest.{legacy}.{spell}.Detail"
-            with group(horizontal=True):
-                add_text(spell, color=c_h2, wrap=300, tag=tag_spell_name)
-            item_delete(tag_spell_tip)
-            with tooltip(tag_spell_name, tag=tag_spell_tip):
-                spell_detail(spell)
+    t3_header = tag.rfeature.header(parent,t3)
+    t3_text = tag.rfeature.text(parent,t3)
+    
+    with group(parent=tag.rfeature.main()):
+        add_text(a1, color=c_h1, wrap=size.gwrap, tag=t1_header)
+        add_text(d1, color=c_text, wrap=size.gwrap, tag=t1_text)
+        add_text(a2, color=c_h1, wrap=size.gwrap, tag=t2_header)
+        add_text(d2, color=c_text, wrap=size.gwrap, tag=t2_text)
+        add_text(a3, color=c_h1, wrap=size.gwrap, tag=t3_header)
+        add_text(d3, color=c_text, wrap=size.gwrap, tag=t3_text)
+    if g.Subrace(): globals()[f"ui_upd_Race_{g.Race()}_{g.Subrace()}"]()
 
-def UI_Race_Gnome_Rock():
-    with group(parent="cw.fRace.Main"):
-        tinker_header_tag = "text.fRace.Gnome.Rock.Tinker.Header"
-        tinker_tooltip_tag = "tooltip.fRace.Gnome.Rock.Tinker.Detail"
-        add_text("Tinker", color=c_h1, tag=tinker_header_tag)
-        item_delete(tinker_tooltip_tag)
-        with tooltip(tinker_header_tag, tag=tinker_tooltip_tag):
-            add_text("Tinker", color=c_h1)
-            add_text("Using tinker's tools, you can spend 1 hour and 10 gp worth of materials to construct a Tiny clockwork device (AC 5, 1 hp)...", color=c_text, wrap=300)
-        add_text("Artificer's Lore", color=c_h1, tag="text.fRace.Gnome.Rock.ArtificersLore.Header")
-        add_text("Whenever you make an Intelligence (History) check related to magic items, alchemical objects, or technological devices, you can add twice your proficiency bonus, instead of any proficiency bonus you normally apply.", color=c_text, wrap=avg_wrap, tag="text.fRace.Gnome.Rock.ArtificersLore.Desc")
+def ui_upd_Race_Halfling_Lightfoot():
+    parent = "halfling_lightfoot"
+    a1 = "Naturally Stealthy"; t1 = a1.replace(" ", "_")
+    d1 = "You can attempt to hide even when you are obscured only by a creature that is at least one size larger than you."
+    t1_header = tag.rfeature.header(parent, t1)
+    t1_text = tag.rfeature.text(parent, t1)
+    with group(parent=tag.rfeature.main()):
+        add_text(a1, color=c_h1, wrap=size.gwrap, tag=t1_header)
+        add_text(d1, color=c_text, wrap=size.gwrap, tag=t1_text)
 
-def UI_Race_Dragonborn():
-    if g.Subrace(): 
-        UI_Race_Dragonborn_subrace()
 
-def UI_Race_Dragonborn_subrace():
-    dnum_map = [0,2,2,2,2,3,3,3,3,3,4,4,4,4,4,5,5,5,5,5]
-    dnum = dnum_map[q.db.Core.L] if q.db.Core.L < len(dnum_map) else 5
-    type_map = {"Black": "Acid", "Blue": "Lightning", "Brass": "Fire", "Bronze": "Lightning", "Copper": "Acid", "Gold": "Fire", "Green": "Poison", "Red": "Fire", "Silver": "Cold", "White": "Cold"}
-    save_map = {"Acid": "DEX", "Lightning": "DEX", "Fire": "DEX", "Poison": "CON", "Cold": "CON"}
-    type = type_map.get(g.Subrace(), "Fire")
-    save = save_map.get(type, "DEX")
-    dc = 8 + q.db.Core.PB +q.db.Atr[save]['Mod']
-    breath_weapon_desc = f"(Action) Exhale destructive energy. Each creature in a 30ft line must make a DC {dc} {save} saving throw, taking {dnum}d6 {type.lower()} damage on a failed save, and half as much damage on a successful one."
-    draconic_resistance_desc = f"You have resistance to {type.lower()} damage."
-    with group(parent="cw.fRace.Main"):
-        add_text("Draconic Resistance", color=c_h1, wrap=avg_wrap, tag="text.fRace.Dragonborn.DraconicResistance.Header")
-        add_text(draconic_resistance_desc, color=c_text, wrap=avg_wrap, tag="text.fRace.Dragonborn.DraconicResistance.Desc")
-        cdata = q.db.Race.Abil["Breath Weapon"]
-        with group(horizontal=False):
-            with group(horizontal=True):
-                add_text("Breath Weapon", color=c_h1, wrap=avg_wrap, tag="text.fRace.Dragonborn.BreathWeapon.Header")
-                add_checkbox(default_value=cdata["Use"][0], enabled=True, user_data=["Race Use", "Breath Weapon", 0], callback=cbh, tag="checkbox.fRace.Dragonborn.BreathWeapon.Use.0")
-            add_text(breath_weapon_desc, color=c_text, wrap=avg_wrap, tag="text.fRace.Dragonborn.BreathWeapon.Desc")
+def ui_upd_Race_Halfling_Stout():
+    parent = "halfling_stout"
+    a1 = "Stout Resilience"; t1 = a1.replace(" ", "_")
+    d1 = "You have advantage on saving throws against poison, and you have resistance against poison damage."
+    t1_header = tag.rfeature.header(parent, t1)
+    t1_text = tag.rfeature.text(parent, t1)
+    with group(parent=tag.rfeature.main()):
+        add_text(a1, color=c_h1, wrap=size.gwrap, tag=t1_header)
+        add_text(d1, color=c_text, wrap=size.gwrap, tag=t1_text)
 
-def UI_Race_HalfOrc():
-    cdata = q.db.Race.Abil["Relentless Endurance"]
-    with group(parent="cw.fRace.Main"):
-        with group(horizontal=True):
-            add_text("Relentless Endurance", color=c_h1, wrap=avg_wrap, tag="text.fRace.HalfOrc.RelentlessEndurance.Header")
-            add_checkbox(default_value=cdata["Use"][0], enabled=True, user_data=["Race Use", "Relentless Endurance", 0], callback=cbh, tag="checkbox.fRace.HalfOrc.RelentlessEndurance.Use.0")
-        add_text("When you are reduced to 0 hit points but not killed outright, you can drop to 1 hit point instead. You can't use this feature again until you finish a long rest.", color=c_text, wrap=avg_wrap, tag="text.fRace.HalfOrc.RelentlessEndurance.Desc")
-        add_text("Savage Attacks", color=c_h1, wrap=avg_wrap, tag="text.fRace.HalfOrc.SavageAttackq.pc.Header")
-        add_text("When you score a critical hit with a melee weapon attack, you can roll one of the weapon's damage dice one additional time and add it to the extra damage of the critical hit.", color=c_text, wrap=avg_wrap, tag="text.fRace.HalfOrc.SavageAttackq.pc.Desc")
-    if g.Subrace(): globals()[f"UI_Race_{g.Race()}_{g.Subrace()}"]()
 
-def UI_Race_HalfOrc_Standard():
+def ui_upd_Race_Gnome():
+    parent = "gnome"
+
+    a1 = "Gnome Cunning"; t1 = a1.replace(" ", "_")
+    d1 = "You have advantage on all Intelligence, Wisdom, and Charisma saving throws against magic."
+
+    t1_header = tag.rfeature.header(parent, t1)
+    t1_text = tag.rfeature.text(parent, t1)
+
+    with group(parent=tag.rfeature.main()):
+        add_text(a1, color=c_h1, wrap=size.gwrap, tag=t1_header)
+        add_text(d1, color=c_text, wrap=size.gwrap, tag=t1_text)
+    if g.Subrace():globals()[f"ui_upd_Race_{g.Race()}_{g.Subrace()}"]()
+
+def ui_upd_Race_Gnome_Forest():
+    parent = "gnome_forest"
+    
+    a1 = "Speak with Small Beasts"; t1 = a1.replace(" ", "_")
+    d1 = "Through sounds and gestures, you can communicate simple ideas with Small or smaller beasts."
+
+    a2 = "Natural Illusionist"; t2 = a2.replace(" ", "_")
+
+
+    t1_header = tag.rfeature.header(parent, t1)
+    t1_text = tag.rfeature.text(parent, t1)
+
+    t2_header = tag.rfeature.header(parent, t2)
+    t2_text = tag.rfeature.text(parent, t2)
+    cdata = q.db.Race.Abil[a2]
+    
+    # with group(parent=tag.rfeature.main()):
+    #     add_text(a1, color=c_h1, wrap=size.gwrap, tag=t1_header)
+    #     add_text(d1, color=c_text, wrap=size.gwrap, tag=t1_text)
+        
+        
+    #     with group(horizontal=True):
+    #         add_text(a2, color=c_h1, wrap=size.gwrap, tag=t2_header)
+            
+    #         for spell in cdata.keys():
+    #             with group(horizontal=True):
+    #             add_text(spell, color=c_h2, wrap=300, tag=t2_text)
+    #             item_delete(tag_spell_tip)
+    #             with tooltip(tag_spell_name, tag=tag_spell_tip):
+    #                 spell_detail(spell)
+
+def ui_upd_Race_Gnome_Rock():
+    pass
+    parent = "gnome_rock"
+    # with group(parent=tag.rfeature.main()):
+    #     tinker_header_tag = "text.fRace.Gnome.Rock.Tinker.Header"
+    #     tinker_tooltip_tag = "tooltip.fRace.Gnome.Rock.Tinker.Detail"
+    #     add_text("Tinker", color=c_h1, tag=tinker_header_tag)
+    #     item_delete(tinker_tooltip_tag)
+    #     with tooltip(tinker_header_tag, tag=tinker_tooltip_tag):
+    #         add_text("Tinker", color=c_h1)
+    #         add_text("Using tinker's tools, you can spend 1 hour and 10 gp worth of materials to construct a Tiny clockwork device (AC 5, 1 hp)...", color=c_text, wrap=300)
+    #     add_text("Artificer's Lore", color=c_h1, tag="text.fRace.Gnome.Rock.ArtificersLore.Header")
+    #     add_text("Whenever you make an Intelligence (History) check related to magic items, alchemical objects, or technological devices, you can add twice your proficiency bonus, instead of any proficiency bonus you normally apply.", color=c_text, wrap=size.gwrap, tag="text.fRace.Gnome.Rock.ArtificersLore.Desc")
+
+def ui_upd_Race_Dragonborn():
+    pass
+    # parent = "dragonborn"
+    # if g.Subrace(): 
+    #     ui_upd_Race_Dragonborn_subrace()
+
+def ui_upd_Race_Dragonborn_subrace():
+    #parent = f"dragonborn_{g.Subrace()}"
+    pass
+    
+    # dnum_map = [0,2,2,2,2,3,3,3,3,3,4,4,4,4,4,5,5,5,5,5]
+    # dnum = dnum_map[q.db.Core.L] if q.db.Core.L < len(dnum_map) else 5
+    # type_map = {"Black": "Acid", "Blue": "Lightning", "Brass": "Fire", "Bronze": "Lightning", "Copper": "Acid", "Gold": "Fire", "Green": "Poison", "Red": "Fire", "Silver": "Cold", "White": "Cold"}
+    # save_map = {"Acid": "DEX", "Lightning": "DEX", "Fire": "DEX", "Poison": "CON", "Cold": "CON"}
+    # type = type_map.get(g.Subrace(), "Fire")
+    # save = save_map.get(type, "DEX")
+    # dc = 8 + q.db.Core.PB +q.db.Atr[save]['Mod']
+    # breath_weapon_desc = f"(Action) Exhale destructive energy. Each creature in a 30ft line must make a DC {dc} {save} saving throw, taking {dnum}d6 {type.lower()} damage on a failed save, and half as much damage on a successful one."
+    # draconic_resistance_desc = f"You have resistance to {type.lower()} damage."
+    # with group(parent=tag.rfeature.main()):
+    #     add_text("Draconic Resistance", color=c_h1, wrap=size.gwrap, tag="text.fRace.Dragonborn.DraconicResistance.Header")
+    #     add_text(draconic_resistance_desc, color=c_text, wrap=size.gwrap, tag="text.fRace.Dragonborn.DraconicResistance.Desc")
+    #     cdata = q.db.Race.Abil["Breath Weapon"]
+    #     with group(horizontal=False):
+    #         with group(horizontal=True):
+    #             add_text("Breath Weapon", color=c_h1, wrap=size.gwrap, tag="text.fRace.Dragonborn.BreathWeapon.Header")
+    #             add_checkbox(default_value=cdata["Use"][0], enabled=True, user_data=["Race Use", "Breath Weapon", 0], callback=cbh, tag="checkbox.fRace.Dragonborn.BreathWeapon.Use.0")
+    #         add_text(breath_weapon_desc, color=c_text, wrap=size.gwrap, tag="text.fRace.Dragonborn.BreathWeapon.Desc")
+
+def ui_upd_Race_HalfOrc():
+    pass
+    # parent = "halforc"
+    # cdata = q.db.Race.Abil["Relentless Endurance"]
+    # with group(parent=tag.rfeature.main()):
+    #     with group(horizontal=True):
+    #         add_text("Relentless Endurance", color=c_h1, wrap=size.gwrap, tag="text.fRace.HalfOrc.RelentlessEndurance.Header")
+    #         add_checkbox(default_value=cdata["Use"][0], enabled=True, user_data=["Race Use", "Relentless Endurance", 0], callback=cbh, tag="checkbox.fRace.HalfOrc.RelentlessEndurance.Use.0")
+    #     add_text("When you are reduced to 0 hit points but not killed outright, you can drop to 1 hit point instead. You can't use this feature again until you finish a long rest.", color=c_text, wrap=size.gwrap, tag="text.fRace.HalfOrc.RelentlessEndurance.Desc")
+    #     add_text("Savage Attacks", color=c_h1, wrap=size.gwrap, tag="text.fRace.HalfOrc.SavageAttackq.pc.Header")
+    #     add_text("When you score a critical hit with a melee weapon attack, you can roll one of the weapon's damage dice one additional time and add it to the extra damage of the critical hit.", color=c_text, wrap=size.gwrap, tag="text.fRace.HalfOrc.SavageAttackq.pc.Desc")
+    # if g.Subrace(): globals()[f"ui_upd_Race_{g.Race()}_{g.Subrace()}"]()
+
+def ui_upd_Race_HalfOrc_Standard():
+    #parent = "halforc_standard"
     pass
 
-def UI_Race_Tiefling():
-    tiefling_map={"Asmodeus": "Infernal Legacy","Baalzebul": "Legacy of Maladomini","Dispater": "Legacy of Dis","Fierna": "Legacy of Phlegethos","Glasya": "Legacy of Malbolge","Levistus": "Legacy of Stygia","Mammon": "Legacy of Minauros","Mephistopheles": "Legacy of Cania","Zariel": "Legacy of Avernus"}
-    if g.Subrace(): 
-        legacy = tiefling_map.get(g.Subrace(), "Infernal Legacy")
-        cdata=q.db.Race.Abil.get(legacy, {})
-        if cdata:
-            UI_Race_Tiefling_subrace(cdata, legacy)
+def ui_upd_Race_Tiefling():
+    pass
+    # parent = "tiefling"
+    # tiefling_map={"Asmodeus": "Infernal Legacy","Baalzebul": "Legacy of Maladomini","Dispater": "Legacy of Dis","Fierna": "Legacy of Phlegethos","Glasya": "Legacy of Malbolge","Levistus": "Legacy of Stygia","Mammon": "Legacy of Minauros","Mephistopheles": "Legacy of Cania","Zariel": "Legacy of Avernus"}
+    # if g.Subrace(): 
+    #     legacy = tiefling_map.get(g.Subrace(), "Infernal Legacy")
+    #     cdata=q.db.Race.Abil.get(legacy, {})
+    #     if cdata:
+    #         ui_upd_Race_Tiefling_subrace(cdata, legacy)
 
-def UI_Race_Tiefling_subrace(cdata,legacy):
-    legacy_tag = legacy.replace(" ", "")
-    with group(parent="cw.fRace.Main"):
-        add_text(legacy, color=c_h1, wrap=300, tag=f"text.fRace.Tiefling.{legacy_tag}.Header")
-        for spell in cdata.keys():
-            tag_spell_name = f"text.fRace.Tiefling.{legacy_tag}.{spell}.Name"
-            tag_spell_tip = f"tooltip.fRace.Tiefling.{legacy_tag}.{spell}.Detail"
-            with group(horizontal=True):
-                add_text(spell, color=c_h2, wrap=300, tag=tag_spell_name)
-                if "Use" in cdata[spell]:
-                    add_checkbox(default_value=cdata[spell]["Use"][0], enabled=True, user_data=["Race Spell Use",legacy,spell], callback=cbh, tag=f"checkbox.fRace.Tiefling.{legacy_tag}.{spell}.Use")
-            item_delete(tag_spell_tip)
-            with tooltip(tag_spell_name, tag=tag_spell_tip):
-                spell_detail(spell)
+def ui_upd_Race_Tiefling_subrace(cdata,legacy):
+    pass
+    # parent = f"tiefling_{g.Subrace()}"
+    # legacy_tag = legacy.replace(" ", "")
+    # with group(parent=tag.rfeature.main()):
+    #     add_text(legacy, color=c_h1, wrap=300, tag=f"text.fRace.Tiefling.{legacy_tag}.Header")
+    #     for spell in cdata.keys():
+    #         tag_spell_name = f"text.fRace.Tiefling.{legacy_tag}.{spell}.Name"
+    #         tag_spell_tip = f"tooltip.fRace.Tiefling.{legacy_tag}.{spell}.Detail"
+    #         with group(horizontal=True):
+    #             add_text(spell, color=c_h2, wrap=300, tag=tag_spell_name)
+    #             if "Use" in cdata[spell]:
+    #                 add_checkbox(default_value=cdata[spell]["Use"][0], enabled=True, user_data=["Race Spell Use",legacy,spell], callback=cbh, tag=f"checkbox.fRace.Tiefling.{legacy_tag}.{spell}.Use")
+    #         item_delete(tag_spell_tip)
+    #         with tooltip(tag_spell_name, tag=tag_spell_tip):
+    #             spell_detail(spell)
 
-def UI_Race_Harengon():
-    with group(parent="cw.fRace.Main"):
-        add_text("Lucky Footwork", color=c_h1, wrap=avg_wrap, tag="text.fRace.Harengon.LuckyFootwork.Header")
-        add_text("When you fail a Dexterity saving throw, you can use your reaction to roll a d4 and add it to the save, potentially turning the failure into a succesq.pc.", color=c_text, wrap=avg_wrap, tag="text.fRace.Harengon.LuckyFootwork.Desc")
-        cdata = q.db.Race.Abil["Rabbit Hop"]
-        with group(horizontal=True):
-            add_text("Rabbit Hop", color=c_h1, wrap=avg_wrap, tag="text.fRace.Harengon.RabbitHop.Header")
-            for idx, val in enumerate(cdata["Use"]):
-                add_checkbox(default_value=val, enabled=True, user_data=["Race Use", "Rabbit Hop", idx], callback=cbh, tag=f"checkbox.fRace.Harengon.RabbitHop.Use.{idx}")
-        add_text(f"As a bonus action, you can jump a number of feet equal to five times your proficiency bonus, without provoking opportunity attackq.pc.", color=c_text, wrap=avg_wrap, tag="text.fRace.Harengon.RabbitHop.Desc")
-    if g.Subrace(): globals()[f"UI_Race_{g.Race()}_{g.Subrace()}"]()
+def ui_upd_Race_Harengon():
+    pass
+    # parent = "Harengon"
+    # with group(parent=tag.rfeature.main()):
+    #     add_text("Lucky Footwork", color=c_h1, wrap=size.gwrap, tag="text.fRace.Harengon.LuckyFootwork.Header")
+    #     add_text("When you fail a Dexterity saving throw, you can use your reaction to roll a d4 and add it to the save, potentially turning the failure into a succesq.pc.", color=c_text, wrap=size.gwrap, tag="text.fRace.Harengon.LuckyFootwork.Desc")
+    #     cdata = q.db.Race.Abil["Rabbit Hop"]
+    #     with group(horizontal=True):
+    #         add_text("Rabbit Hop", color=c_h1, wrap=size.gwrap, tag="text.fRace.Harengon.RabbitHop.Header")
+    #         for idx, val in enumerate(cdata["Use"]):
+    #             add_checkbox(default_value=val, enabled=True, user_data=["Race Use", "Rabbit Hop", idx], callback=cbh, tag=f"checkbox.fRace.Harengon.RabbitHop.Use.{idx}")
+    #     add_text(f"As a bonus action, you can jump a number of feet equal to five times your proficiency bonus, without provoking opportunity attackq.pc.", color=c_text, wrap=size.gwrap, tag="text.fRace.Harengon.RabbitHop.Desc")
+    # if g.Subrace(): globals()[f"ui_upd_Race_{g.Race()}_{g.Subrace()}"]()
 
-def UI_Race_Harengon_Standard():
+def ui_upd_Race_Harengon_Standard():
+    parent = "Harengon_standard"
     pass
 
 # #-----------------------------------------------------------
 
 # #ANCHOR - Class shit
 
-def UI_Class_Empty():
+def ui_upd_Class_Empty():
     pass
     
-def UI_Class_Fighter():
+def ui_upd_Class_Fighter():
     data = q.db.Class["Abil"]
     with group(parent="cw.fClass.Main"):
         if "Fighting Style" in data:
             feat = "Fighting Style"
             tag = feat.replace(" ", "_")
             cdata = data["Fighting Style"]
-            tag_header = f"text.fClass.Fighter.{tag}.Header"
+            t1_header = f"text.fClass.Fighter.{tag}.Header"
             tag_popup = f"popup.fClass.Fighter.{tag}.Select"
-            add_text("Fighting Style", color=c_h1, wrap=avg_wrap, tag=tag_header)
+            add_text("Fighting Style", color=c_h1, wrap=size.gwrap, tag=t1_header)
             item_delete(tag_popup)
-            with popup(tag_header, mousebutton=mvMouseButton_Left, tag=tag_popup):
+            with popup(t1_header, mousebutton=mvMouseButton_Left, tag=tag_popup):
                 for idx, value in enumerate(cdata["Select"]):
                     add_combo(items=g.list_Fighting_Styles, default_value=value, width=80, no_arrow_button=True, callback=cbh, user_data=["Class Select", "Fighting Style", idx], tag=f"combo.fClass.Fighter.{tag}.Choice.{idx}")
             for item in cdata["Select"]:
                 if item != "":
-                    add_text(item, color=c_h2, wrap=avg_wrap, tag=f"text.fClass.Fighter.{tag}.Choice.{item}")
-                    add_text(g.get_Fighting_Style(item), color=c_text, wrap=avg_wrap, tag=f"text.fClass.Fighter.{tag}.Choice.{item}.Desc")
+                    add_text(item, color=c_h2, wrap=size.gwrap, tag=f"text.fClass.Fighter.{tag}.Choice.{item}")
+                    add_text(g.get_Fighting_Style(item), color=c_text, wrap=size.gwrap, tag=f"text.fClass.Fighter.{tag}.Choice.{item}.Desc")
 
         if "Second Wind" in data:
             ability = "Second Wind"
@@ -2115,9 +2241,9 @@ def UI_Class_Fighter():
             cdata = data["Second Wind"]
             with group(horizontal=False):
                 with group(horizontal=True):
-                    add_text("Second Wind", color=c_h1, wrap=avg_wrap, tag=f"text.fClass.Fighter.{tag}.Header")
+                    add_text("Second Wind", color=c_h1, wrap=size.gwrap, tag=f"text.fClass.Fighter.{tag}.Header")
                     add_checkbox(default_value=cdata["Use"][0], enabled=True, callback=cbh, user_data=["Class Use", "Second Wind", 0], tag=f"checkbox.fClass.Fighter.{tag}.Use.0")
-                add_text(Second_Wind, color=c_text, wrap=avg_wrap, tag=f"text.fClass.Fighter.{tag}.Desc")
+                add_text(Second_Wind, color=c_text, wrap=size.gwrap, tag=f"text.fClass.Fighter.{tag}.Desc")
                 
         if "Action Surge" in data:
             ability = "Action Surge"
@@ -2126,10 +2252,10 @@ def UI_Class_Fighter():
             cdata = data["Action Surge"]
             with group(horizontal=False):
                 with group(horizontal=True):
-                    add_text("Action Surge", color=c_h1, wrap=avg_wrap, tag=f"text.fClass.Fighter.{tag}.Header")
+                    add_text("Action Surge", color=c_h1, wrap=size.gwrap, tag=f"text.fClass.Fighter.{tag}.Header")
                     for idx, value in enumerate(cdata["Use"]):
                         add_checkbox(default_value=value, enabled=True, callback=cbh, user_data=["Class Use", "Action Surge", idx], tag=f"checkbox.fClass.Fighter.{tag}.Use.{idx}")
-                add_text(Action_Surge, color=c_text, wrap=avg_wrap, tag=f"text.fClass.Fighter.{tag}.Desc")
+                add_text(Action_Surge, color=c_text, wrap=size.gwrap, tag=f"text.fClass.Fighter.{tag}.Desc")
 
         if "Extra Attack" in data:
             ability = "Extra Attack"
@@ -2137,8 +2263,8 @@ def UI_Class_Fighter():
             extra_attack_num = [0,0,0,0,0,2,2,2,2,2,2,3,3,3,3,3,3,4,4,4,4][q.db.Core.L]
             Extra_Attack = f"On Attack action, attack {extra_attack_num} times"
             with group(horizontal=True):
-                add_text("Extra Attack", color=c_h1, wrap=avg_wrap, tag=f"text.fClass.Fighter.{tag}.Header")
-                add_text(Extra_Attack, color=c_text, wrap=avg_wrap, tag=f"text.fClass.Fighter.{tag}.Desc")
+                add_text("Extra Attack", color=c_h1, wrap=size.gwrap, tag=f"text.fClass.Fighter.{tag}.Header")
+                add_text(Extra_Attack, color=c_text, wrap=size.gwrap, tag=f"text.fClass.Fighter.{tag}.Desc")
 
         if "Indomitable" in data:
             ability = "Indomitable"
@@ -2147,13 +2273,13 @@ def UI_Class_Fighter():
             cdata = data["Indomitable"]
             with group(horizontal=False):
                 with group(horizontal=True):
-                    add_text("Indomitable", color=c_h1, wrap=avg_wrap, tag=f"text.fClass.Fighter.{tag}.Header")
+                    add_text("Indomitable", color=c_h1, wrap=size.gwrap, tag=f"text.fClass.Fighter.{tag}.Header")
                     for idx, value in enumerate(cdata["Use"]):
                         add_checkbox(default_value=value, enabled=True, callback=cbh, user_data=["Class Use", "Indomitable", idx], tag=f"checkbox.fClass.Fighter.{tag}.Use.{idx}")
-                add_text(Indomitable, color=c_text, wrap=avg_wrap, tag=f"text.fClass.Fighter.{tag}.Desc")
-    if q.db.Core.SC: globals()[f"UI_Class_{q.db.Core.C}_{q.db.Core.SC}"]()
+                add_text(Indomitable, color=c_text, wrap=size.gwrap, tag=f"text.fClass.Fighter.{tag}.Desc")
+    if q.db.Core.SC: globals()[f"ui_upd_Class_{q.db.Core.C}_{q.db.Core.SC}"]()
 
-def UI_Class_Fighter_Champion():
+def ui_upd_Class_Fighter_Champion():
     data = q.db.Class["Abil"]
     with group(parent="cw.fClass.Main"):
         if "Improved Critical" in data:
@@ -2161,30 +2287,30 @@ def UI_Class_Fighter_Champion():
             tag = ability.replace(" ", "_")
             Improved_Critical = "weapon attacks crit on 18-20." 
             add_text("Improved Critical", color=c_h1, tag=f"text.fClass.Fighter.Champion.{tag}.Header")
-            add_text(Improved_Critical, color=c_text, wrap=avg_wrap, tag=f"text.fClass.Fighter.Champion.{tag}.Desc")
+            add_text(Improved_Critical, color=c_text, wrap=size.gwrap, tag=f"text.fClass.Fighter.Champion.{tag}.Desc")
 
         if "Superior Critical" in data:
             ability = "Superior Critical"
             tag = ability.replace(" ", "_")
             Superior_Critical = "weapon attacks crit on 19-20."
             add_text("Superior Critical", color=c_h1, tag=f"text.fClass.Fighter.Champion.{tag}.Header")
-            add_text(Superior_Critical, color=c_text, wrap=avg_wrap, tag=f"text.fClass.Fighter.Champion.{tag}.Desc")
+            add_text(Superior_Critical, color=c_text, wrap=size.gwrap, tag=f"text.fClass.Fighter.Champion.{tag}.Desc")
             
         if "Remarkable Athlete" in data:
             ability = "Remarkable Athlete"
             tag = ability.replace(" ", "_")
             Remarkable_Athlete = f"add +{math.ceil(q.db.Core.PB/2)} to any non proficient Str/Dex/Con check. On running long jump, increase distance by {q.db.Atr["STR"]["Mod"]} ft."
             add_text("Remarkable Athlete", color=c_h1, tag=f"text.fClass.Fighter.Champion.{tag}.Header")
-            add_text(Remarkable_Athlete, color=c_text, wrap=avg_wrap, tag=f"text.fClass.Fighter.Champion.{tag}.Desc")
+            add_text(Remarkable_Athlete, color=c_text, wrap=size.gwrap, tag=f"text.fClass.Fighter.Champion.{tag}.Desc")
 
         if "Survivor" in data:
             ability = "Survivor"
             tag = ability.replace(" ", "_")
             Survivor = f"At the start of your turn, regain {5 + q.db.Atr['CON']['Mod']} hp if at less then half HP and above 0 HP"
             add_text("Survivor", color=c_h1, tag=f"text.fClass.Fighter.Champion.{tag}.Header")
-            add_text(Survivor, color=c_text, wrap=avg_wrap, tag=f"text.fClass.Fighter.Champion.{tag}.Desc")
+            add_text(Survivor, color=c_text, wrap=size.gwrap, tag=f"text.fClass.Fighter.Champion.{tag}.Desc")
 
-def UI_Class_Fighter_BattleMaster():
+def ui_upd_Class_Fighter_BattleMaster():
     data = q.db.Class["Abil"]
     with group(parent="cw.fClass.Main"):
         if "Combat Superiority" in data:
@@ -2192,12 +2318,12 @@ def UI_Class_Fighter_BattleMaster():
             tag = ability.replace(" ", "_")
             die = [0,0,0,8,8,8,8,8,8,8,10,10,10,10,10,10,10,10,12,12,12][q.db.Core.L]
             cdata = data["Combat Superiority"]
-            tag_header = f"text.fClass.Fighter.BattleMaster.{tag}.Header"
+            t1_header = f"text.fClass.Fighter.BattleMaster.{tag}.Header"
             tag_popup = f"popup.fClass.Fighter.BattleMaster.{tag}.Select"
             with group(horizontal=True):
-                add_text(f"Combat Superiority (d{die})", color=c_h1, wrap=avg_wrap, tag=tag_header)
+                add_text(f"Combat Superiority (d{die})", color=c_h1, wrap=size.gwrap, tag=t1_header)
                 item_delete(tag_popup)
-                with popup(tag_header, mousebutton=mvMouseButton_Left, tag=tag_popup):
+                with popup(t1_header, mousebutton=mvMouseButton_Left, tag=tag_popup):
                     for idx, value in enumerate(cdata["Select"]): 
                         add_combo(items=g.list_Maneuvers, default_value=value, width=80, no_arrow_button=True, callback=cbh, user_data=["Class Select", "Combat Superiority", idx], tag=f"combo.fClass.Fighter.BattleMaster.{tag}.Choice.{idx}")
                 for idx, value in enumerate(cdata["Use"]):
@@ -2205,20 +2331,20 @@ def UI_Class_Fighter_BattleMaster():
             for item in cdata["Select"]:
                 if item:
                     item_tag = item.replace(" ", "_")
-                    add_text(item, color=c_h2, wrap=avg_wrap, tag=f"text.fClass.Fighter.BattleMaster.{tag}.Maneuver.{item_tag}")
+                    add_text(item, color=c_h2, wrap=size.gwrap, tag=f"text.fClass.Fighter.BattleMaster.{tag}.Maneuver.{item_tag}")
                     item_delete(f"tooltip.fClass.Fighter.BattleMaster.{tag}.Maneuver.{item_tag}")
                     with tooltip(f"text.fClass.Fighter.BattleMaster.{tag}.Maneuver.{item_tag}", tag=f"tooltip.fClass.Fighter.BattleMaster.{tag}.Maneuver.{item_tag}"):
-                        add_text(g.dict_Maneuver_map[item], color=c_text, wrap=avg_wrap)
+                        add_text(g.dict_Maneuver_map[item], color=c_text, wrap=size.gwrap)
         
         if "Student of War" in data:
             ability = "Student of War"
             tag = ability.replace(" ", "_")
             cdata = data["Student of War"]
-            tag_header = f"text.fClass.Fighter.BattleMaster.{tag}.Header"
+            t1_header = f"text.fClass.Fighter.BattleMaster.{tag}.Header"
             tag_popup = f"popup.fClass.Fighter.BattleMaster.{tag}.Select"
-            add_text("Student of War", color=c_h1, wrap=avg_wrap, tag=tag_header)
+            add_text("Student of War", color=c_h1, wrap=size.gwrap, tag=t1_header)
             item_delete(tag_popup)
-            with popup(tag_header, mousebutton=mvMouseButton_Left, tag=tag_popup):
+            with popup(t1_header, mousebutton=mvMouseButton_Left, tag=tag_popup):
                 add_combo(items=g.list_Student_of_War_Profs, default_value=cdata["Select"][0], width=80, no_arrow_button=True, callback=cbh, user_data=["Class Select", "Student of War", 0], tag=f"combo.fClass.Fighter.BattleMaster.{tag}.Choice.0")
         
         if "Relentless" in data:
@@ -2226,10 +2352,10 @@ def UI_Class_Fighter_BattleMaster():
             tag = ability.replace(" ", "_")
             Relentless = "When you roll initiative with 0 SD; gain 1 SD."
             with group(horizontal=True):
-                add_text("Relentless", color=c_h1, wrap=avg_wrap, tag=f"text.fClass.Fighter.BattleMaster.{tag}.Header")
-                add_text(Relentless, color=c_text, wrap=avg_wrap, tag=f"text.fClass.Fighter.BattleMaster.{tag}.Desc")
+                add_text("Relentless", color=c_h1, wrap=size.gwrap, tag=f"text.fClass.Fighter.BattleMaster.{tag}.Header")
+                add_text(Relentless, color=c_text, wrap=size.gwrap, tag=f"text.fClass.Fighter.BattleMaster.{tag}.Desc")
 
-def UI_Class_Fighter_EldrichKnight():
+def ui_upd_Class_Fighter_EldrichKnight():
     data = q.db.Class["Abil"]
     with group(parent="cw.fClass.Main"):
         if "Weapon Bond" in data:
@@ -2238,55 +2364,55 @@ def UI_Class_Fighter_EldrichKnight():
             Weapon_Bond_1 = "Learn a ritual that creates a magical bond between yourself and one weapon. You perform the ritual over the course of 1 hour, which can be done during a short rest. The weapon must be within your reach throughout the ritual, at the conclusion of which you touch the weapon and forge the bond."
             Weapon_Bond_2 = "Once you have bonded a weapon to yourself, you can't be disarmed of that weapon unless you are incapacitated. If it is on the same plane of existence, you can summon that weapon as a bonus action on your turn, causing it to teleport instantly to your hand."
             Weapon_Bond_3 = "You can have up to two bonded weapons, but can summon only one at a time with your bonus action. If you attempt to bond with a third weapon, you must break the bond with one of the other two."
-            tag_header = f"text.fClass.Fighter.EldrichKnight.{tag}.Header"
+            t1_header = f"text.fClass.Fighter.EldrichKnight.{tag}.Header"
             tag_tooltip = f"tooltip.fClass.Fighter.EldrichKnight.{tag}.Detail"
-            add_text("Weapon Bond", color=c_h1, wrap=avg_wrap, tag=tag_header)
+            add_text("Weapon Bond", color=c_h1, wrap=size.gwrap, tag=t1_header)
             item_delete(tag_tooltip)
-            with tooltip(tag_header, tag=tag_tooltip):
-                add_text(Weapon_Bond_1, color=c_text, wrap=avg_wrap)
-                add_text(Weapon_Bond_2, color=c_text, wrap=avg_wrap)
-                add_text(Weapon_Bond_3, color=c_text, wrap=avg_wrap)
+            with tooltip(t1_header, tag=tag_tooltip):
+                add_text(Weapon_Bond_1, color=c_text, wrap=size.gwrap)
+                add_text(Weapon_Bond_2, color=c_text, wrap=size.gwrap)
+                add_text(Weapon_Bond_3, color=c_text, wrap=size.gwrap)
                         
         if "War Magic" in data:
             ability = "War Magic"
             tag = ability.replace(" ", "_")
             War_Magic = "(action-cantrip) gain (bonus) make one weapon attack."
-            add_text("War Magic", color=c_h1, wrap=avg_wrap, tag=f"text.fClass.Fighter.EldrichKnight.{tag}.Header")
-            add_text(War_Magic, color=c_text, wrap=avg_wrap, tag=f"text.fClass.Fighter.EldrichKnight.{tag}.Desc")
+            add_text("War Magic", color=c_h1, wrap=size.gwrap, tag=f"text.fClass.Fighter.EldrichKnight.{tag}.Header")
+            add_text(War_Magic, color=c_text, wrap=size.gwrap, tag=f"text.fClass.Fighter.EldrichKnight.{tag}.Desc")
         
         if "Improved War Magic" in data:
             ability = "Improved War Magic"
             tag = ability.replace(" ", "_")
             Improved_War_Magic = "(action-spell) gain (bonus) make one weapon attack."
-            add_text("Improved War Magic", color=c_h1, wrap=avg_wrap, tag=f"text.fClass.Fighter.EldrichKnight.{tag}.Header")
-            add_text(Improved_War_Magic, color=c_text, wrap=avg_wrap, tag=f"text.fClass.Fighter.EldrichKnight.{tag}.Desc")
+            add_text("Improved War Magic", color=c_h1, wrap=size.gwrap, tag=f"text.fClass.Fighter.EldrichKnight.{tag}.Header")
+            add_text(Improved_War_Magic, color=c_text, wrap=size.gwrap, tag=f"text.fClass.Fighter.EldrichKnight.{tag}.Desc")
         
         if "Eldrich Strike" in data:
             ability = "Eldrich Strike"
             tag = ability.replace(" ", "_")
             Eldrich_Strike = "When you hit a creature with a weapon attack, that creature has disadvantage on the next saving throw it makes against a spell you cast before the end of your next turn."
-            add_text("Eldrich Strike", color=c_h1, wrap=avg_wrap, tag=f"text.fClass.Fighter.EldrichKnight.{tag}.Header")
-            add_text(Eldrich_Strike, color=c_text, wrap=avg_wrap, tag=f"text.fClass.Fighter.EldrichKnight.{tag}.Desc")
+            add_text("Eldrich Strike", color=c_h1, wrap=size.gwrap, tag=f"text.fClass.Fighter.EldrichKnight.{tag}.Header")
+            add_text(Eldrich_Strike, color=c_text, wrap=size.gwrap, tag=f"text.fClass.Fighter.EldrichKnight.{tag}.Desc")
         
         if "Arcane Charge" in data:
             ability = "Arcane Charge"
             tag = ability.replace(" ", "_")
             Arcane_Charge = "(Action Surge) Teleport up to 30 feet to an unoccupied space you can see, teleport before or after extra action"
-            add_text("Arcane Charge", color=c_h1, wrap=avg_wrap, tag=f"text.fClass.Fighter.EldrichKnight.{tag}.Header")
-            add_text(Arcane_Charge, color=c_text, wrap=avg_wrap, tag=f"text.fClass.Fighter.EldrichKnight.{tag}.Desc")
+            add_text("Arcane Charge", color=c_h1, wrap=size.gwrap, tag=f"text.fClass.Fighter.EldrichKnight.{tag}.Header")
+            add_text(Arcane_Charge, color=c_text, wrap=size.gwrap, tag=f"text.fClass.Fighter.EldrichKnight.{tag}.Desc")
 
-def UI_Class_Fighter_Samurai():
+def ui_upd_Class_Fighter_Samurai():
     data = q.db.Class["Abil"]
     with group(parent="cw.fClass.Main"):
         if "Bonus Proficiency" in data:
             ability = "Bonus Proficiency"
             tag = ability.replace(" ", "_")
             cdata = data[ability]
-            tag_header = f"text.fClass.Fighter.Samurai.{tag}.Header"
+            t1_header = f"text.fClass.Fighter.Samurai.{tag}.Header"
             tag_popup = f"popup.fClass.Fighter.Samurai.{tag}.Select"
-            add_text(ability, color=c_h1, wrap=avg_wrap, tag=tag_header)
+            add_text(ability, color=c_h1, wrap=size.gwrap, tag=t1_header)
             item_delete(tag_popup)
-            with popup(tag_header, mousebutton=mvMouseButton_Left, tag=tag_popup):
+            with popup(t1_header, mousebutton=mvMouseButton_Left, tag=tag_popup):
                 add_combo(items=g.list_Fighter_Samuri_Bonus_Proficiency, default_value=cdata["Select"][0], width=80, no_arrow_button=True, callback=cbh, user_data=["Class Select", ability, 0], tag=f"combo.fClass.Fighter.Samurai.{tag}.Choice.0")
         
         if "Fighting Spirit" in data:
@@ -2296,34 +2422,34 @@ def UI_Class_Fighter_Samurai():
             Fighting_Spirit = "(Bonus Action) Advantage on weapon attacks and gain 5 temp HP until end of turn."
             with group(horizontal=False):
                 with group(horizontal=True):
-                    add_text("Fighting Spirit", color=c_h1, wrap=avg_wrap, tag=f"text.fClass.Fighter.Samurai.{tag}.Header")
+                    add_text("Fighting Spirit", color=c_h1, wrap=size.gwrap, tag=f"text.fClass.Fighter.Samurai.{tag}.Header")
                     for idx, value in enumerate(cdata["Use"]):
                         add_checkbox(default_value=value, enabled=True, callback=cbh, user_data=["Class Use", "Fighting Spirit", idx], tag=f"checkbox.fClass.Fighter.Samurai.{tag}.Use.{idx}")
-                add_text(Fighting_Spirit, color=c_text, wrap=avg_wrap, tag=f"text.fClass.Fighter.Samurai.{tag}.Desc")
+                add_text(Fighting_Spirit, color=c_text, wrap=size.gwrap, tag=f"text.fClass.Fighter.Samurai.{tag}.Desc")
                 
         if "Elegant Courtier" in data:
             ability = "Elegant Courtier"
             tag = ability.replace(" ", "_")
             Elegant_Courtier = f"Persuasion checks gain {q.db.Atr['WIS']['Mod']:+d}"
             with group(horizontal=True):
-                add_text("Elegant Courtier", color=c_h1, wrap=avg_wrap, tag=f"text.fClass.Fighter.Samurai.{tag}.Header")
-                add_text(Elegant_Courtier, color=c_text, wrap=avg_wrap, tag=f"text.fClass.Fighter.Samurai.{tag}.Desc")
+                add_text("Elegant Courtier", color=c_h1, wrap=size.gwrap, tag=f"text.fClass.Fighter.Samurai.{tag}.Header")
+                add_text(Elegant_Courtier, color=c_text, wrap=size.gwrap, tag=f"text.fClass.Fighter.Samurai.{tag}.Desc")
                 
         if "Tireless Spirit" in data:
             ability = "Tireless Spirit"
             tag = ability.replace(" ", "_")
             Tireless_Spirit = "When you roll initiative and have no uses of Fighting Spirit remaining, regain one use."
             with group(horizontal=True):
-                add_text("Tireless Spirit", color=c_h1, wrap=avg_wrap, tag=f"text.fClass.Fighter.Samurai.{tag}.Header")
-                add_text(Tireless_Spirit, color=c_text, wrap=avg_wrap, tag=f"text.fClass.Fighter.Samurai.{tag}.Desc")
+                add_text("Tireless Spirit", color=c_h1, wrap=size.gwrap, tag=f"text.fClass.Fighter.Samurai.{tag}.Header")
+                add_text(Tireless_Spirit, color=c_text, wrap=size.gwrap, tag=f"text.fClass.Fighter.Samurai.{tag}.Desc")
         
         if "Rapid Strike" in data:
             ability = "Rapid Strike"
             tag = ability.replace(" ", "_")
             Rapid_Strike = "On Attack with advantage, you may remove advantage to gain +1 attack, 1/turn."
             with group(horizontal=True):
-                add_text("Rapid Strike", color=c_h1, wrap=avg_wrap, tag=f"text.fClass.Fighter.Samurai.{tag}.Header")
-                add_text(Rapid_Strike, color=c_text, wrap=avg_wrap, tag=f"text.fClass.Fighter.Samurai.{tag}.Desc")
+                add_text("Rapid Strike", color=c_h1, wrap=size.gwrap, tag=f"text.fClass.Fighter.Samurai.{tag}.Header")
+                add_text(Rapid_Strike, color=c_text, wrap=size.gwrap, tag=f"text.fClass.Fighter.Samurai.{tag}.Desc")
                 
         if "Strength before Death" in data:
             ability = "Strength before Death"
@@ -2332,11 +2458,11 @@ def UI_Class_Fighter_Samurai():
             Strength_before_Death = "When reduced to 0 HP, take a full turn before falling unconsciouq.pc."
             with group(horizontal=False):
                 with group(horizontal=True):
-                    add_text("Strength before Death", color=c_h1, wrap=avg_wrap, tag=f"text.fClass.Fighter.Samurai.{tag}.Header")
+                    add_text("Strength before Death", color=c_h1, wrap=size.gwrap, tag=f"text.fClass.Fighter.Samurai.{tag}.Header")
                     add_checkbox(default_value=cdata["Use"][0], enabled=True, callback=cbh, user_data=["Class Use", "Strength before Death", 0], tag=f"checkbox.fClass.Fighter.Samurai.{tag}.Use.0")
-                add_text(Strength_before_Death, color=c_text, wrap=avg_wrap, tag=f"text.fClass.Fighter.Samurai.{tag}.Desc")
+                add_text(Strength_before_Death, color=c_text, wrap=size.gwrap, tag=f"text.fClass.Fighter.Samurai.{tag}.Desc")
                 
-def UI_Class_Wizard():
+def ui_upd_Class_Wizard():
     data = q.db.Class["Abil"]
     with group(parent="cw.fClass.Main"):
         if "Spellcasting" in data:
@@ -2344,15 +2470,15 @@ def UI_Class_Wizard():
             tag = ability.replace(" ", "_")
             Spellcasting_1 = "Must be spell level you can prepare, Costs 50 gp + 2 hours per spell level"
             Spellcasting_2 = "Too backup own spellbook, Costs 10 gp + 1 hour per spell level"
-            tag_header = f"text.fClass.Wizard.{tag}.Header"
+            t1_header = f"text.fClass.Wizard.{tag}.Header"
             tag_tooltip = f"tooltip.fClass.Wizard.{tag}.Detail"
-            add_text("Spellcasting", color=c_h1, wrap=avg_wrap, tag=tag_header)
+            add_text("Spellcasting", color=c_h1, wrap=size.gwrap, tag=t1_header)
             item_delete(tag_tooltip)
-            with tooltip(tag_header, tag=tag_tooltip):
-                add_text("Copying external spells", color=c_h1, wrap=avg_wrap)
-                add_text(Spellcasting_1, color=c_text, wrap=avg_wrap)
-                add_text("Copying internal spells", color=c_h1, wrap=avg_wrap)
-                add_text(Spellcasting_2, color=c_text, wrap=avg_wrap)
+            with tooltip(t1_header, tag=tag_tooltip):
+                add_text("Copying external spells", color=c_h1, wrap=size.gwrap)
+                add_text(Spellcasting_1, color=c_text, wrap=size.gwrap)
+                add_text("Copying internal spells", color=c_h1, wrap=size.gwrap)
+                add_text(Spellcasting_2, color=c_text, wrap=size.gwrap)
                 
         if "Arcane Recovery" in data:
             ability = "Arcane Recovery"
@@ -2361,20 +2487,20 @@ def UI_Class_Wizard():
             Arcane_Recovery = f"Regain Spell slots with a combined level of {math.ceil(q.db.Core.L/2)}, None highter then 6th level"
             with group(horizontal=False):
                 with group(horizontal=True):
-                    add_text("Arcane Recovery", color=c_h1, wrap=avg_wrap, tag=f"text.fClass.Wizard.{tag}.Header")
+                    add_text("Arcane Recovery", color=c_h1, wrap=size.gwrap, tag=f"text.fClass.Wizard.{tag}.Header")
                     for idx, value in enumerate(cdata["Use"]):
                         add_checkbox(default_value=value, enabled=True, callback=cbh, user_data=["Class Use", "Arcane Recovery", idx], tag=f"checkbox.fClass.Wizard.{tag}.Use.{idx}")
-                add_text(Arcane_Recovery, color=c_text, wrap=avg_wrap, tag=f"text.fClass.Wizard.{tag}.Desc")
+                add_text(Arcane_Recovery, color=c_text, wrap=size.gwrap, tag=f"text.fClass.Wizard.{tag}.Desc")
 
         if "Spell Mastery" in data:
             ability = "Spell Mastery"
             tag = ability.replace(" ", "_")
             cdata = data["Spell Mastery"]
-            tag_header = f"text.fClass.Wizard.{tag}.Header"
+            t1_header = f"text.fClass.Wizard.{tag}.Header"
             tag_popup = f"popup.fClass.Wizard.{tag}.Select"
-            add_text("Spell Mastery", color=c_h1, wrap=avg_wrap, tag=tag_header)
+            add_text("Spell Mastery", color=c_h1, wrap=size.gwrap, tag=t1_header)
             item_delete(tag_popup)
-            with popup(tag_header, mousebutton=mvMouseButton_Left, tag=tag_popup):
+            with popup(t1_header, mousebutton=mvMouseButton_Left, tag=tag_popup):
                 add_combo(items=q.db.Spell["Book"][1], default_value=cdata["Select"][0], width=80, no_arrow_button=True, callback=cbh, user_data=["Class Select", "Spell Mastery", 0], tag=f"combo.fClass.Wizard.{tag}.Choice.0")
                 add_combo(items=q.db.Spell["Book"][2], default_value=cdata["Select"][1], width=80, no_arrow_button=True, callback=cbh, user_data=["Class Select", "Spell Mastery", 1], tag=f"combo.fClass.Wizard.{tag}.Choice.1")
             for idx, spell in enumerate(cdata["Select"]):
@@ -2391,11 +2517,11 @@ def UI_Class_Wizard():
             ability = "Signature Spells"
             tag = ability.replace(" ", "_")
             cdata = data["Signature Spells"]
-            tag_header = f"text.fClass.Wizard.{tag}.Header"
+            t1_header = f"text.fClass.Wizard.{tag}.Header"
             tag_popup = f"popup.fClass.Wizard.{tag}.Select"
-            add_text("Signature Spells", color=c_h1, wrap=avg_wrap, tag=tag_header)
+            add_text("Signature Spells", color=c_h1, wrap=size.gwrap, tag=t1_header)
             item_delete(tag_popup)
-            with popup(tag_header, mousebutton=mvMouseButton_Left, tag=tag_popup):
+            with popup(t1_header, mousebutton=mvMouseButton_Left, tag=tag_popup):
                 add_combo(items=q.db.Spell["Book"][3], default_value=cdata["Select"][0], width=80, no_arrow_button=True, callback=cbh, user_data=["Class Select", "Signature Spells", 0], tag=f"combo.fClass.Wizard.{tag}.Choice.0")
                 add_combo(items=q.db.Spell["Book"][3], default_value=cdata["Select"][1], width=80, no_arrow_button=True, callback=cbh, user_data=["Class Select", "Signature Spells", 1], tag=f"combo.fClass.Wizard.{tag}.Choice.1")
             for idx, spell in enumerate(cdata["Select"]):
@@ -2407,17 +2533,17 @@ def UI_Class_Wizard():
                         item_delete(f"tooltip.fClass.Wizard.{tag}.Spell.{spell_tag}")
                         with tooltip(f"text.fClass.Wizard.{tag}.Spell.{spell_tag}", tag=f"tooltip.fClass.Wizard.{tag}.Spell.{spell_tag}"):
                             spell_detail(spell)
-        if q.db.Core.SC: globals()[f"UI_Class_{q.db.Core.C}_{q.db.Core.SC}"]()
+        if q.db.Core.SC: globals()[f"ui_upd_Class_{q.db.Core.C}_{q.db.Core.SC}"]()
 
-def UI_Class_Wizard_Abjuration():
+def ui_upd_Class_Wizard_Abjuration():
     data = q.db.Class["Abil"]
     with group(parent="cw.fClass.Main"):
         if "Abjuration Savant" in data:
             ability = "Abjuration Savant"
             tag = ability.replace(" ", "_")
             Abjuration_Savant = "Abjuration spells cost 25gp and 1 hour per spell level."
-            add_text("Abjuration Savant", color=c_h1, wrap=avg_wrap, tag=f"text.fClass.Wizard.Abjuration.{tag}.Header")
-            add_text(Abjuration_Savant, color=c_text, wrap=avg_wrap, tag=f"text.fClass.Wizard.Abjuration.{tag}.Desc")
+            add_text("Abjuration Savant", color=c_h1, wrap=size.gwrap, tag=f"text.fClass.Wizard.Abjuration.{tag}.Header")
+            add_text(Abjuration_Savant, color=c_text, wrap=size.gwrap, tag=f"text.fClass.Wizard.Abjuration.{tag}.Desc")
             
         if "Arcane Ward" in data:
             ability = "Arcane Ward"
@@ -2425,81 +2551,81 @@ def UI_Class_Wizard_Abjuration():
             Arcane_Ward = "On casting a 1st-level+ Abjuration spell, create a magical ward that lasts until a long rest. It can regain HP equal to twice the spell level on subsequent Abjuration spell castq.pc."
             cdata = data["Arcane Ward"]
             with group(horizontal=True):
-                add_text("Arcane Ward", color=c_h1, wrap=avg_wrap, tag=f"text.fClass.Wizard.Abjuration.{tag}.Header")
+                add_text("Arcane Ward", color=c_h1, wrap=size.gwrap, tag=f"text.fClass.Wizard.Abjuration.{tag}.Header")
                 add_checkbox(default_value=cdata["Use"][0], enabled=True, callback=cbh, user_data=["Class Use", "Arcane Ward", 0], tag=f"checkbox.fClass.Wizard.Abjuration.{tag}.Use.0")
                 add_button(label="Ward HP", enabled=False)
                 add_button(label=f"{cdata["HP"]["Current"]} / {cdata["HP"]["Max"]}", enabled=False, tag=f"button.fClass.Wizard.Abjuration.{tag}.HP")
                 add_button(label="-", user_data = ["Arcane Ward", -1], callback=cbh)
                 add_button(label="+", user_data = ["Arcane Ward", 1], callback=cbh)
-            add_text(Arcane_Ward, color=c_text, wrap=avg_wrap, tag=f"text.fClass.Wizard.Abjuration.{tag}.Desc")
+            add_text(Arcane_Ward, color=c_text, wrap=size.gwrap, tag=f"text.fClass.Wizard.Abjuration.{tag}.Desc")
         
         if "Projected Ward" in data:
             ability = "Projected Ward"
             tag = ability.replace(" ", "_")
             Projected_Ward = "(reaction) When a creature within 30 ft is hit, use your Arcane Ward to absorb the damage."
-            add_text("Projected Ward", color=c_h1, wrap=avg_wrap, tag=f"text.fClass.Wizard.Abjuration.{tag}.Header")
-            add_text(Projected_Ward, color=c_text, wrap=avg_wrap, tag=f"text.fClass.Wizard.Abjuration.{tag}.Desc")
+            add_text("Projected Ward", color=c_h1, wrap=size.gwrap, tag=f"text.fClass.Wizard.Abjuration.{tag}.Header")
+            add_text(Projected_Ward, color=c_text, wrap=size.gwrap, tag=f"text.fClass.Wizard.Abjuration.{tag}.Desc")
             
         if "Improved Abjuration" in data:
             ability = "Improved Abjuration"
             tag = ability.replace(" ", "_")
             Improved_Abjuration = f"When an Abjuration spell requires you to make an ability check, add your proficiency bonus ({q.db.Core.PB}) to that check."
-            add_text("Improved Abjuration", color=c_h1, wrap=avg_wrap, tag=f"text.fClass.Wizard.Abjuration.{tag}.Header")
-            add_text(Improved_Abjuration, color=c_text, wrap=avg_wrap, tag=f"text.fClass.Wizard.Abjuration.{tag}.Desc")
+            add_text("Improved Abjuration", color=c_h1, wrap=size.gwrap, tag=f"text.fClass.Wizard.Abjuration.{tag}.Header")
+            add_text(Improved_Abjuration, color=c_text, wrap=size.gwrap, tag=f"text.fClass.Wizard.Abjuration.{tag}.Desc")
             
         if "Spell Resistance" in data:
             ability = "Spell Resistance"
             tag = ability.replace(" ", "_")
             Spell_Resistance = "Gain advantage on saving throws against spells and resistance to spell damage."
-            add_text("Spell Resistance", color=c_h1, wrap=avg_wrap, tag=f"text.fClass.Wizard.Abjuration.{tag}.Header")
-            add_text(Spell_Resistance, color=c_text, wrap=avg_wrap, tag=f"text.fClass.Wizard.Abjuration.{tag}.Desc")
+            add_text("Spell Resistance", color=c_h1, wrap=size.gwrap, tag=f"text.fClass.Wizard.Abjuration.{tag}.Header")
+            add_text(Spell_Resistance, color=c_text, wrap=size.gwrap, tag=f"text.fClass.Wizard.Abjuration.{tag}.Desc")
 
-def UI_Class_Wizard_Conjuration():
+def ui_upd_Class_Wizard_Conjuration():
     data = q.db.Class["Abil"]
     with group(parent="cw.fClass.Main"):
         if "Conjuration Savant" in data:
             ability = "Conjuration Savant"
             tag = ability.replace(" ", "_")
             Conjuration_Savant = "Conjuration spells cost 25gp and 1 hour per spell level."
-            add_text("Conjuration Savant", color=c_h1, wrap=avg_wrap, tag=f"text.fClass.Wizard.Conjuration.{tag}.Header")
-            add_text(Conjuration_Savant, color=c_text, wrap=avg_wrap, tag=f"text.fClass.Wizard.Conjuration.{tag}.Desc")
+            add_text("Conjuration Savant", color=c_h1, wrap=size.gwrap, tag=f"text.fClass.Wizard.Conjuration.{tag}.Header")
+            add_text(Conjuration_Savant, color=c_text, wrap=size.gwrap, tag=f"text.fClass.Wizard.Conjuration.{tag}.Desc")
             
         if "Minor Conjuration" in data:
             ability = "Minor Conjuration"
             tag = ability.replace(" ", "_")
             Minor_Conjuration = "(action) Conjure a non-magical item (up to 3ft, 10 lbs). It lasts for 1 hour or until it takes damage."
-            add_text("Minor Conjuration", color=c_h1, wrap=avg_wrap, tag=f"text.fClass.Wizard.Conjuration.{tag}.Header")
-            add_text(Minor_Conjuration, color=c_text, wrap=avg_wrap, tag=f"text.fClass.Wizard.Conjuration.{tag}.Desc")
+            add_text("Minor Conjuration", color=c_h1, wrap=size.gwrap, tag=f"text.fClass.Wizard.Conjuration.{tag}.Header")
+            add_text(Minor_Conjuration, color=c_text, wrap=size.gwrap, tag=f"text.fClass.Wizard.Conjuration.{tag}.Desc")
             
         if "Benign Transportation" in data:
             ability = "Benign Transportation"
             tag = ability.replace(" ", "_")
             Benign_Transportation = "(action) Teleport up to 30ft or swap places with a willing creature. Usable again after a long rest or casting a Level 1+ conjuration spell."
-            add_text("Benign Transportation", color=c_h1, wrap=avg_wrap, tag=f"text.fClass.Wizard.Conjuration.{tag}.Header")
-            add_text(Benign_Transportation, color=c_text, wrap=avg_wrap, tag=f"text.fClass.Wizard.Conjuration.{tag}.Desc")
+            add_text("Benign Transportation", color=c_h1, wrap=size.gwrap, tag=f"text.fClass.Wizard.Conjuration.{tag}.Header")
+            add_text(Benign_Transportation, color=c_text, wrap=size.gwrap, tag=f"text.fClass.Wizard.Conjuration.{tag}.Desc")
             
         if "Focused Conjuration" in data:
             ability = "Focused Conjuration"
             tag = ability.replace(" ", "_")
             Focused_Conjuration = "Your concentration on conjuration spells can't be broken as a result of taking damage."
-            add_text("Focused Conjuration", color=c_h1, wrap=avg_wrap, tag=f"text.fClass.Wizard.Conjuration.{tag}.Header")
-            add_text(Focused_Conjuration, color=c_text, wrap=avg_wrap, tag=f"text.fClass.Wizard.Conjuration.{tag}.Desc")
+            add_text("Focused Conjuration", color=c_h1, wrap=size.gwrap, tag=f"text.fClass.Wizard.Conjuration.{tag}.Header")
+            add_text(Focused_Conjuration, color=c_text, wrap=size.gwrap, tag=f"text.fClass.Wizard.Conjuration.{tag}.Desc")
             
         if "Durable Summons" in data:
             ability = "Durable Summons"
             tag = ability.replace(" ", "_")
             Durable_Summons = "Any creature you summon or create with a conjuration spell has 30 temporary hit pointq.pc."
-            add_text("Durable Summons", color=c_h1, wrap=avg_wrap, tag=f"text.fClass.Wizard.Conjuration.{tag}.Header")
-            add_text(Durable_Summons, color=c_text, wrap=avg_wrap, tag=f"text.fClass.Wizard.Conjuration.{tag}.Desc")
+            add_text("Durable Summons", color=c_h1, wrap=size.gwrap, tag=f"text.fClass.Wizard.Conjuration.{tag}.Header")
+            add_text(Durable_Summons, color=c_text, wrap=size.gwrap, tag=f"text.fClass.Wizard.Conjuration.{tag}.Desc")
 
 # #ANCHOR - Inventory
 
-def UI_INVE():
-    UI_INVE_Equip()
-    UI_INVE_Backpack()
+def ui_upd_INVE():
+    ui_upd_INVE_Equip()
+    ui_upd_INVE_Backpack()
 
 
-def UI_INVE_Backpack():
+def ui_upd_INVE_Backpack():
     item_clear("cw.INVE.Backpack")
     with group(parent="cw.INVE.Backpack"):
         with table(header_row=True, row_background=False, borders_innerH=True, borders_outerH=True, borders_innerV=True, borders_outerV=True, resizable=True):
@@ -2547,7 +2673,7 @@ def ensure_Backpack():
         set_value(f"text.BP.weight.{item}", weight)
         set_value(f"text.BP.Cost.{item}", cost)
 
-def UI_INVE_Equip():
+def ui_upd_INVE_Equip():
     backpack = set(q.db.Inventory.Backpack)
     two_handed = set(q.w.prop("Two-handed"))
     cEquip = q.db.Inventory.Equip
@@ -2584,12 +2710,12 @@ def create_bazaar_button(item, category_type, parent):
     button_tag = f"button.Bazaar.add.{item}"
     tooltip_tag = f"tooltip.Bazaar.detail.{item}"
     
-    add_button(label=g.isName(item), width=swItem, user_data=["Bazaar Add Item", category_type, item], callback=cbh, tag=button_tag, parent=parent)
+    add_button(label=g.isName(item), width=size.w_item, user_data=["Bazaar Add Item", category_type, item], callback=cbh, tag=button_tag, parent=parent)
     
     with tooltip(button_tag, tag=tooltip_tag):
         disp_item_detail(item)
 
-def UI_INVE_Bazaar():
+def ui_upd_INVE_Bazaar():
     dict_struct = {
         "Weapon": [("Simple", "Melee"), ("Simple", "Ranged"), ("Martial", "Melee"), ("Martial", "Ranged")],
         "Armor": ["Light", "Medium", "Heavy"]
