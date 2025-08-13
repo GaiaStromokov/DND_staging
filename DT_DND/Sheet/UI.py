@@ -1772,7 +1772,7 @@ def spell_detail(spell):
 class ui_upd_Race:
     def __init__(self):
         self.parent = tag.rfeature.main()
-
+        
     def standard(self, name, descriptions):
         a, t = gen_abil(name, 1)
         t_header = tag.rfeature.header(t)
@@ -1817,66 +1817,56 @@ class ui_upd_Race:
             
             for i, desc in enumerate(descriptions):
                 add_text(desc, color=c_text, wrap=size.gwrap, tag=desc_tags[i])
+    
+    def Empty(self):
+        pass
+    def Human(self):
+        pass
+    def Human_Standard(self):
+        pass
+    def Human_Variant(self):
+        pass
+    def Elf(self):
+        Fey_Ancestry_descriptions = [
+            "You have advantage on saving throws against being charmed, and magic can't put you to sleep."
+        ]
+        self.standard("Fey Ancestry", Fey_Ancestry_descriptions)
 
+        Trance_descriptions = [
+            "You don't need to sleep. Instead, you meditate deeply, remaining semiconscious, for 4 hours a day."
+        ]
+        self.standard("Trance", Trance_descriptions)
+    def Elf_High(self):
+        a, t = gen_abil("Cantrip", 1)
+        spell = q.db.Race.Abil["Cantrip"]["Select"][0]
 
+        t_header = tag.rfeature.header(self.parent, a)
+        t_label = tag.rfeature.label(self.parent, a)
+        t_tooltip = tag=tag.rfeature.tooltip(self.parent, a)
+        t_popup = tag.rfeature.popup(self.parent, a)
+        t_select = tag.rfeature.select(self.parent, a)
 
-
-def ui_upd_Race_Empty():
-    parent = "empty"
-    pass
-
-def ui_upd_Race_Human():
-    parent = "human"
-    pass
-
-def ui_upd_Race_Human_Standard():
-    parent = "human_standard"
-    pass
-
-def ui_upd_Race_Human_Variant():
-    parent = "human_variant"
-    pass
-
-def ui_upd_Race_Elf():
-    parent = "elf"
-    with group(parent=tag.rfeature.main()):
-        a1 = "Fey Ancestry"
-        t1 = a1.replace(" ", "_")
-        d1 = "You have advantage on saving throws against being charmed, and magic can't put you to sleep."
-        
-        a2 = "Trance"
-        t2 = a2.replace(" ", "_")
-        d2 = "You don't need to sleep. Instead, you meditate deeply, remaining semiconscious, for 4 hours a day."
-        
-        add_text(a1, color=c_h1, wrap=size.gwrap)
-        add_text(d1, color=c_text, wrap=size.gwrap)
-        
-        add_text(a2, color=c_h1, wrap=size.gwrap)
-        add_text(d2, color=c_text, wrap=size.gwrap)
-    if g.Subrace(): globals()[f"ui_upd_Race_{g.Race()}_{g.Subrace()}"]()
-
-def ui_upd_Race_Elf_High():
-    parent = "elf_high"
-    with group(parent=tag.rfeature.main()):
-        a1 = "Cantrip"
-        cdata1=q.db.Race.Abil["Cantrip"]
-        spell = cdata1["Select"][0]
-
-        t1_header = tag.rfeature.header(parent, a1)
-        tag_label = tag.rfeature.label(parent, a1)
-        tag_tooltip = tag=tag.rfeature.tooltip(parent, a1)
-        tag_popup = tag.rfeature.popup(parent, a1)
-        tag_select = tag.rfeature.select(parent, a1)
-        with group(horizontal=True):
-            add_text(a1, color=c_h1, wrap=size.gwrap, tag=t1_header)
-            add_text(spell, color=c_h2, wrap=size.gwrap, tag=tag_label)
-            if spell:
-                item_delete(tag_tooltip)
-                with tooltip(tag_label, tag=tag_tooltip):
+        with group(self.parent):
+            with group(horizontal=True):
+                add_text(a, color=c_h1, wrap=size.gwrap, tag=t_header)
+                add_text(spell, color=c_h2, wrap=size.gwrap, tag=t_label)
+                item_delete(t_tooltip)
+                with tooltip(t_label, tag=t_tooltip):
                     spell_detail(spell)
-        item_delete(tag_popup)
-        with popup(t1_header, mousebutton=mvMouseButton_Left, tag=tag_popup):
-            add_combo(items=g.list_High_Elf_Cantrip, default_value=spell, width=120, no_arrow_button=True, user_data=["Race Spell Select","Cantrip"], callback=cbh, tag=tag_select)
+
+
+                item_delete(t_popup)
+                with popup(t1_header, mousebutton=mvMouseButton_Left, tag=tag_popup):
+                    add_combo(items=g.list_High_Elf_Cantrip, default_value=spell, width=120, no_arrow_button=True, user_data=["Race Spell Select","Cantrip"], callback=cbh, tag=tag_select)
+
+
+    def Elf_Wood(self):
+        pass
+    def Elf_Drow(self):
+        pass
+    def Elf_Shadarkai(self):
+        pass
+
 
 
 def ui_upd_Race_Elf_Wood():
