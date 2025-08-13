@@ -2,326 +2,22 @@
 from dearpygui.dearpygui import *
 import q
 from Sheet.getset import g
-
+from UI.UI_imports import gen_abil, tag, size
 from access_data.color_reference import *
 import math as math
 
 from colorist import *
 
-def gen_abil(name: str, number: int):
-    an = name
-    tn = name.replace(" ", "_")
-    return an, tn
 
 
-#ANCHOR - size
-class size:
-    w_max = 1350
-    h_max = 880
-
-    w_block = w_max - 595
-    h_block = h_max - 114
-
-    h_header_1 = 20
-    w_header_2 = 188
-    w_header_3 = 116
-
-    gwrap = 640
-
-    w_s_btn = 20
-    w_m_btn = 46
-    w_l_btn = 90
-
-    w_armor_class = 62
-    h_armor_class = 58
-
-    w_attributes = 132
-    h_attributes = 174
-
-    w_buffer_1 = 132
-    h_buffer_1 = 17
-
-    w_buffer_2 = 210
-    h_buffer_2 = 13
-
-    w_character = 210
-    h_character = 82
-
-    w_conditions = 132
-    h_conditions = 42
-
-    w_core = 210
-    h_core = 174
-
-    w_health = 210
-    h_health = 82
-
-    w_initiative = 62
-    h_initiative = 58
-
-    w_inventory = 552
-    h_inventory = 340
-
-    w_item = 117
-
-    w_proficiencies = 210
-    h_proficiencies = 82
-
-    w_rest = 132
-    h_rest = 80
-
-    w_skill = 194
-    h_skill = 449
-
-    w_speed = 62
-    h_speed = 58
-
-    w_vision = 62
-    h_vision = 58
-
-    w_wallet = 412
-    h_wallet = 35
-
-#ANCHOR -  tag
-class tag:
-    class Base:
-        prefix = None
-
-        @classmethod
-        def build(cls, items=None, suffix=None):
-            if cls.prefix is None: raise NotImplementedError("Subclasses must define prefix")
-            if suffix is None: raise ValueError("Suffix must be provided")
-            items_str = "_".join(items) if isinstance(items, (list, tuple)) else str(items) if items else ""
-            return f"{cls.prefix}_{items_str}_{suffix}" if items_str else f"{cls.prefix}_{suffix}"
-
-        
-        @classmethod
-        def select(cls, *items): return cls.build(items if items else None, "select")
-        @classmethod
-        def val(cls, *items): return cls.build(items if items else None, "val")
-        @classmethod
-        def label(cls, *items): return cls.build(items if items else None, "label")
-        @classmethod
-        def button(cls, *items): return cls.build(items if items else None, "button")
-        @classmethod
-        def source(cls, *items): return cls.build(items if items else None, "source")
-        @classmethod
-        def toggle(cls, *items): return cls.build(items if items else None, "toggle")
-        @classmethod
-        def max(cls, *items): return cls.build(items if items else None, "max")
-        @classmethod
-        def input(cls, *items): return cls.build(items if items else None, "input")
-        @classmethod
-        def text(cls, *items): return cls.build(items if items else None, "text")
-        @classmethod
-        def mod(cls, *items): return cls.build(items if items else None, "mod")
-        @classmethod
-        def sum(cls, *items): return cls.build(items if items else None, "sum")
-        @classmethod
-        def sub(cls, *items): return cls.build(items if items else None, "sub")
-        @classmethod
-        def main(cls, *items): return cls.build(items if items else None, "main")
-        @classmethod
-        def window(cls, *items): return cls.build(items if items else None, "window")
-        @classmethod
-        def tabbar(cls, *items): return cls.build(items if items else None, "tabbar")
-        @classmethod
-        def tab(cls, *items): return cls.build(items if items else None, "tab")
-        @classmethod
-        def known(cls, *items): return cls.build(items if items else None, "known")
-        @classmethod
-        def available(cls, *items): return cls.build(items if items else None, "available")
-        @classmethod
-        def current(cls, *items): return cls.build(items if items else None, "current")
-        @classmethod
-        def tooltip(cls, *items): return cls.build(items if items else None, "tooltip")
-        @classmethod
-        def popup(cls, *items): return cls.build(items if items else None, "popup")
-        @classmethod
-        def header(cls, *items): return cls.build(items if items else None, "header")
-
-        @classmethod
-        def wlevel(cls, level): 
-            if cls.prefix is None: raise NotImplementedError("Subclasses must define prefix")
-            return f"{cls.prefix}_Level_{level}_window"
-
-
-        @classmethod
-        def cell(cls, item1, item2):
-            if cls.prefix is None:
-                raise NotImplementedError("Subclasses must define prefix")
-            return f"{cls.prefix}_{item1}_{item2}_cell"
-
-        @classmethod
-        def element(cls, *, item=None, suffix=None):
-            if cls.prefix is None:
-                raise NotImplementedError("Subclasses must define prefix")
-            if suffix is None:
-                raise ValueError("Suffix must be provided")
-            return f"{cls.prefix}_{item}_{suffix}" if item else f"{cls.prefix}_{suffix}"
-
-        @classmethod
-        def multi(cls, *parents, suffix):
-            if cls.prefix is None:
-                raise NotImplementedError("Subclasses must define prefix")
-            return f"{cls.prefix}_{'_'.join(parents)}_{suffix}"
-
-        @classmethod
-        def gen(cls, parents, items, suffix):
-            parts = []
-            if parents: parts.extend(parents)
-            if items: parts.extend(items)
-            return "_".join(parts) + f"_{suffix}"
-
-        @classmethod
-        def bazaar(cls, equip_type, rank):
-            return f"bazaar_{equip_type}_{rank}"
-
-
-
-        @classmethod
-        def equip(cls, item):
-            item = item.lower()
-            return f"{item}_equip"
-
-    @staticmethod
-    def icon(item):
-        item = item.lower()
-        return f"{item}_icon"
-
-    @staticmethod
-    def img(item):
-        item = item.lower()
-        return f"{item}_img"
-    class core(Base):      prefix = "core"
-    class health(Base):    prefix = "health"
-    class prof(Base):      prefix = "proficiencies"
-    class char(Base):      prefix = "character"
-    class pdesc(Base):     prefix = "pdescription"
-    class buffer1(Base):   prefix = "buffer1"
-    class buffer2(Base):   prefix = "buffer2"
-    class atr(Base):       prefix = "attributes"
-    class init(Base):      prefix = "initiative"
-    class ac(Base):        prefix = "armor_class"
-    class vision(Base):    prefix = "vision"
-    class speed(Base):     prefix = "speed"
-    class cond(Base):      prefix = "condition"
-    class rest(Base):      prefix = "rest"
-    class skill(Base):     prefix = "skills"
-    class inve(Base):      prefix = "inventory"
-    class block(Base):     prefix = "block"
-    class wallet(Base):    prefix = "wallet"
-    class rfeature(Base):  prefix = "block_feature_race"
-    class cfeature(Base):  prefix = "block_feature_class"
-    class mfeature(Base):  prefix = "block_feature_milestone"
-    class bfeature(Base):  prefix = "block_feature_background"
-    class wactions(Base):  prefix = "block_actions_weapon"
-    class spell(Base):     prefix = "block_spells"
-    class scast(Base):     prefix = "block_spells_cast"
-    class slearn(Base):    prefix = "block_spells_learn"
-    class sprepare(Base):  prefix = "block_spells_prepare"
 
 
 #ANCHOR - Backend Import
-from Sheet.backend import (
-    stage_Level, 
-    
-    stage_Race, stage_Subrace, 
-    stage_Race_Asi, stage_Race_Use,
-    stage_Race_Spell_Use, stage_Race_Spell_Select,
-    
-    stage_Class, stage_Subclass,
-    stage_Class_Use, stage_Class_Skill_Select,
-    stage_Class_select,
-    
-    stage_Background, 
-    stage_Background_Prof_Select,
-    
-    stage_Milestone_Level_Select, 
-    stage_Milestone_Feat_Select, stage_Milestone_Feat_Choice, stage_Milestone_Feat_Use,
-    stage_Milestone_Asi_Select,
-    
-    stage_Atr_Base,
-
-    stage_Spell_Learn,
-    stage_Spell_Prepare, stage_Spell_Cast, 
-    
-    stage_Long_Rest, stage_Health_Mod, stage_Player_HP_Mod,
-    
-    stage_Arcane_Ward,
-    
-    stage_Player_Prof_Select, stage_Player_Condition,
-    
-    stage_Characteristic_Input, stage_Description_Input,
-    
-    
-    stage_Bazaar_Add_Item, stage_Backpack_Mod_Item,
-    
-    stage_Equip_Equip
-)
 
 
         
 #ANCHOR - Call Back Handler
-def cbh(sender, data, user_data):
-    func_dict = {
-        "Level Input":                  stage_Level,
-        "Core Race":                    stage_Race,
-        "Core Subrace":                 stage_Subrace,
-        "Core Class":                   stage_Class,
-        "Core Subclass":                stage_Subclass,
-        "Core Background":              stage_Background,
 
-        "Base Atr":                     stage_Atr_Base,
-
-        "Race Asi":                     stage_Race_Asi,
-        "Race Use":                     stage_Race_Use,
-        "Race Spell Use":               stage_Race_Spell_Use,
-        "Race Spell Select":            stage_Race_Spell_Select,
-
-        
-        "Milestone Level Select":       stage_Milestone_Level_Select,
-        "Milestone Feat Select":        stage_Milestone_Feat_Select,
-        "Milestone Feat Choice":        stage_Milestone_Feat_Choice,
-        "Milestone Feat Use":           stage_Milestone_Feat_Use,
-        "Milestone Asi Select":         stage_Milestone_Asi_Select,
-
-
-        "Class Use":                    stage_Class_Use,
-        "Class Skill Select":           stage_Class_Skill_Select,
-        "Class Select":                 stage_Class_select,
-        
-        "Spell Learn":                  stage_Spell_Learn,
-        "Spell Prepare":                stage_Spell_Prepare,
-        "Spell Cast":                   stage_Spell_Cast,
-        
-        "Background Prof Select":       stage_Background_Prof_Select,
-        
-        "Long Rest":                    stage_Long_Rest,
-
-        
-        "HP":                           stage_Health_Mod,
-        "Player HP Mod":                stage_Player_HP_Mod,
-        
-        "Arcane Ward":                  stage_Arcane_Ward,
-        
-        "Player Prof Input":            stage_Player_Prof_Select,
-        
-        "Condition":                    stage_Player_Condition,
-        
-        "Characteristic":               stage_Characteristic_Input,
-        "Description":                  stage_Description_Input,
-        
-        "Bazaar Add Item":              stage_Bazaar_Add_Item,
-        "Backpack Mod Item":            stage_Backpack_Mod_Item,
-        
-        "Equip Equip":                  stage_Equip_Equip,
-        "Clear Equip":                  stage_Equip_Equip
-    }
-    key = user_data[0]
-    user_data=user_data[1:]
-    print(f"{key} updating {func_dict[key].__name__}, data={data}, user_data={user_data}")
-    func_dict[key](sender, data, user_data, populate_Fields)
     
     
 
@@ -710,13 +406,24 @@ def init_window_inventory():
     with group(parent=tag.inve.window()):
         with tab_bar():
             with tab(label="Equip"):
-                add_child_window(height=h-28, border=True, no_scrollbar=True, tag=tag.inve.window("equip"))
+                add_child_window(height=h-28, border=True, no_scrollbar=True, tag=tag.equip.window("equip"))
             with tab(label="Backpack"):
-                add_child_window(height=h-80, border=True, no_scrollbar=True, tag=tag.inve.window("backpack"))
-                add_child_window(height=h-294, border=True, tag=tag.inve.window("backpack_totals"))
+                add_child_window(height=h-80, border=True, no_scrollbar=True, tag=tag.backpack.window())
+                add_child_window(height=h-294, border=True, tag=tag.backpack.window("totals"))
             with tab(label="Bazaar"):
-                add_child_window(height=h-26, border=True, no_scrollbar=True,  tag=tag.inve.window("bazaar"))
+                add_child_window(height=h-26, border=True, no_scrollbar=True,  tag=tag.bazaar.window("bazaar"))
 
+def init_window_inventory_backpack():
+    parent = tag.backpack.window()
+    item_clear(parent)
+    with group(parent=parent):
+        with table(header_row=True, row_background=False, borders_innerH=True, borders_outerH=True, borders_innerV=True, borders_outerV=True, resizable=True, tag=tag.backpack.table()):
+            add_table_column(label="Item", width_stretch=True, init_width_or_weight=0)
+            add_table_column(label="Slot", width_stretch=True, init_width_or_weight=0)
+            add_table_column(label="QTY", width_stretch=True, init_width_or_weight=0)
+            add_table_column(label="Weight", width_stretch=True, init_width_or_weight=0)
+            add_table_column(label="Cost", width_stretch=True, init_width_or_weight=0)
+            
 
 def init_window_inventory_bazaar():
     with group(parent=tag.inve.window("bazaar")):
@@ -727,7 +434,7 @@ def init_window_inventory_bazaar():
                         for rarity in range(5):
                             rank = g.item_rarity(rarity)
                             with tab(label=rank):
-                                add_child_window(height=size.h_inventory - 85, border=True, no_scrollbar=True, tag=tag.bazaar(equipment_type, rank))
+                                add_child_window(height=size.h_inventory - 85, border=True, no_scrollbar=True, tag=tag.bazaar.window(equipment_type, rank))
 def load_icons():
     figure_w, figure_h, figure_channel, figure_data = load_image("image/Figure_Icon.png")
     armor_w, armor_h, armor_channel, armor_data = load_image("image/Armor_Icon.png")
@@ -2020,358 +1727,6 @@ class ui_upd_Race:
 
 # #ANCHOR - Class shit
 
-class ui_upd_Class:
-    def __init__(self):
-        self.parent = "cw.fClass.Main"
-
-    def standard(self, name, descriptions):
-        a, t = gen_abil(name, 1)
-        t_header = tag.cfeature.header(t)
-        desc_tags = [tag.cfeature.text(t, f"{i+1}") for i, _ in enumerate(descriptions)]
-
-        with group(parent=self.parent):
-            add_text(a, color=c_h1, tag=t_header)
-            for i, desc in enumerate(descriptions):
-                add_text(desc, color=c_text, wrap=size.gwrap, tag=desc_tags[i])
-
-    def standard_toggle(self, name, descriptions):
-        a, t = gen_abil(name, 1)
-        cdata = q.db.Class["Abil"][a]
-        t_header = tag.cfeature.header(t)
-        desc_tags = [tag.cfeature.text(t, f"{i+1}") for i, _ in enumerate(descriptions)]
-
-        with group(parent=self.parent):
-            with group(horizontal=True):
-                add_text(a, color=c_h1, tag=t_header)
-                for idx, val in enumerate(cdata["Use"]):
-                    t_toggle = tag.cfeature.toggle(t, idx)
-                    add_checkbox(default_value=val, enabled=True, user_data=["Class Use", a, idx], callback=cbh, tag=t_toggle)
-
-            for i, desc in enumerate(descriptions):
-                add_text(desc, color=c_text, wrap=size.gwrap, tag=desc_tags[i])
-
-    def standard_multi_choice(self, name):
-        a, t = gen_abil(name, 1)
-        cdata = q.db.Class["Abil"][a]
-        t_header = tag.cfeature.header(t)
-        t_popup = tag.cfeature.popup(t)
-
-        with group(parent=self.parent):
-            add_text(a, color=c_h1, tag=t_header)
-
-            item_delete(t_popup)
-            with popup(t_header, mousebutton=mvMouseButton_Left, tag=t_popup):
-                for idx, value in enumerate(cdata["Select"]):
-                    t_select = tag.cfeature.select(t, idx)
-                    add_combo(items=g.list_Fighting_Styles, default_value=value, width=80, no_arrow_button=True, callback=cbh, user_data=["Class Select", a, idx], tag=t_select)
-
-            for item in cdata["Select"]:
-                if item != "":
-                    add_text(item, color=c_h2)
-                    add_text(g.get_Fighting_Style(item), color=c_text, wrap=size.gwrap)
-
-    def Empty(self):
-        pass
-
-    def Fighter(self):
-        data = q.db.Class["Abil"]
-
-        if "Fighting Style" in data:
-            self.standard_multi_choice("Fighting Style")
-
-        if "Second Wind" in data:
-            Second_Wind_descriptions = [f"(bonus) regain 1d10+{q.db.Core.L} HP"]
-            self.standard_toggle("Second Wind", Second_Wind_descriptions)
-
-        if "Action Surge" in data:
-            Action_Surge_descriptions = ["(free) take one additional action."]
-            self.standard_toggle("Action Surge", Action_Surge_descriptions)
-
-        if "Extra Attack" in data:
-            extra_attack_num_map = [0,0,0,0,1,1,1,1,1,1,2,2,2,2,2,2,2,3,3,3,4]
-            extra_attack_num = extra_attack_num_map[q.db.Core.L] if q.db.Core.L < len(extra_attack_num_map) else 4
-            Extra_Attack_descriptions = [f"You can attack {extra_attack_num+1} times whenever you take the Attack action on your turn."]
-            self.standard("Extra Attack", Extra_Attack_descriptions)
-
-        if "Indomitable" in data:
-            Indomitable_descriptions = ["You can reroll a saving throw that you fail. If you do so, you must use the new roll."]
-            self.standard_toggle("Indomitable", Indomitable_descriptions)
-
-    def Fighter_Champion(self):
-        data = q.db.Class["Abil"]
-
-        if "Improved Critical" in data:
-            Improved_Critical_descriptions = ["Your weapon attacks score a critical hit on a roll of 19 or 20."]
-            self.standard("Improved Critical", Improved_Critical_descriptions)
-
-        if "Superior Critical" in data:
-            Superior_Critical_descriptions = ["Your weapon attacks score a critical hit on a roll of 18-20."]
-            self.standard("Superior Critical", Superior_Critical_descriptions)
-
-        if "Remarkable Athlete" in data:
-            Remarkable_Athlete_descriptions = [f"You can add half your proficiency bonus (rounded up) to any Strength, Dexterity, or Constitution check you make that doesn't already use your proficiency bonus. In addition, when you make a running long jump, the distance you can cover increases by a number of feet equal to your Strength modifier."]
-            self.standard("Remarkable Athlete", Remarkable_Athlete_descriptions)
-
-        if "Survivor" in data:
-            Survivor_descriptions = [f"At the start of each of your turns, you regain {5 + q.db.Atr['CON']['Mod']} hit points if you have no more than half of your hit points left. You don't gain this benefit if you have 0 hit points."]
-            self.standard("Survivor", Survivor_descriptions)
-
-    def Fighter_BattleMaster(self):
-        data = q.db.Class["Abil"]
-
-        if "Combat Superiority" in data:
-            a, t = gen_abil("Combat Superiority", 1)
-            cdata = data[a]
-            die = [0,0,0,8,8,8,8,8,8,10,10,10,10,10,10,10,10,12,12,12][q.db.Core.L]
-            t_header = tag.cfeature.header(t)
-            t_popup = tag.cfeature.popup(t)
-
-            with group(parent=self.parent):
-                with group(horizontal=True):
-                    add_text(f"{a} (d{die})", color=c_h1, tag=t_header)
-                    item_delete(t_popup)
-                    with popup(t_header, mousebutton=mvMouseButton_Left, tag=t_popup):
-                        for idx, value in enumerate(cdata["Select"]): 
-                            t_select = tag.cfeature.select(t, idx)
-                            add_combo(items=g.list_Maneuvers, default_value=value, width=80, no_arrow_button=True, callback=cbh, user_data=["Class Select", a, idx], tag=t_select)
-                    for idx, value in enumerate(cdata["Use"]):
-                        t_toggle = tag.cfeature.toggle(t, idx)
-                        add_checkbox(default_value=value, enabled=True, callback=cbh, user_data=["Class Use", a, idx], tag=t_toggle)
-                
-                for item in cdata["Select"]:
-                    if item:
-                        item_tag = item.replace(" ", "_")
-                        t_item = tag.cfeature.text(t, item_tag)
-                        t_tooltip = tag.cfeature.tooltip(t, item_tag)
-                        add_text(item, color=c_h2, tag=t_item)
-                        item_delete(t_tooltip)
-                        with tooltip(t_item, tag=t_tooltip):
-                            add_text(g.dict_Maneuver_map[item], color=c_text, wrap=size.gwrap)
-        
-        if "Student of War" in data:
-            a, t = gen_abil("Student of War", 1)
-            cdata = data[a]
-            t_header = tag.cfeature.header(t)
-            t_popup = tag.cfeature.popup(t)
-            t_select = tag.cfeature.select(t, 0)
-            
-            with group(parent=self.parent):
-                add_text(a, color=c_h1, tag=t_header)
-                item_delete(t_popup)
-                with popup(t_header, mousebutton=mvMouseButton_Left, tag=t_popup):
-                    add_combo(items=g.list_Student_of_War_Profs, default_value=cdata["Select"][0], width=80, no_arrow_button=True, callback=cbh, user_data=["Class Select", a, 0], tag=t_select)
-
-        if "Relentless" in data:
-            Relentless_descriptions = ["When you roll initiative and have no superiority dice remaining, you regain 1 superiority die."]
-            self.standard("Relentless", Relentless_descriptions)
-    def Fighter_EldritchKnight(self):
-        data = q.db.Class["Abil"]
-
-        if "Weapon Bond" in data:
-            a, t = gen_abil("Weapon Bond", 1)
-            t_header = tag.cfeature.header(t)
-            t_tooltip = tag.cfeature.tooltip(t)
-            
-            Weapon_Bond_descriptions = [
-                "Learn a ritual that creates a magical bond between yourself and one weapon. You perform the ritual over the course of 1 hour, which can be done during a short rest. The weapon must be within your reach throughout the ritual, at the conclusion of which you touch the weapon and forge the bond.",
-                "Once you have bonded a weapon to yourself, you can't be disarmed of that weapon unless you are incapacitated. If it is on the same plane of existence, you can summon that weapon as a bonus action on your turn, causing it to teleport instantly to your hand.",
-                "You can have up to two bonded weapons, but can summon only one at a time with your bonus action. If you attempt to bond with a third weapon, you must break the bond with one of the other two."
-            ]
-            
-            with group(parent=self.parent):
-                add_text(a, color=c_h1, tag=t_header)
-                item_delete(t_tooltip)
-                with tooltip(t_header, tag=t_tooltip):
-                    for desc in Weapon_Bond_descriptions:
-                        add_text(desc, color=c_text, wrap=size.gwrap)
-        
-        if "War Magic" in data:
-            War_Magic_descriptions = ["When you use your action to cast a cantrip, you can make one weapon attack as a bonus action."]
-            self.standard("War Magic", War_Magic_descriptions)
-
-        if "Improved War Magic" in data:
-            Improved_War_Magic_descriptions = ["When you use your action to cast a spell, you can make one weapon attack as a bonus action."]
-            self.standard("Improved War Magic", Improved_War_Magic_descriptions)
-
-        if "Eldritch Strike" in data:
-            Eldritch_Strike_descriptions = ["When you hit a creature with a weapon attack, that creature has disadvantage on the next saving throw it makes against a spell you cast before the end of your next turn."]
-            self.standard("Eldritch Strike", Eldritch_Strike_descriptions)
-
-        if "Arcane Charge" in data:
-            Arcane_Charge_descriptions = ["When you use your Action Surge, you can teleport up to 30 feet to an unoccupied space you can see. You can teleport before or after the additional action."]
-            self.standard("Arcane Charge", Arcane_Charge_descriptions)
-
-    def Fighter_Samurai(self):
-        data = q.db.Class["Abil"]
-
-        if "Bonus Proficiency" in data:
-            a, t = gen_abil("Bonus Proficiency", 1)
-            cdata = data[a]
-            t_header = tag.cfeature.header(t)
-            t_popup = tag.cfeature.popup(t)
-            t_select = tag.cfeature.select(t, 0)
-            
-            with group(parent=self.parent):
-                add_text(a, color=c_h1, tag=t_header)
-                item_delete(t_popup)
-                with popup(t_header, mousebutton=mvMouseButton_Left, tag=t_popup):
-                    add_combo(items=g.list_Fighter_Samuri_Bonus_Proficiency, default_value=cdata["Select"][0], width=80, no_arrow_button=True, callback=cbh, user_data=["Class Select", a, 0], tag=t_select)
-
-        if "Fighting Spirit" in data:
-            Fighting_Spirit_descriptions = ["As a bonus action on your turn, you can give yourself advantage on all weapon attack rolls until the end of the current turn. When you do so, you also gain 5 temporary hit points."]
-            self.standard_toggle("Fighting Spirit", Fighting_Spirit_descriptions)
-
-        if "Elegant Courtier" in data:
-            Elegant_Courtier_descriptions = [f"You can add your Wisdom modifier to Persuasion checks."]
-            self.standard("Elegant Courtier", Elegant_Courtier_descriptions)
-
-        if "Tireless Spirit" in data:
-            Tireless_Spirit_descriptions = ["When you roll initiative and have no uses of Fighting Spirit remaining, you regain one use."]
-            self.standard("Tireless Spirit", Tireless_Spirit_descriptions)
-
-        if "Rapid Strike" in data:
-            Rapid_Strike_descriptions = ["If you take the Attack action on your turn and have advantage on an attack roll against one of the targets, you can forgo the advantage for that roll to make one additional weapon attack against that target, as part of the same action. You can do so no more than once per turn."]
-            self.standard("Rapid Strike", Rapid_Strike_descriptions)
-
-        if "Strength before Death" in data:
-            Strength_before_Death_descriptions = ["If you take damage that would reduce you to 0 hit points, you can use your reaction to delay falling unconscious, and you can immediately take an extra turn, interrupting the current turn."]
-            self.standard_toggle("Strength before Death", Strength_before_Death_descriptions)
-        
-                    
-    def Wizard(self):
-        data = q.db.Class["Abil"]
-
-        if "Spellcasting" in data:
-            a, t = gen_abil("Spellcasting", 1)
-            t_header = tag.cfeature.header(t)
-            t_tooltip = tag.cfeature.tooltip(t)
-            
-            desc1 = "Must be spell level you can prepare, Costs 50 gp + 2 hours per spell level"
-            desc2 = "To backup own spellbook, Costs 10 gp + 1 hour per spell level"
-
-            with group(parent=self.parent):
-                add_text(a, color=c_h1, tag=t_header)
-                item_delete(t_tooltip)
-                with tooltip(t_header, tag=t_tooltip):
-                    add_text("Copying External Spells", color=c_h1)
-                    add_text(desc1, color=c_text, wrap=size.gwrap)
-                    add_text("Copying Internal Spells", color=c_h1)
-                    add_text(desc2, color=c_text, wrap=size.gwrap)
-
-        if "Arcane Recovery" in data:
-            Arcane_Recovery_descriptions = [f"Once per day when you finish a short rest, you can choose expended spell slots to recover. The spell slots can have a combined level that is equal to or less than half your wizard level (rounded up), and none of the slots can be 6th level or higher."]
-            self.standard_toggle("Arcane Recovery", Arcane_Recovery_descriptions)
-
-        if "Spell Mastery" in data:
-            a, t = gen_abil("Spell Mastery", 1)
-            cdata = data[a]
-            t_header = tag.cfeature.header(t)
-            t_popup = tag.cfeature.popup(t)
-
-            with group(parent=self.parent):
-                add_text(a, color=c_h1, tag=t_header)
-                item_delete(t_popup)
-                with popup(t_header, mousebutton=mvMouseButton_Left, tag=t_popup):
-                    add_combo(items=q.db.Spell["Book"][1], default_value=cdata["Select"][0], width=80, no_arrow_button=True, callback=cbh, user_data=["Class Select", a, 0], tag=tag.cfeature.select(t,0))
-                    add_combo(items=q.db.Spell["Book"][2], default_value=cdata["Select"][1], width=80, no_arrow_button=True, callback=cbh, user_data=["Class Select", a, 1], tag=tag.cfeature.select(t,1))
-                
-                for idx, spell in enumerate(cdata["Select"]):
-                    if spell != "":
-                        spell_tag = spell.replace(" ", "_")
-                        t_spell = tag.cfeature.text(t, spell_tag)
-                        t_tooltip = tag.cfeature.tooltip(t, spell_tag)
-                        with group(horizontal=True):
-                            add_text(spell, color=c_h2, tag=t_spell)
-                            add_checkbox(default_value=cdata["Use"][idx], enabled=True, callback=cbh, user_data=["Class Use", a, idx], tag=tag.cfeature.toggle(t,idx))
-                        item_delete(t_tooltip)
-                        with tooltip(t_spell, tag=t_tooltip):
-                            spell_detail(spell)
-
-        if "Signature Spells" in data:
-            a, t = gen_abil("Signature Spells", 1)
-            cdata = data[a]
-            t_header = tag.cfeature.header(t)
-            t_popup = tag.cfeature.popup(t)
-            
-            with group(parent=self.parent):
-                add_text(a, color=c_h1, tag=t_header)
-                item_delete(t_popup)
-                with popup(t_header, mousebutton=mvMouseButton_Left, tag=t_popup):
-                    add_combo(items=q.db.Spell["Book"][3], default_value=cdata["Select"][0], width=80, no_arrow_button=True, callback=cbh, user_data=["Class Select", a, 0], tag=tag.cfeature.select(t,0))
-                    add_combo(items=q.db.Spell["Book"][3], default_value=cdata["Select"][1], width=80, no_arrow_button=True, callback=cbh, user_data=["Class Select", a, 1], tag=tag.cfeature.select(t,1))
-                
-                for idx, spell in enumerate(cdata["Select"]):
-                    if spell != "":
-                        spell_tag = spell.replace(" ", "_")
-                        t_spell = tag.cfeature.text(t, spell_tag)
-                        t_tooltip = tag.cfeature.tooltip(t, spell_tag)
-                        with group(horizontal=True):
-                            add_text(spell, color=c_h2, tag=t_spell)
-                            add_checkbox(default_value=cdata["Use"][idx], enabled=True, callback=cbh, user_data=["Class Use", a, idx], tag=tag.cfeature.toggle(t,idx))
-                        item_delete(t_tooltip)
-                        with tooltip(t_spell, tag=t_tooltip):
-                            spell_detail(spell)
-
-    def Wizard_Abjuration(self):
-        data = q.db.Class["Abil"]
-
-        if "Abjuration Savant" in data:
-            Abjuration_Savant_descriptions = ["The gold and time you must spend to copy an abjuration spell into your spellbook is halved."]
-            self.standard("Abjuration Savant", Abjuration_Savant_descriptions)
-
-        if "Arcane Ward" in data:
-            a, t = gen_abil("Arcane Ward", 1)
-            cdata = data[a]
-            description = "On casting a 1st-level+ Abjuration spell, create a magical ward that lasts until a long rest. It can regain HP equal to twice the spell level on subsequent Abjuration spell casts."
-            t_header = tag.cfeature.header(t)
-            t_hp = tag.cfeature.button(t, "HP")
-            t_desc = tag.cfeature.text(t, "Desc")
-
-            with group(parent=self.parent):
-                with group(horizontal=True):
-                    add_text(a, color=c_h1, tag=t_header)
-                    add_checkbox(default_value=cdata["Use"][0], enabled=True, callback=cbh, user_data=["Class Use", a, 0], tag=tag.cfeature.toggle(t, 0))
-                    add_button(label="Ward HP", enabled=False)
-                    add_button(label=f"{cdata['HP']['Current']} / {cdata['HP']['Max']}", enabled=False, tag=t_hp)
-                    add_button(label="-", user_data=["Arcane Ward", -1], callback=cbh)
-                    add_button(label="+", user_data=["Arcane Ward", 1], callback=cbh)
-                add_text(description, color=c_text, wrap=size.gwrap, tag=t_desc)
-
-        if "Projected Ward" in data:
-            Projected_Ward_descriptions = ["(reaction) When a creature within 30 ft is hit, use your Arcane Ward to absorb the damage."]
-            self.standard("Projected Ward", Projected_Ward_descriptions)
-
-        if "Improved Abjuration" in data:
-            Improved_Abjuration_descriptions = [f"When an Abjuration spell requires you to make an ability check, add your proficiency bonus ({q.db.Core.PB}) to that check."]
-            self.standard("Improved Abjuration", Improved_Abjuration_descriptions)
-
-        if "Spell Resistance" in data:
-            Spell_Resistance_descriptions = ["Gain advantage on saving throws against spells and resistance to spell damage."]
-            self.standard("Spell Resistance", Spell_Resistance_descriptions)
-
-    def Wizard_Conjuration(self):
-        data = q.db.Class["Abil"]
-
-        if "Conjuration Savant" in data:
-            Conjuration_Savant_descriptions = ["The gold and time you must spend to copy a conjuration spell into your spellbook is halved."]
-            self.standard("Conjuration Savant", Conjuration_Savant_descriptions)
-
-        if "Minor Conjuration" in data:
-            Minor_Conjuration_descriptions = ["(action) Conjure a non-magical item (up to 3ft, 10 lbs). It lasts for 1 hour or until it takes damage."]
-            self.standard("Minor Conjuration", Minor_Conjuration_descriptions)
-
-        if "Benign Transportation" in data:
-            Benign_Transportation_descriptions = ["(action) Teleport up to 30ft or swap places with a willing creature. Usable again after a long rest or casting a Level 1+ conjuration spell."]
-            self.standard("Benign Transportation", Benign_Transportation_descriptions)
-
-        if "Focused Conjuration" in data:
-            Focused_Conjuration_descriptions = ["Your concentration on conjuration spells can't be broken as a result of taking damage."]
-            self.standard("Focused Conjuration", Focused_Conjuration_descriptions)
-
-        if "Durable Summons" in data:
-            Durable_Summons_descriptions = ["Any creature you summon or create with a conjuration spell has 30 temporary hit points."]
-            self.standard("Durable Summons", Durable_Summons_descriptions)
-
 
 
 class ui_upd():
@@ -2385,201 +1740,272 @@ def ui_upd_INVE():
     ui_upd_INVE_Equip()
     ui_upd_INVE_Backpack()
 
+class ui_upd_Backpack():
+    def __init__(self):
+        pass
 
-def ui_upd_INVE_Backpack():
-    item_clear("cw.INVE.Backpack")
-    with group(parent="cw.INVE.Backpack"):
-        with table(header_row=True, row_background=False, borders_innerH=True, borders_outerH=True, borders_innerV=True, borders_outerV=True, resizable=True):
-            add_table_column(label="Item", width_stretch=True, init_width_or_weight=0)
-            add_table_column(label="Slot", width_stretch=True, init_width_or_weight=0)
-            add_table_column(label="QTY", width_stretch=True, init_width_or_weight=0)
-            add_table_column(label="Weight", width_stretch=True, init_width_or_weight=0)
-            add_table_column(label="Cost", width_stretch=True, init_width_or_weight=0)
+
+    def fill_backpack():
+        bdata = q.db.Inventory.Backpack
+        item_count = len(bdata)
+        table_tag = tag.backpack.table()
+        
+        # Count existing rows
+        existing_rows = 0
+        while does_item_exist(tag.backpack.row(existing_rows)):
+            existing_rows += 1
+        
+        # Add more rows if needed
+        for row_idx in range(existing_rows, item_count):
+            with table_row(parent=table_tag, tag=tag.backpack.row(row_idx)):
+                add_table_cell(tag=tag.backpack.cell("name", row_idx))
+                add_table_cell(tag=tag.backpack.cell("slot", row_idx))
+                add_table_cell(tag=tag.backpack.cell("qty", row_idx))
+                add_table_cell(tag=tag.backpack.cell("weight", row_idx))
+                add_table_cell(tag=tag.backpack.cell("cost", row_idx))
+        
+        # Delete excess rows if needed
+        for row_idx in range(item_count, existing_rows):
+            delete_item(tag.backpack.row(row_idx))
+
+    def populate_backpack():
+        """Populate the cells with actual item data"""
+        bdata = q.db.Inventory.Backpack
+        
+        for row_idx, item in enumerate(bdata):
+            cdata = q.w.Item(item)
+            qty = bdata[item][1]
+            weight = 0
+            cost = 0
             
-            for item in g.q.db.Inventory.Backpack:
-                cdata = q.w.Item(item)
-                qty = q.db.Inventory.Backpack[item][1]
-                weight = int(w) if (w := round(float(cdata.Weight)*qty, 2)) == int(w) else w
-                cost = int(c) if (c := round(float(cdata.Cost)*qty, 2)) == int(c) else c
-                with table_row():
-                    with table_cell():
-                        add_text(g.iName(item), tag=f"text.BP.Label.{item}")
-                    with table_cell():
-                        add_text(cdata.Slot, tag=f"text.BP.Slot.{item}")
-                    with table_cell():
-                        with group(horizontal=True):
-                            add_text(qty, tag=f"text.BP.qty.{item}")
-                            add_button(label="<", small=True, user_data=["Backpack Mod Item", item, -1], callback=cbh)
-                            add_button(label=">", small=True, user_data=["Backpack Mod Item", item, 1], callback=cbh)
-                            add_button(label="X", small=True, user_data=["Backpack Mod Item", item, "Clear"], callback=cbh)
-                    with table_cell():
-                        add_text(weight, tag=f"text.BP.weight.{item}")
-                    with table_cell():
-                        add_text(cost, tag=f"text.BP.Cost.{item}")
+            # Clear cells
+            item_clear(tag.backpack.cell("name", row_idx))
+            item_clear(tag.backpack.cell("slot", row_idx))
+            item_clear(tag.backpack.cell("qty", row_idx))
+            item_clear(tag.backpack.cell("weight", row_idx))
+            item_clear(tag.backpack.cell("cost", row_idx))
+            
+            # Populate cells
+            add_text(g.iName(item), parent=tag.backpack.cell("name", row_idx))
+            
+            item_delete(tag.backpack.tooltip(row_idx))
+            with tooltip(tag.backpack.cell("name", row_idx), tag=tag.backpack.tooltip(row_idx)):
+                item_detail_handler(item)
+                
+            add_text(cdata.Slot, parent=tag.backpack.cell("slot", row_idx))
+            
+            with group(horizontal=True, parent=tag.backpack.cell("qty", row_idx)):
+                add_text(qty, tag=tag.backpack.text(item, row_idx))
+                add_button(label="<", callback=cbh, user_data=["Backpack Mod Item", item, -1], small=True)
+                add_button(label=">", callback=cbh, user_data=["Backpack Mod Item", item, 1], small=True)
+                add_button(label="X", callback=cbh, user_data=["Backpack Mod Item", item, "Clear"], small=True)
+            
+            add_text(weight, parent=tag.backpack.cell("weight", row_idx))
+            add_text(cost, parent=tag.backpack.cell("cost", row_idx))
 
-                item_delete(f"tooltip.BP.{item}")
-                with tooltip(f"text.BP.Label.{item}", tag=f"tooltip.BP.{item}"):
-                    disp_item_detail(item)
 
-
-def ensure_Backpack():
-    for item in cdata:
+def backpack_contents():
+    bdata = q.db.Inventory.Backpack
+    """Update backpack contents without rebuilding the table"""
+    table_tag = tag.backpack.table()
+    
+    # Clear existing rows (keep header)
+    for child in get_item_children(table_tag, slot=1):
+        delete_item(child)
+    
+    # Add current inventory items
+    for row_idx, item in enumerate(bdata):
         cdata = q.w.Item(item)
-        qty = q.db.Inventory.Backpack[item][1]
+        qty = bdata[item][1]
         weight = 0
         cost = 0
         
-        set_value(f"text.BP.Slot.{item}", cdata.Slot)
-        set_value(f"text.BP.qty.{item}", qty)
-        set_value(f"text.BP.weight.{item}", weight)
-        set_value(f"text.BP.Cost.{item}", cost)
+        with table_row(parent=table_tag):
+            add_text(g.iName(item), tag=tag.backpack.row.name(row_idx))
+            add_text(cdata.Slot, tag=tag.backpack.row.slot(row_idx))
+            
+            with group(horizontal=True):
+                add_text(qty, tag=tag.backpack.row.qty(row_idx))
+                add_button(label="<", callback=cbh, user_data=["Backpack Mod Item", item, -1], small=True)
+                add_button(label=">", callback=cbh, user_data=["Backpack Mod Item", item, 1], small=True)
+                add_button(label="X", callback=cbh, user_data=["Backpack Mod Item", item, "Clear"], small=True)
+            
+            add_text(weight, tag=tag.backpack.row.weight(row_idx))
+            add_text(cost, tag=tag.backpack.row.cost(row_idx))
+        
+        # Add tooltip
+        with tooltip(tag.backpack.row.name(row_idx)):
+            item_detail_handler(item)
+            
+            
 
-def ui_upd_INVE_Equip():
-    backpack = set(q.db.Inventory.Backpack)
-    two_handed = set(q.w.prop("Two-handed"))
-    cEquip = q.db.Inventory.Equip
-    main_hand_item = cEquip["Hand_1"]
 
-    slots = [
-        ("Face", q.w.slot("Face"), "combo.INVE.Equip.Face"),
-        ("Throat", q.w.slot("Throat"), "combo.INVE.Equip.Throat"),
-        ("Body", q.w.slot("Body"), "combo.INVE.Equip.Body"),
-        ("Hands", q.w.slot("Hands"), "combo.INVE.Equip.Hands"),
-        ("Waist", q.w.slot("Waist"), "combo.INVE.Equip.Waist"),
-        ("Feet", q.w.slot("Feet"), "combo.INVE.Equip.Feet"),
-        ("Armor", q.w.slot("Armor"), "combo.INVE.Equip.Armor"),
-        ("Hand_1", q.w.slot("Weapon"), "combo.INVE.Equip.Hand_1"),
-        ("Hand_2", q.w.list_off_hand, "combo.INVE.Equip.Hand_2"),
-        ("Ring_1", q.w.slot("Ring"), "combo.INVE.Equip.Ring_1"),
-        ("Ring_2", q.w.slot("Ring"), "combo.INVE.Equip.Ring_2"),
-    ]
-
-    for slot_name, source, tag in slots:
-        items = [g.iName(i) for i in source if i in backpack]
+class ui_upd_equip:
+    def __init__(self):
+        self.backpack = None
+        self.two_handed = None
+        self.cEquip = None
+        self.main_hand_item = None
+    
+    def load_data(self):
+        self.backpack = set(q.db.Inventory.Backpack)
+        self.two_handed = set(q.w.prop("Two-handed"))
+        self.cEquip = q.db.Inventory.Equip
+        self.main_hand_item = self.cEquip["Hand_1"]
+    
+    def get_slots(self):
+        return [
+            ("Face", q.w.slot("Face"), tag.equip.select("Face")),
+            ("Throat", q.w.slot("Throat"), tag.equip.select("Throat")),
+            ("Body", q.w.slot("Body"), tag.equip.select("Body")),
+            ("Hands", q.w.slot("Hands"), tag.equip.select("Hands")),
+            ("Waist", q.w.slot("Waist"), tag.equip.select("Waist")),
+            ("Feet", q.w.slot("Feet"), tag.equip.select("Feet")),
+            ("Armor", q.w.slot("Armor"), tag.equip.select("Armor")),
+            ("Hand_1", q.w.slot("Weapon"), tag.equip.select("Hand_1")),
+            ("Hand_2", q.w.list_off_hand, tag.equip.select("Hand_2")),
+            ("Ring_1", q.w.slot("Ring"), tag.equip.select("Ring_1")),
+            ("Ring_2", q.w.slot("Ring"), tag.equip.select("Ring_2")),
+        ]
+    
+    def get_available_items(self, source):
+        return [g.iName(i) for i in source if i in self.backpack]
+    
+    def get_default_value(self, slot_name):
         if slot_name == "Hand_2":
-            if main_hand_item in two_handed: default_value = "Weapon Grip"
-            elif g.weapon_versatile(): default_value = "Verse Grip"
-            else: default_value = g.iName(cEquip["Hand_2"]) if cEquip["Hand_2"] in backpack else ""
+            if self.main_hand_item in self.two_handed:
+                return "Weapon Grip"
+            elif g.weapon_versatile():
+                return "Verse Grip"
+            else:
+                return g.iName(self.cEquip["Hand_2"]) if self.cEquip["Hand_2"] in self.backpack else ""
         else:
-            equipped = cEquip.get(slot_name, None)
-            default_value = g.iName(equipped) if equipped in backpack else ""
-        configure_item(tag, items=items, default_value=default_value)
-
-
-
-def create_bazaar_button(item, category_type, parent):
-    button_tag = f"button.Bazaar.add.{item}"
-    tooltip_tag = f"tooltip.Bazaar.detail.{item}"
+            equipped = self.cEquip.get(slot_name, None)
+            return g.iName(equipped) if equipped in self.backpack else ""
     
-    add_button(label=g.isName(item), width=size.w_item, user_data=["Bazaar Add Item", category_type, item], callback=cbh, tag=button_tag, parent=parent)
-    
-    with tooltip(button_tag, tag=tooltip_tag):
-        disp_item_detail(item)
+    def update(self):
+        self.load_data()
+        slots = self.get_slots()
+        
+        for slot_name, source, select_tag in slots:
+            items = self.get_available_items(source)
+            default_value = self.get_default_value(slot_name)
+            configure_item(select_tag, items=items, default_value=default_value)
 
-def ui_upd_INVE_Bazaar():
-    dict_struct = {
-        "Weapon": [("Simple", "Melee"), ("Simple", "Ranged"), ("Martial", "Melee"), ("Martial", "Ranged")],
-        "Armor": ["Light", "Medium", "Heavy"]
-    }
 
-    for equipment_type, categories in dict_struct.items():
-        for rank in range(5):
-            rarity = g.item_rarity(rank)
-            parent_container = f"cw.Bazaar.{equipment_type}.{rarity}"
 
-            if not does_item_exist(parent_container):continue
+class ui_upd_bazaar:
+    def __init__(self):
+        self.dict_struct = {
+            "Weapon": [("Simple", "Melee"), ("Simple", "Ranged"), ("Martial", "Melee"), ("Martial", "Ranged")],
+            "Armor": ["Light", "Medium", "Heavy"]
+        }
+        
+        
+    def create_bazaar_button(self, item, category_type, parent):
+        button_tag = tag.bazaar.button(item)
+        tooltip_tag = tag.bazaar.tooltip(item)
+        add_button(label=g.isName(item), width=size.w_item, user_data=["Bazaar Add Item", category_type, item], callback=cbh, tag=button_tag, parent=parent)
+        with tooltip(button_tag, tag=tooltip_tag):
+            item_detail_handler(item)
 
-            # --- 1. Get Target Items ---
-            target_set = set()
-            is_weapon_type = isinstance(categories[0], tuple)
+    def get_target_items(self, categories, rank):
+        target_set = set()
+        is_weapon_type = isinstance(categories[0], tuple)
+        for category_info in categories:
+            if is_weapon_type:
+                tag1, tag2 = category_info
+                items = q.w.mcategory(rank, tag1, tag2)
+            else:
+                items = q.w.mcategory(rank, category_info)
+            target_set.update(items)
+        return target_set
+
+    def get_current_items(self, parent_container):
+        current_items = set()
+        if does_item_exist(parent_container):
+            container_children = get_item_children(parent_container, 1)
+            for group_id in container_children:
+                if get_item_info(group_id)['type'] == 'Group':
+                    row_children = get_item_children(group_id, 1)
+                    for button_id in row_children:
+                        button_alias = get_item_alias(button_id)
+                        if button_alias and "bazaar" in button_alias and "add" in button_alias:
+                            # Extract item from tag system instead of string parsing
+                            current_items.add(button_id)
+        return current_items
+
+    def rebuild_category(self, categories, equipment_type, parent_container, rank):
+        item_clear(parent_container)
+        
+        with group(parent=parent_container):
             for category_info in categories:
+                is_weapon_type = isinstance(categories[0], tuple)
                 if is_weapon_type:
                     tag1, tag2 = category_info
+                    label = f"{tag1} {tag2}"
                     items = q.w.mcategory(rank, tag1, tag2)
+                    items.sort()
                 else:
-                    items = q.w.mcategory(rank, category_info)
-                target_set.update(items)
+                    label = tag1 = category_info
+                    items = q.w.mcategory(rank, tag1)
+                    items.sort()
+                
+                add_separator(label=label if rank == 0 else f"{label} (+{rank})")
+                
+                for i in range(0, len(items), 4):
+                    with group(horizontal=True):
+                        horizontal_group_id = last_item()
+                        for item in items[i:i+4]:
+                            self.create_bazaar_button(item, equipment_type, parent=horizontal_group_id)
+    
+    def update(self):
+        for equipment_type, categories in self.dict_struct.items():
+            for rank in range(5):
+                rarity = g.item_rarity(rank)
+                parent_container = tag.bazaar.container(equipment_type, rarity)
 
-            # --- 2. Get Current Items ---
-            current_items = set()
-            if does_item_exist(parent_container):
-                container_children = get_item_children(parent_container, 1)
-                for group_id in container_children:
-                    if get_item_info(group_id)['type'] == 'Group':
-                        row_children = get_item_children(group_id, 1)
-                        for button_id in row_children:
-                            button_alias = get_item_alias(button_id)
-                            if button_alias and button_alias.startswith("button.Bazaar.add."):
-                                item_id = button_alias.replace("button.Bazaar.add.", "")
-                                current_items.add(item_id)
-            
-            # --- 3. Compare and Rebuild if Necessary ---
-            if target_set != current_items:
-                item_clear(parent_container)
+                if not does_item_exist(parent_container):
+                    continue
 
-                with group(parent=parent_container):
-                    for category_info in categories:
-                        if is_weapon_type:
-                            tag1, tag2 = category_info
-                            label = f"{tag1} {tag2}"
-                            items = q.w.mcategory(rank, tag1, tag2)
-                            items.sort() # Sort the list alphabetically
-                        else:
-                            label = tag1 = category_info
-                            items = q.w.mcategory(rank, tag1)
-                            items.sort()
-                        add_separator(label=label if rank == 0 else f"{label} (+{rank})")
-                        for i in range(0, len(items), 4):
-                            with group(horizontal=True):
-                                horizontal_group_id = last_item()
-                                for item in items[i:i+4]:
-                                    create_bazaar_button(item, equipment_type, parent=horizontal_group_id)
-
-def disp_item_detail(item):
-    data=q.w.Item(item)
-    if data.Slot == "Weapon": weapon_detail(data)
-    if data.Slot == "Armor": armor_detail(data)
+                target_set = self.get_target_items(categories, rank)
+                current_items = self.get_current_items(parent_container)
+                
+                if target_set != current_items:
+                    self.rebuild_category(categories, equipment_type, parent_container, rank)
 
 
-def weapon_detail(data):
-    with group(horizontal=True):
-        if data.get("Reach"):
-            add_text("Reach", color=c_h1)
-            add_text(data.Reach, color=c_text)
-        if data.get("Range"):
-            add_text("Range", color=c_h1)
-            add_text(data.Range, color=c_text)
-        add_text("Damage", color=c_h1)
-        add_text(data.Damage, color=c_h5)
-        add_text(data.Type, color=c_damagetype[f"{data.Type}"])
-    with group(horizontal=True):
-        add_text("Prop", color=c_h1)
-        for prop in data.Prop: add_text(f"{prop}", color=c_text)
-        add_text("Rarity", color=c_h1)
-        add_text(g.item_rarity(data.Tier), color=c_rarity[f"{g.item_rarity(data.Tier)}"])
-        add_text("Weight", color=c_h1)
-        add_text(data.Weight, color=c_text)
-        add_text("Cost", color=c_h1)
-        add_text(data.Cost, color=c_h9)
 
+def item_detail_handler(item):
+    data = q.w.Item(item)
+    if data.Slot == "Weapon":
+        item_detail_weapon(data)
+    if data.Slot == "Armor":
+        item_detail_armor(data)
 
-def armor_detail(data):
+def item_detail_weapon(data):
+        with group(horizontal=True):
+            if data.get("Reach"):
+                add_text("Reach", color=c_h1)
+                add_text(data.Reach, color=c_text)
+            if data.get("Range"):
+                add_text("Range", color=c_h1)
+                add_text(data.Range, color=c_text)
+            add_text("Damage", color=c_h1)
+            add_text(data.Damage, color=c_h5)
+            add_text(data.Type, color=c_damagetype[f"{data.Type}"])
+        with group(horizontal=True):
+            add_text("Prop", color=c_h1)
+            for prop in data.Prop:
+                add_text(f"{prop}", color=c_text)
+            add_text("Rarity", color=c_h1)
+            add_text(g.item_rarity(data.Tier), color=c_rarity[f"{g.item_rarity(data.Tier)}"])
+            add_text("Weight", color=c_h1)
+            add_text(data.Weight, color=c_text)
+            add_text("Cost", color=c_h1)
+            add_text(data.Cost, color=c_h9)
+def item_detail_armor(data):
     pass
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
