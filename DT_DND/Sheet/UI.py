@@ -8,6 +8,12 @@ import math as math
 from Sheet.sizing import *
 from colorist import *
 
+def gen_abil(name: str, number: int):
+    an = name
+    tn = name.replace(" ", "_")
+    return an, tn
+
+
 #ANCHOR - size
 class size:
     w_max = 1350
@@ -1433,390 +1439,292 @@ def ui_upd_fBackground_main():
 
 # #ANCHOR - FEATS
 
-def ui_upd_Feat_Actor():
-    feat = "Actor"
-    tag = feat
-    d1 = "Gain advantage on Deception and Performance checks when trying to pass yourself off as a different person."
-    d2 = f"You can mimic the speech of another person or the sounds made by other creature. You must have heard the person speaking, or heard the creature make the sound, for at least 1 minute. A successful Wisdom Insight check contested by your {q.db.Skill['Deception']['Mod']:+d} Deception check allows a listener to determine that the effect is faked."
-    with group(parent=tag.mfeature.main()):
-        add_text(feat, color=c_h1, tag=tag.mfeature.header(tag))
-        add_text(d1, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"0"))
-        add_text(d2, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"1"))
+class ui_upd_Feat:
+    def __init__(self):
+        self.parent = tag.mfeature.main()
 
-def ui_upd_Feat_Alert():
-    feat = "Alert"
-    tag = feat
-    d1 = "You can't be surprised while you are consciouse."
-    d2 = "Other creatures don't gain advantage on attack rolls against you as a result of being unseen by you."
-    with group(parent=tag.mfeature.main()):
-        add_text(feat, color=c_h1, tag=tag.mfeature.header(tag))
-        add_text(d1, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"0"))
-        add_text(d2, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"1"))
+    def standard(self, name, descriptions):
+        a, t = gen_abil(name, 1)
+        t_header = tag.mfeature.header(t)
+        desc_tags = [tag.mfeature.text(t, f"{i+1}") for i, _ in enumerate(descriptions)]
 
-def ui_upd_Feat_Athlete():
-    feat = "Athlete"
-    tag = feat
-    d1 = "When you are prone, standing up uses only 5 feet of your movement."
-    d2 = "Climbing doesn't cost you extra movement."
-    d3 = "You can make a running long jump or a running high jump after moving only 5 feet on foot, rather than 10 feet."
-    t1_header = tag.mfeature.header(tag)
-    tag_popup = tag.mfeature.popup(tag)
-    with group(parent=tag.mfeature.main()):
-        add_text(feat, color=c_h1, tag=t1_header)
-        add_text(d1, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"0"))
-        add_text(d2, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"1"))
-        add_text(d3, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"2"))
-        item_delete(tag_popup)
-        with popup(t1_header, mousebutton=mvMouseButton_Left, max_size=[500,400], tag=tag_popup):
+        with group(parent=self.parent):
+            add_text(a, color=c_h1, tag=t_header)
+            for i, desc in enumerate(descriptions):
+                add_text(desc, color=c_text, wrap=size.gwrap, tag=desc_tags[i])
+
+    def standard_popup(self, name, descriptions, num_choices=1):
+        a, t = gen_abil(name, 1)
+        t_header = tag.mfeature.header(t)
+        desc_tags = [tag.mfeature.text(t, f"{i+1}") for i, _ in enumerate(descriptions)]
+        t_popup = tag.mfeature.popup(t)
+        
+        item_delete(t_popup)
+
+        with group(parent=self.parent):
+            add_text(a, color=c_h1, tag=t_header)
+            for i, desc in enumerate(descriptions):
+                add_text(desc, color=c_text, wrap=size.gwrap, tag=desc_tags[i])
+
+        with popup(t_header, mousebutton=mvMouseButton_Left, max_size=[500,400], tag=t_popup):
             with group(horizontal=False):
-                add_combo(items=["Clear"]+g.dict_Feat_Lists[feat], default_value=q.db.Milestone.Data[feat]["Select"][0], width=50, no_arrow_button=True, user_data=["Milestone Feat Choice",feat, 0], callback=cbh, tag=tag.mfeature.select(tag,"0"))
+                for i in range(num_choices):
+                    t_select = tag.mfeature.select(t, i)
+                    add_combo(items=g.dict_Feat_Lists[a], default_value=q.db.Milestone.Data[a]["Select"][i], width=100, no_arrow_button=True, user_data=["Milestone Feat Choice", a, i], callback=cbh, tag=t_select)
+                    add_button(label="X", user_data=["Milestone Feat Choice Clear", a, i], callback=cbh)
 
-def ui_upd_Feat_Charger():
-    feat = "Charger"
-    tag = feat
-    d1 = "When you use your action to Dash, you can use a bonus action to make one melee weapon attack or shove a creature, and if you moved at least 10 feet in a straight line immediately before taking this bonus action, you gain a +5 bonus to the attack's damage roll or push the target with extra force."
-    with group(parent=tag.mfeature.main()):
-        add_text(feat, color=c_h1, tag=tag.mfeature.header(tag))
-        add_text(d1, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"0"))
+    def standard_toggle(self, name, descriptions):
+        a, t = gen_abil(name, 1)
+        t_header = tag.mfeature.header(t)
+        desc_tags = [tag.mfeature.text(t, f"{i+1}") for i, _ in enumerate(descriptions)]
+        use = q.db.Milestone["Data"][a]["Use"]
 
-def ui_upd_Feat_Crossbow_Expert():
-    feat = "Crossbow Expert"
-    tag = feat.replace(" ", "_")
-    d1 = "You ignore the loading quality of crossbows with which you are proficient."
-    d2 = "Being within 5 feet of a hostile creature doesn't impose disadvantage on your ranged attack rollq.pc."
-    d3 = "When you use the Attack action and attack with a one-handed weapon, you can use a bonus action to fire a hand crossbow you are holding."
-    with group(parent=tag.mfeature.main()):
-        add_text(feat, color=c_h1, tag=tag.mfeature.header(tag))
-        add_text(d1, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"0"))
-        add_text(d2, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"1"))
-        add_text(d3, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"2"))
+        with group(parent=self.parent):
+            with group(horizontal=True):
+                add_text(a, color=c_h1, tag=t_header)
+                for idx, val in enumerate(use):
+                    add_checkbox(default_value=val, enabled=True, user_data=["Milestone Feat Use", a, idx], callback=cbh, tag=f"checkbox.fMilestone.{t}.Use.{idx}")
+            
+            for i, desc in enumerate(descriptions):
+                add_text(desc, color=c_text, wrap=size.gwrap, tag=desc_tags[i])
 
-def ui_upd_Feat_Defensive_Duelist():
-    feat = "Defensive Duelist"
-    tag = feat.replace(" ", "_")
-    d1 = "When you are wielding a finesse weapon with which you are proficient and another creature hits you with a melee attack, you can use your reaction to add your proficiency bonus to your AC for that attack, potentially causing the attack to miss you."
-    with group(parent=tag.mfeature.main()):
-        add_text(feat, color=c_h1, tag=tag.mfeature.header(tag))
-        add_text(d1, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"0"))
 
-def ui_upd_Feat_Dual_Wielder():
-    feat = "Dual Wielder"
-    tag = feat.replace(" ", "_")
-    d1 = "You gain a +1 bonus to AC while you are wielding a separate melee weapon in each hand."
-    d2 = "You can use two-weapon fighting even when the one-handed melee weapons you are wielding aren't light."
-    d3 = "You can draw or stow two one-handed weapons when you would normally be able to draw or stow only one."
-    with group(parent=tag.mfeature.main()):
-        add_text(feat, color=c_h1, tag=tag.mfeature.header(tag))
-        add_text(d1, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"0"))
-        add_text(d2, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"1"))
-        add_text(d3, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"2"))
+    def Actor(self):
+        descriptions = [
+            "Gain advantage on Deception and Performance checks when trying to pass yourself off as a different person.",
+            f"You can mimic the speech of another person or the sounds made by other creature. You must have heard the person speaking, or heard the creature make the sound, for at least 1 minute. A successful Wisdom Insight check contested by your {q.db.Skill['Deception']['Mod']:+d} Deception check allows a listener to determine that the effect is faked."
+        ]
+        self.standard("Actor", descriptions)
 
-def ui_upd_Feat_Dungeon_Delver():
-    feat = "Dungeon Delver"
-    tag = feat.replace(" ", "_")
-    d1 = "You have advantage on Wisdom (Perception) and Intelligence (Investigation) checks made to detect the presence of secret doorq.pc."
-    d2 = "You have advantage on saving throws made to avoid or resist trapq.pc."
-    d3 = "You take no damage from traps that would normally deal half damage on a successful save."
-    with group(parent=tag.mfeature.main()):
-        add_text(feat, color=c_h1, tag=tag.mfeature.header(tag))
-        add_text(d1, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"0"))
-        add_text(d2, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"1"))
-        add_text(d3, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"2"))
+    def Alert(self):
+        descriptions = [
+            "You can't be surprised while you are conscious.",
+            "Other creatures don't gain advantage on attack rolls against you as a result of being unseen by you."
+        ]
+        self.standard("Alert", descriptions)
 
-def ui_upd_Feat_Durable():
-    feat = "Durable"
-    tag = feat
-    d1 = f"When you roll a Hit Die to regain hit points, the minimum number of hit points you regain from the roll equals {q.db.Atr['CON']['Mod'] * 2}."
-    with group(parent=tag.mfeature.main()):
-        add_text(feat, color=c_h1, tag=tag.mfeature.header(tag))
-        add_text(d1, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"0"))
+    def Athlete(self):
+        descriptions = [
+            "When you are prone, standing up uses only 5 feet of your movement.",
+            "Climbing doesn't cost you extra movement.",
+            "You can make a running long jump or a running high jump after moving only 5 feet on foot, rather than 10 feet."
+        ]
+        self.standard_popup("Athlete", descriptions)
 
-def ui_upd_Feat_Elemental_Adept():
-    feat = "Elemental Adept"
-    tag = "ElementalAdept"
-    value = q.db.Milestone["Data"][tag]["Select"][0]
-    d1 = f"Spells you cast ignore resistance to {value} damage."
-    d2 = f"When you roll damage for a spell you cast that deals {value} damage, you treat any 1 on a damage die as a 2."
-    t1_header = tag.mfeature.header(tag)
-    tag_popup = tag.mfeature.popup(tag)
-    with group(parent=tag.mfeature.main()):
-        add_text(feat, color=c_h1, tag=t1_header)
-        add_text(d1, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"0"))
-        add_text(d2, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"1"))
-        item_delete(tag_popup)
-        with popup(t1_header, mousebutton=mvMouseButton_Left, max_size=[500,400], tag=tag_popup):
-            with group(horizontal=False):
-                add_combo(items=g.dict_Feat_Lists[tag], default_value=value, width=100, no_arrow_button=True, user_data=["Milestone Feat Choice", tag, 0], callback=cbh, tag=tag.mfeature.select(tag,"0"))
+    def Charger(self):
+        descriptions = [
+            "When you use your action to Dash, you can use a bonus action to make one melee weapon attack or shove a creature, and if you moved at least 10 feet in a straight line immediately before taking this bonus action, you gain a +5 bonus to the attack's damage roll or push the target with extra force."
+        ]
+        self.standard("Charger", descriptions)
 
-def ui_upd_Feat_Grappler():
-    feat = "Grappler"
-    tag = feat
-    d1 = "You have advantage on attack rolls against a creature you are grappling."
-    d2 = "You can use your action to try to pin a creature grappled by you. To do so, make another grapple check. If you succeed, you and the creature are both restrained until the grapple endq.pc."
-    with group(parent=tag.mfeature.main()):
-        add_text(feat, color=c_h1, tag=tag.mfeature.header(tag))
-        add_text(d1, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"0"))
-        add_text(d2, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"1"))
+    def Crossbow_Expert(self):
+        descriptions = [
+            "You ignore the loading quality of crossbows with which you are proficient.",
+            "Being within 5 feet of a hostile creature doesn't impose disadvantage on your ranged attack roll.",
+            "When you use the Attack action and attack with a one-handed weapon, you can use a bonus action to fire a hand crossbow you are holding."
+        ]
+        self.standard("Crossbow Expert", descriptions)
 
-def ui_upd_Feat_Great_Weapon_Master():
-    feat = "Great Weapon Master"
-    tag = feat.replace(" ", "_")
-    d1 = "On your turn, when you score a critical hit with a melee weapon or reduce a creature to 0 hit points with one, you can make one melee weapon attack as a bonus action."
-    d2 = "Before you make a melee attack with a heavy weapon you are proficient with, you can choose to take a -5 penalty to the attack roll. If the attack hits, you add +10 to the attack's damage."
-    with group(parent=tag.mfeature.main()):
-        add_text(feat, color=c_h1, tag=tag.mfeature.header(tag))
-        add_text(d1, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"0"))
-        add_text(d2, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"1"))
+    def Defensive_Duelist(self):
+        descriptions = [
+            "When you are wielding a finesse weapon with which you are proficient and another creature hits you with a melee attack, you can use your reaction to add your proficiency bonus to your AC for that attack, potentially causing the attack to miss you."
+        ]
+        self.standard("Defensive Duelist", descriptions)
 
-def ui_upd_Feat_Healer():
-    feat = "Healer"
-    tag = feat
-    d1 = "When you use a healer's kit to stabilize a dying creature, that creature also regains 1 hit point."
-    d2 = "As an action, you can spend one use of a healer's kit to tend to a creature and restore 1d6 + 4 hit points to it, plus additional hit points equal to the creature's maximum number of Hit Dice. The creature can't regain hit points from this feat again until it finishes a short or long rest."
-    with group(parent=tag.mfeature.main()):
-        add_text(feat, color=c_h1, tag=tag.mfeature.header(tag))
-        add_text(d1, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"0"))
-        add_text(d2, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"1"))
+    def Dual_Wielder(self):
+        descriptions = [
+            "You gain a +1 bonus to AC while you are wielding a separate melee weapon in each hand.",
+            "You can use two-weapon fighting even when the one-handed melee weapons you are wielding aren't light.",
+            "You can draw or stow two one-handed weapons when you would normally be able to draw or stow only one."
+        ]
+        self.standard("Dual Wielder", descriptions)
 
-def ui_upd_Feat_Heavily_Armored():
-    feat = "Heavily Armored"
-    tag = feat.replace(" ", "_")
-    with group(parent=tag.mfeature.main()):
-        add_text(feat, color=c_h1, tag=tag.mfeature.header(tag))
+    def Dungeon_Delver(self):
+        descriptions = [
+            "You have advantage on Wisdom (Perception) and Intelligence (Investigation) checks made to detect the presence of secret doors.",
+            "You have advantage on saving throws made to avoid or resist traps.",
+            "You take no damage from traps that would normally deal half damage on a successful save."
+        ]
+        self.standard("Dungeon Delver", descriptions)
 
-def ui_upd_Feat_Heavy_Armor_Master():
-    feat = "Heavy Armor Master"
-    tag = feat.replace(" ", "_")
-    d1 = "Prerequisite: Proficiency with heavy armor"
-    d2 = "While you are wearing heavy armor, bludgeoning, piercing, and slashing damage that you take from nonmagical attacks is reduced by 3."
-    with group(parent=tag.mfeature.main()):
-        add_text(feat, color=c_h1, tag=tag.mfeature.header(tag))
-        add_text(d1, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"0"))
-        add_text(d2, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"1"))
+    def Durable(self):
+        descriptions = [
+            f"When you roll a Hit Die to regain hit points, the minimum number of hit points you regain from the roll equals {q.db.Atr['CON']['Mod'] * 2}."
+        ]
+        self.standard("Durable", descriptions)
 
-def ui_upd_Feat_Inspiring_Leader():
-    feat = "Inspiring Leader"
-    tag = feat.replace(" ", "_")
-    d1 = f"You can spend 10 minutes inspiring your companions, shoring up their resolve to fight. When you do so, choose up to six friendly creatures (which can include yourself) within 30 feet of you who can see or hear you and who can understand you. Each creature gains temporary hit points equal to your level + {q.db.Atr['CHA']['Mod']}."
-    with group(parent=tag.mfeature.main()):
-        add_text(feat, color=c_h1, tag=tag.mfeature.header(tag))
-        add_text(d1, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"0"))
+    def Elemental_Adept(self):
+        v = q.db.Milestone.Data["Elemental_Adept"]["Select"][0]
+        
+        descriptions = [
+            f"Spells you cast ignore resistance to {v} damage.",
+            f"When you roll damage for a spell you cast that deals {v} damage, you treat any 1 on a damage die as a 2."
+        ]
+        self.standard_popup("Elemental Adept", descriptions)
 
-def ui_upd_Feat_Keen_Mind():
-    feat = "Keen Mind"
-    tag = feat.replace(" ", "_")
-    d1 = "You always know which way is north."
-    d2 = "You always know the number of hours left before the next sunrise or sunset."
-    d3 = "You can accurately recall anything you have seen or heard within the past month."
-    with group(parent=tag.mfeature.main()):
-        add_text(feat, color=c_h1, tag=tag.mfeature.header(tag))
-        add_text(d1, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"0"))
-        add_text(d2, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"1"))
-        add_text(d3, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"2"))
+    def Grappler(self):
+        descriptions = [
+            "You have advantage on attack rolls against a creature you are grappling.",
+            "You can use your action to try to pin a creature grappled by you. To do so, make another grapple check. If you succeed, you and the creature are both restrained until the grapple ends."
+        ]
+        self.standard("Grappler", descriptions)
 
-def ui_upd_Feat_Lightly_Armored():
-    feat = "Lightly Armored"
-    tag = "LightlyArmored"
-    t1_header = tag.mfeature.header(tag)
-    tag_popup = tag.mfeature.popup(tag)
-    with group(parent=tag.mfeature.main()):
-        add_text(feat, color=c_h1, tag=t1_header)
-        item_delete(tag_popup)
-        with popup(t1_header, mousebutton=mvMouseButton_Left, max_size=[500,400], tag=tag_popup):
-            with group(horizontal=False):
-                add_combo(items=g.dict_Feat_Lists[tag], default_value=q.db.Milestone["Data"][tag]["Select"][0], width=50, no_arrow_button=True, user_data=["Milestone Feat Choice", tag, 0], callback=cbh, tag=tag.mfeature.select(tag,"0"))
+    def Great_Weapon_Master(self):
+        descriptions = [
+            "On your turn, when you score a critical hit with a melee weapon or reduce a creature to 0 hit points with one, you can make one melee weapon attack as a bonus action.",
+            "Before you make a melee attack with a heavy weapon you are proficient with, you can choose to take a -5 penalty to the attack roll. If the attack hits, you add +10 to the attack's damage."
+        ]
+        self.standard("Great Weapon Master", descriptions)
 
-def ui_upd_Feat_Lucky():
-    feat = "Lucky"
-    tag = feat
-    use = q.db.Milestone["Data"][feat]["Use"]
-    d1 = "You have 3 luck pointq.pc. Whenever you make an attack roll, an ability check, or a saving throw, you can spend one luck point to roll an additional d20. You can choose to spend one of your luck points after you roll the die, but before the outcome is determined. You choose which of the d20s is used for the attack roll, ability check, or saving throw."
-    d2 = "You can also spend one luck point when an attack roll is made against you. Roll a d20, and then choose whether the attack uses the attacker's roll or yourq.pc. If more than one creature spends a luck point to influence the outcome of a roll, the points cancel each other out; no additional dice are rolled."
-    with group(parent=tag.mfeature.main()):
-        with group(horizontal=True):
-            add_text(feat, color=c_h1, tag=tag.mfeature.header(tag))
-            for idx, val in enumerate(use):
-                add_checkbox(default_value=val, enabled=True, user_data=["Milestone Feat Use", feat, idx], callback=cbh, tag=f"checkbox.fMilestone.{tag}.Use.{idx}")
-        add_text(d1, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"0"))
-        add_text(d2, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"1"))
+    def Healer(self):
+        descriptions = [
+            "When you use a healer's kit to stabilize a dying creature, that creature also regains 1 hit point.",
+            "As an action, you can spend one use of a healer's kit to tend to a creature and restore 1d6 + 4 hit points to it, plus additional hit points equal to the creature's maximum number of Hit Dice. The creature can't regain hit points from this feat again until it finishes a short or long rest."
+        ]
+        self.standard("Healer", descriptions)
 
-def ui_upd_Feat_Mage_Slayer():
-    feat = "Mage Slayer"
-    tag = feat.replace(" ", "_")
-    d1 = "When a creature within 5 feet of you casts a spell, you can use your reaction to make a melee weapon attack against that creature."
-    d2 = "When you damage a creature that is concentrating on a spell, that creature has disadvantage on the saving throw it makes to maintain its concentration."
-    d3 = "You have advantage on saving throws against spells cast by creatures within 5 feet of you."
-    with group(parent=tag.mfeature.main()):
-        add_text(feat, color=c_h1, tag=tag.mfeature.header(tag))
-        add_text(d1, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"0"))
-        add_text(d2, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"1"))
-        add_text(d3, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"2"))
+    def Heavily_Armored(self):
+        self.standard_popup("Heavily Armored", [])
 
-def ui_upd_Feat_Medium_Armor_Master():
-    feat = "Medium Armor Master"
-    tag = feat.replace(" ", "_")
-    d1 = "Wearing medium armor doesn't impose disadvantage on your Dexterity (Stealth) checkq.pc."
-    d2 = "When you wear medium armor, you can add 3, rather than 2, to your AC if you have a Dexterity of 16 or higher."
-    with group(parent=tag.mfeature.main()):
-        add_text(feat, color=c_h1, tag=tag.mfeature.header(tag))
-        add_text(d1, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"0"))
-        add_text(d2, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"1"))
+    def Heavy_Armor_Master(self):
+        descriptions = [
+            "Prerequisite: Proficiency with heavy armor",
+            "While you are wearing heavy armor, bludgeoning, piercing, and slashing damage that you take from nonmagical attacks is reduced by 3."
+        ]
+        self.standard("Heavy Armor Master", descriptions)
 
-def ui_upd_Feat_Mobile():
-    feat = "Mobile"
-    tag = feat
-    d1 = "When you use the Dash action, difficult terrain doesn't cost you extra movement on that turn."
-    d2 = "When you make a melee attack against a creature, you don't provoke opportunity attacks from that creature for the rest of the turn, whether you hit or not."
-    with group(parent=tag.mfeature.main()):
-        add_text(feat, color=c_h1, tag=tag.mfeature.header(tag))
-        add_text(d1, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"0"))
-        add_text(d2, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"1"))
+    def Inspiring_Leader(self):
+        descriptions = [
+            f"You can spend 10 minutes inspiring your companions, shoring up their resolve to fight. When you do so, choose up to six friendly creatures (which can include yourself) within 30 feet of you who can see or hear you and who can understand you. Each creature gains temporary hit points equal to your level + {q.db.Atr['CHA']['Mod']}."
+        ]
+        self.standard("Inspiring Leader", descriptions)
 
-def ui_upd_Feat_Moderately_Armored():
-    feat = "Moderately Armored"
-    tag = feat.replace(" ", "_")
-    t1_header = tag.mfeature.header(tag)
-    tag_popup = tag.mfeature.popup(tag)
-    with group(parent=tag.mfeature.main()):
-        add_text(feat, color=c_h1, tag=t1_header)
-        item_delete(tag_popup)
-        with popup(t1_header, mousebutton=mvMouseButton_Left, max_size=[500,400], tag=tag_popup):
-            with group(horizontal=False):
-                add_combo(items=g.dict_Feat_Lists[tag], default_value=q.db.Milestone["Data"][tag]["Select"][0], width=50, no_arrow_button=True, user_data=["Milestone Feat Choice", tag, 0], callback=cbh, tag=tag.mfeature.select(tag,"0"))
+    def Keen_Mind(self):
+        descriptions = [
+            "You always know which way is north.",
+            "You always know the number of hours left before the next sunrise or sunset.",
+            "You can accurately recall anything you have seen or heard within the past month."
+        ]
+        self.standard("Keen Mind", descriptions)
 
-def ui_upd_Feat_Mounted_Combatant():
-    feat = "Mounted Combatant"
-    tag = feat.replace(" ", "_")
-    d1 = "You have advantage on melee attack rolls against any unmounted creature that is smaller than your mount."
-    d2 = "You can force an attack targeted at your mount to target you instead."
-    d3 = "If your mount is subjected to an effect that allows it to make a Dexterity saving throw to take only half damage, it instead takes no damage if it succeeds on the saving throw, and only half damage if it failq.pc."
-    with group(parent=tag.mfeature.main()):
-        add_text(feat, color=c_h1, tag=tag.mfeature.header(tag))
-        add_text(d1, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"0"))
-        add_text(d2, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"1"))
-        add_text(d3, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"2"))
+    def Lightly_Armored(self):
+        self.standard_popup("Lightly Armored", [])
 
-def ui_upd_Feat_Polearm_Master():
-    feat = "Polearm Master"
-    tag = feat.replace(" ", "_")
-    d1 = "When you take the Attack action and attack with only a glaive, halberd, quarterstaff, or spear, you can use a bonus action to make a melee attack with the opposite end of the weapon. This attack uses the same ability modifier as the primary attack. The weapon's damage die for this attack is a d4, and it deals bludgeoning damage."
-    d2 = "While you are wielding a glaive, halberd, pike, quarterstaff, or spear, other creatures provoke an opportunity attack from you when they enter the reach you have with that weapon."
-    with group(parent=tag.mfeature.main()):
-        add_text(feat, color=c_h1, tag=tag.mfeature.header(tag))
-        add_text(d1, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"0"))
-        add_text(d2, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"1"))
+    def Lucky(self):
+        descriptions = [
+            "You have 3 luck points. Whenever you make an attack roll, an ability check, or a saving throw, you can spend one luck point to roll an additional d20. You can choose to spend one of your luck points after you roll the die, but before the outcome is determined. You choose which of the d20s is used for the attack roll, ability check, or saving throw.",
+            "You can also spend one luck point when an attack roll is made against you. Roll a d20, and then choose whether the attack uses the attacker's roll or yours. If more than one creature spends a luck point to influence the outcome of a roll, the points cancel each other out; no additional dice are rolled."
+        ]
+        self.standard_toggle("Lucky", descriptions)
 
-def ui_upd_Feat_Resilient():
-    feat = "Resilient"
-    tag = feat
-    t1_header = tag.mfeature.header(tag)
-    tag_popup = tag.mfeature.popup(tag)
-    with group(parent=tag.mfeature.main()):
-        add_text(feat, color=c_h1, tag=t1_header)
-        item_delete(tag_popup)
-        with popup(t1_header, mousebutton=mvMouseButton_Left, max_size=[500,400], tag=tag_popup):
-            with group(horizontal=False):
-                add_combo(items=g.dict_Feat_Lists[feat], default_value=q.db.Milestone["Data"][feat]["Select"][0], width=50, no_arrow_button=True, user_data=["Milestone Feat Choice", feat, 0], callback=cbh, tag=tag.mfeature.select(tag,"0"))
+    def Mage_Slayer(self):
+        descriptions = [
+            "When a creature within 5 feet of you casts a spell, you can use your reaction to make a melee weapon attack against that creature.",
+            "When you damage a creature that is concentrating on a spell, that creature has disadvantage on the saving throw it makes to maintain its concentration.",
+            "You have advantage on saving throws against spells cast by creatures within 5 feet of you."
+        ]
+        self.standard("Mage Slayer", descriptions)
 
-def ui_upd_Feat_Savage_Attacker():
-    feat = "Savage Attacker"
-    tag = feat.replace(" ", "_")
-    d1 = "Once per turn when you roll damage for a melee weapon attack, you can reroll the weapon's damage dice and use either total."
-    with group(parent=tag.mfeature.main()):
-        add_text(feat, color=c_h1, tag=tag.mfeature.header(tag))
-        add_text(d1, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"0"))
+    def Medium_Armor_Master(self):
+        descriptions = [
+            "Wearing medium armor doesn't impose disadvantage on your Dexterity (Stealth) checks.",
+            "When you wear medium armor, you can add 3, rather than 2, to your AC if you have a Dexterity of 16 or higher."
+        ]
+        self.standard("Medium Armor Master", descriptions)
 
-def ui_upd_Feat_Sentinel():
-    feat = "Sentinel"
-    tag = feat
-    d1 = "When you hit a creature with an opportunity attack, the creature's speed becomes 0 for the rest of the turn."
-    d2 = "Creatures provoke opportunity attacks from you even if they take the Disengage action before leaving your reach."
-    d3 = "When a creature within 5 feet of you makes an attack against a target other than you (and that target doesn't have this feat), you can use your reaction to make a melee weapon attack against the attacking creature."
-    with group(parent=tag.mfeature.main()):
-        add_text(feat, color=c_h1, tag=tag.mfeature.header(tag))
-        add_text(d1, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"0"))
-        add_text(d2, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"1"))
-        add_text(d3, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"2"))
+    def Mobile(self):
+        descriptions = [
+            "When you use the Dash action, difficult terrain doesn't cost you extra movement on that turn.",
+            "When you make a melee attack against a creature, you don't provoke opportunity attacks from that creature for the rest of the turn, whether you hit or not."
+        ]
+        self.standard("Mobile", descriptions)
 
-def ui_upd_Feat_Sharp_shooter():
-    feat = "Sharpshooter"
-    tag = feat
-    d1 = "Attacking at long range doesn't impose disadvantage on your ranged weapon attack rollq.pc."
-    d2 = "Your ranged weapon attacks ignore half cover and three-quarters cover."
-    d3 = "Before you make an attack with a ranged weapon that you are proficient with, you can choose to take a -5 penalty to the attack roll. If the attack hits, you add +10 to the attack's damage."
-    with group(parent=tag.mfeature.main()):
-        add_text(feat, color=c_h1, tag=tag.mfeature.header(tag))
-        add_text(d1, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"0"))
-        add_text(d2, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"1"))
-        add_text(d3, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"2"))
+    def Moderately_Armored(self):
+        self.standard_popup("Moderately Armored", [])
 
-def ui_upd_Feat_Shield_Master():
-    feat = "Shield Master"
-    tag = feat.replace(" ", "_")
-    d1 = "If you take the Attack action on your turn, you can use a bonus action to try to shove a creature within 5 feet of you with your shield."
-    d2 = "If you aren't incapacitated, you can add your shield's AC bonus to any Dexterity saving throw you make against a spell or other harmful effect that targets only you."
-    d3 = "If you are subjected to an effect that allows you to make a Dexterity saving throw to take only half damage, you can use your reaction to take no damage if you succeed on the saving throw, interposing your shield between yourself and the source of the effect."
-    with group(parent=tag.mfeature.main()):
-        add_text(feat, color=c_h1, tag=tag.mfeature.header(tag))
-        add_text(d1, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"0"))
-        add_text(d2, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"1"))
-        add_text(d3, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"2"))
+    def Mounted_Combatant(self):
+        descriptions = [
+            "You have advantage on melee attack rolls against any unmounted creature that is smaller than your mount.",
+            "You can force an attack targeted at your mount to target you instead.",
+            "If your mount is subjected to an effect that allows it to make a Dexterity saving throw to take only half damage, it instead takes no damage if it succeeds on the saving throw, and only half damage if it fails."
+        ]
+        self.standard("Mounted Combatant", descriptions)
 
-def ui_upd_Feat_Skulker():
-    feat = "Skulker"
-    tag = feat
-    d1 = "You can try to hide when you are lightly obscured from the creature from which you are hiding."
-    d2 = "When you are hidden from a creature and miss it with a ranged weapon attack, making the attack doesn't reveal your position."
-    d3 = "Dim light doesn't impose disadvantage on your Wisdom (Perception) checks that rely on sight."
-    with group(parent=tag.mfeature.main()):
-        add_text(feat, color=c_h1, tag=tag.mfeature.header(tag))
-        add_text(d1, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"0"))
-        add_text(d2, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"1"))
-        add_text(d3, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"2"))
+    def Polearm_Master(self):
+        descriptions = [
+            "When you take the Attack action and attack with only a glaive, halberd, quarterstaff, or spear, you can use a bonus action to make a melee attack with the opposite end of the weapon. This attack uses the same ability modifier as the primary attack. The weapon's damage die for this attack is a d4, and it deals bludgeoning damage.",
+            "While you are wielding a glaive, halberd, pike, quarterstaff, or spear, other creatures provoke an opportunity attack from you when they enter the reach you have with that weapon."
+        ]
+        self.standard("Polearm Master", descriptions)
 
-def ui_upd_Feat_Tavern_Brawler():
-    feat = "Tavern Brawler"
-    tag = feat.replace(" ", "_")
-    d1 = f"You are proficient with improvised Weapon. Your unarmed strike uses a d4 for damage. When you hit a creature with an unarmed strike or an improvised weapon on your turn, you can use a bonus action to attempt to grapple the target."
-    with group(parent=tag.mfeature.main()):
-        add_text(feat, color=c_h1, tag=tag.mfeature.header(tag))
-        add_text(d1, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"0"))
+    def Resilient(self):
+        self.standard_popup("Resilient", [])
 
-def ui_upd_Feat_Tough():
-    feat = "Tough"
-    tag = feat
-    d1 = "Your hit point maximum increases by an amount equal to twice your level when you gain this feat. Whenever you gain a level thereafter, your hit point maximum increases by an additional 2 hit pointq.pc."
-    with group(parent=tag.mfeature.main()):
-        add_text(feat, color=c_h1, tag=tag.mfeature.header(tag))
-        add_text(d1, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"0"))
+    def Savage_Attacker(self):
+        descriptions = [
+            "Once per turn when you roll damage for a melee weapon attack, you can reroll the weapon's damage dice and use either total."
+        ]
+        self.standard("Savage Attacker", descriptions)
 
-def ui_upd_Feat_War_Caster():
-    feat = "War Caster"
-    tag = feat
-    d1 = "You have advantage on Constitution saving throws that you make to maintain your concentration on a spell when you take damage."
-    d2 = "You can perform the somatic components of spells even when you have weapons or a shield in one or both handq.pc."
-    d3 = "When a hostile creature's movement provokes an opportunity attack from you, you can use your reaction to cast a spell at the creature, rather than making an opportunity attack. The spell must have a casting time of 1 action and must target only that creature."
-    with group(parent=tag.mfeature.main()):
-        add_text(feat, color=c_h1, tag=tag.mfeature.header(tag))
-        add_text(d1, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"0"))
-        add_text(d2, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"1"))
-        add_text(d3, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"2"))
+    def Sentinel(self):
+        descriptions = [
+            "When you hit a creature with an opportunity attack, the creature's speed becomes 0 for the rest of the turn.",
+            "Creatures provoke opportunity attacks from you even if they take the Disengage action before leaving your reach.",
+            "When a creature within 5 feet of you makes an attack against a target other than you (and that target doesn't have this feat), you can use your reaction to make a melee weapon attack against the attacking creature."
+        ]
+        self.standard("Sentinel", descriptions)
 
-def ui_upd_Feat_Weapon_Master():
-    feat = "Weapon Master"
-    tag = feat.replace(" ", "_")
-    select = q.db.Milestone["Data"][tag]["Select"]
-    d1 = "You gain proficiency with four weapons of your choice."
-    t1_header = tag.mfeature.header(tag)
-    tag_popup = tag.mfeature.popup(tag)
-    with group(parent=tag.mfeature.main()):
-        add_text(feat, color=c_h1, tag=t1_header)
-        add_text(d1, color=c_text, wrap=size.gwrap, tag=tag.mfeature.text(tag,"0"))
-        item_delete(tag_popup)
-        with popup(t1_header, mousebutton=mvMouseButton_Left, max_size=[500,400], tag=tag_popup):
-            with group(horizontal=False):
-                for i in [0,1,2,3]:
-                    add_combo(items=g.dict_Feat_Lists[tag], default_value=select[i], width=100, no_arrow_button=True, user_data=["Milestone Feat Choice", tag, i], callback=cbh, tag=tag.mfeauture.select(tag,i))
+    def Sharpshooter(self):
+        descriptions = [
+            "Attacking at long range doesn't impose disadvantage on your ranged weapon attack rolls.",
+            "Your ranged weapon attacks ignore half cover and three-quarters cover.",
+            "Before you make an attack with a ranged weapon that you are proficient with, you can choose to take a -5 penalty to the attack roll. If the attack hits, you add +10 to the attack's damage."
+        ]
+        self.standard("Sharpshooter", descriptions)
+
+    def Shield_Master(self):
+        descriptions = [
+            "If you take the Attack action on your turn, you can use a bonus action to try to shove a creature within 5 feet of you with your shield.",
+            "If you aren't incapacitated, you can add your shield's AC bonus to any Dexterity saving throw you make against a spell or other harmful effect that targets only you.",
+            "If you are subjected to an effect that allows you to make a Dexterity saving throw to take only half damage, you can use your reaction to take no damage if you succeed on the saving throw, interposing your shield between yourself and the source of the effect."
+        ]
+        self.standard("Shield Master", descriptions)
+
+    def Skulker(self):
+        descriptions = [
+            "You can try to hide when you are lightly obscured from the creature from which you are hiding.",
+            "When you are hidden from a creature and miss it with a ranged weapon attack, making the attack doesn't reveal your position.",
+            "Dim light doesn't impose disadvantage on your Wisdom (Perception) checks that rely on sight."
+        ]
+        self.standard("Skulker", descriptions)
+
+    def Tavern_Brawler(self):
+        descriptions = [
+            "You are proficient with improvised weapons. Your unarmed strike uses a d4 for damage. When you hit a creature with an unarmed strike or an improvised weapon on your turn, you can use a bonus action to attempt to grapple the target."
+        ]
+        self.standard("Tavern Brawler", descriptions)
+
+    def Tough(self):
+        descriptions = [
+            "Your hit point maximum increases by an amount equal to twice your level when you gain this feat. Whenever you gain a level thereafter, your hit point maximum increases by an additional 2 hit points."
+        ]
+        self.standard("Tough", descriptions)
+
+    def War_Caster(self):
+        descriptions = [
+            "You have advantage on Constitution saving throws that you make to maintain your concentration on a spell when you take damage.",
+            "You can perform the somatic components of spells even when you have weapons or a shield in one or both hands.",
+            "When a hostile creature's movement provokes an opportunity attack from you, you can use your reaction to cast a spell at the creature, rather than making an opportunity attack. The spell must have a casting time of 1 action and must target only that creature."
+        ]
+        self.standard("War Caster", descriptions)
+
+    def Weapon_Master(self):
+        descriptions = [
+            "You gain proficiency with four weapons of your choice."
+        ]
+        self.standard_popup("Weapon Master", descriptions, num_choices=4)
+
+
 
 # #------------------------------------------------
 
@@ -1859,6 +1767,59 @@ def spell_detail(spell):
 
 
 # Fixed Race UI Functions with Proper Naming
+
+
+class ui_upd_Race:
+    def __init__(self):
+        self.parent = tag.rfeature.main()
+
+    def standard(self, name, descriptions):
+        a, t = gen_abil(name, 1)
+        t_header = tag.rfeature.header(t)
+        desc_tags = [tag.rfeature.text(t, f"{i+1}") for i, _ in enumerate(descriptions)]
+
+        with group(parent=self.parent):
+            add_text(a, color=c_h1, tag=t_header)
+            for i, desc in enumerate(descriptions):
+                add_text(desc, color=c_text, wrap=size.gwrap, tag=desc_tags[i])
+
+    def standard_popup(self, name, descriptions, num_choices=1):
+        a, t = gen_abil(name, 1)
+        t_header = tag.rfeature.header(t)
+        desc_tags = [tag.rfeature.text(t, f"{i+1}") for i, _ in enumerate(descriptions)]
+        t_popup = tag.rfeature.popup(t)
+        
+        item_delete(t_popup)
+
+        with group(parent=self.parent):
+            add_text(a, color=c_h1, tag=t_header)
+            for i, desc in enumerate(descriptions):
+                add_text(desc, color=c_text, wrap=size.gwrap, tag=desc_tags[i])
+
+        with popup(t_header, mousebutton=mvMouseButton_Left, max_size=[500,400], tag=t_popup):
+            with group(horizontal=False):
+                for i in range(num_choices):
+                    t_select = tag.mfeature.select(t, i)
+                    add_combo(items=g.dict_Feat_Lists[a], default_value=q.db.Milestone.Data[a]["Select"][i], width=100, no_arrow_button=True, user_data=["Milestone Feat Choice", a, i], callback=cbh, tag=t_select)
+                    add_button(label="X", user_data=["Milestone Feat Choice Clear", a, i], callback=cbh)
+
+    def standard_toggle(self, name, descriptions):
+        a, t = gen_abil(name, 1)
+        t_header = tag.mfeature.header(t)
+        desc_tags = [tag.mfeature.text(t, f"{i+1}") for i, _ in enumerate(descriptions)]
+        use = q.db.Milestone["Data"][a]["Use"]
+
+        with group(parent=self.parent):
+            with group(horizontal=True):
+                add_text(a, color=c_h1, tag=t_header)
+                for idx, val in enumerate(use):
+                    add_checkbox(default_value=val, enabled=True, user_data=["Milestone Feat Use", a, idx], callback=cbh, tag=f"checkbox.fMilestone.{t}.Use.{idx}")
+            
+            for i, desc in enumerate(descriptions):
+                add_text(desc, color=c_text, wrap=size.gwrap, tag=desc_tags[i])
+
+
+
 
 def ui_upd_Race_Empty():
     parent = "empty"
