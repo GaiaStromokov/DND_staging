@@ -1,15 +1,36 @@
-from dearpygui.dearpygui import *
-import q
-from Sheet.getset import g
-from UI.UI_imports import gen_abil, tag, size
-from access_data.color_reference import *
-import math as math
+from ui.upd_helper_import import *
 
-from colorist import *
 
-class ui_upd_Class:
+
+class upd_class:
     def __init__(self):
-        self.parent = "cw.fClass.Main"
+        self.parent = tag.cfeature.main()
+    
+    def whole(self):
+        self.sub()
+        self.main()
+        
+    def main(self):
+        item_clear(self.parent)
+        Class = get.Class()
+        Subclass = get.Subclass()
+        
+        if hasattr(self, Class):
+            method_name = Class
+            getattr(self, method_name)()
+
+        if hasattr(self, f"{Class}_{Subclass}"):
+            method_name = f"{Class}_{Subclass}"
+            getattr(self, method_name)()
+            
+    def sub():
+        item_clear(tag.cfeature.sub())
+        with group(parent=tag.cfeature.sub()):
+            with group(horizontal=True):
+                add_text("Skill Select", color=c_h1)
+                for idx, key in enumerate(q.db.Class["Skill Select"]):
+                    add_combo(items=get.dict_Class_Skills[q.db.Core.C], default_value=key,  width=100, no_arrow_button=True, user_data=["Class Skill Select",idx], callback=q.cbh, tag=tag.cfeature.toggle("skill_select",idx))
+                add_button(label = "Clear", user_data=["Class Skill Select", "Clear"], callback=q.cbh, tag=tag.cfeature.button("skill_select","Clear"))
 
     def standard(self, name, descriptions):
         a, t = gen_abil(name)
@@ -32,7 +53,7 @@ class ui_upd_Class:
                 add_text(a, color=c_h1, tag=t_header)
                 for idx, val in enumerate(cdata["Use"]):
                     t_toggle = tag.cfeature.toggle(t, idx)
-                    add_checkbox(default_value=val, enabled=True, user_data=["Class Use", a, idx], callback=cbh, tag=t_toggle)
+                    add_checkbox(default_value=val, enabled=True, user_data=["Class Use", a, idx], callback=q.cbh, tag=t_toggle)
 
             for i, desc in enumerate(descriptions):
                 add_text(desc, color=c_text, wrap=size.gwrap, tag=desc_tags[i])
@@ -50,12 +71,12 @@ class ui_upd_Class:
             with popup(t_header, mousebutton=mvMouseButton_Left, tag=t_popup):
                 for idx, value in enumerate(cdata["Select"]):
                     t_select = tag.cfeature.select(t, idx)
-                    add_combo(items=g.list_Fighting_Styles, default_value=value, width=80, no_arrow_button=True, callback=cbh, user_data=["Class Select", a, idx], tag=t_select)
+                    add_combo(items=get.list_Fighting_Styles, default_value=value, width=80, no_arrow_button=True, callback=q.cbh, user_data=["Class Select", a, idx], tag=t_select)
 
             for item in cdata["Select"]:
                 if item != "":
                     add_text(item, color=c_h2)
-                    add_text(g.get_Fighting_Style(item), color=c_text, wrap=size.gwrap)
+                    add_text(get.get_Fighting_Style(item), color=c_text, wrap=size.gwrap)
 
     def Empty(self):
         pass
@@ -120,10 +141,10 @@ class ui_upd_Class:
                     with popup(t_header, mousebutton=mvMouseButton_Left, tag=t_popup):
                         for idx, value in enumerate(cdata["Select"]): 
                             t_select = tag.cfeature.select(t, idx)
-                            add_combo(items=g.list_Maneuvers, default_value=value, width=80, no_arrow_button=True, callback=cbh, user_data=["Class Select", a, idx], tag=t_select)
+                            add_combo(items=get.list_Maneuvers, default_value=value, width=80, no_arrow_button=True, callback=q.cbh, user_data=["Class Select", a, idx], tag=t_select)
                     for idx, value in enumerate(cdata["Use"]):
                         t_toggle = tag.cfeature.toggle(t, idx)
-                        add_checkbox(default_value=value, enabled=True, callback=cbh, user_data=["Class Use", a, idx], tag=t_toggle)
+                        add_checkbox(default_value=value, enabled=True, callback=q.cbh, user_data=["Class Use", a, idx], tag=t_toggle)
                 
                 for item in cdata["Select"]:
                     if item:
@@ -133,7 +154,7 @@ class ui_upd_Class:
                         add_text(item, color=c_h2, tag=t_item)
                         item_delete(t_tooltip)
                         with tooltip(t_item, tag=t_tooltip):
-                            add_text(g.dict_Maneuver_map[item], color=c_text, wrap=size.gwrap)
+                            add_text(get.dict_Maneuver_map[item], color=c_text, wrap=size.gwrap)
         
         if "Student of War" in data:
             a, t = gen_abil("Student of War", 1)
@@ -146,7 +167,7 @@ class ui_upd_Class:
                 add_text(a, color=c_h1, tag=t_header)
                 item_delete(t_popup)
                 with popup(t_header, mousebutton=mvMouseButton_Left, tag=t_popup):
-                    add_combo(items=g.list_Student_of_War_Profs, default_value=cdata["Select"][0], width=80, no_arrow_button=True, callback=cbh, user_data=["Class Select", a, 0], tag=t_select)
+                    add_combo(items=get.list_Student_of_War_Profs, default_value=cdata["Select"][0], width=80, no_arrow_button=True, callback=q.cbh, user_data=["Class Select", a, 0], tag=t_select)
 
         if "Relentless" in data:
             Relentless_descriptions = ["When you roll initiative and have no superiority dice remaining, you regain 1 superiority die."]
@@ -202,7 +223,7 @@ class ui_upd_Class:
                 add_text(a, color=c_h1, tag=t_header)
                 item_delete(t_popup)
                 with popup(t_header, mousebutton=mvMouseButton_Left, tag=t_popup):
-                    add_combo(items=g.list_Fighter_Samuri_Bonus_Proficiency, default_value=cdata["Select"][0], width=80, no_arrow_button=True, callback=cbh, user_data=["Class Select", a, 0], tag=t_select)
+                    add_combo(items=get.list_Fighter_Samuri_Bonus_Proficiency, default_value=cdata["Select"][0], width=80, no_arrow_button=True, callback=q.cbh, user_data=["Class Select", a, 0], tag=t_select)
 
         if "Fighting Spirit" in data:
             Fighting_Spirit_descriptions = ["As a bonus action on your turn, you can give yourself advantage on all weapon attack rolls until the end of the current turn. When you do so, you also gain 5 temporary hit points."]
@@ -259,8 +280,8 @@ class ui_upd_Class:
                 add_text(a, color=c_h1, tag=t_header)
                 item_delete(t_popup)
                 with popup(t_header, mousebutton=mvMouseButton_Left, tag=t_popup):
-                    add_combo(items=q.db.Spell["Book"][1], default_value=cdata["Select"][0], width=80, no_arrow_button=True, callback=cbh, user_data=["Class Select", a, 0], tag=tag.cfeature.select(t,0))
-                    add_combo(items=q.db.Spell["Book"][2], default_value=cdata["Select"][1], width=80, no_arrow_button=True, callback=cbh, user_data=["Class Select", a, 1], tag=tag.cfeature.select(t,1))
+                    add_combo(items=q.db.Spell["Book"][1], default_value=cdata["Select"][0], width=80, no_arrow_button=True, callback=q.cbh, user_data=["Class Select", a, 0], tag=tag.cfeature.select(t,0))
+                    add_combo(items=q.db.Spell["Book"][2], default_value=cdata["Select"][1], width=80, no_arrow_button=True, callback=q.cbh, user_data=["Class Select", a, 1], tag=tag.cfeature.select(t,1))
                 
                 for idx, spell in enumerate(cdata["Select"]):
                     if spell != "":
@@ -269,7 +290,7 @@ class ui_upd_Class:
                         t_tooltip = tag.cfeature.tooltip(t, spell_tag)
                         with group(horizontal=True):
                             add_text(spell, color=c_h2, tag=t_spell)
-                            add_checkbox(default_value=cdata["Use"][idx], enabled=True, callback=cbh, user_data=["Class Use", a, idx], tag=tag.cfeature.toggle(t,idx))
+                            add_checkbox(default_value=cdata["Use"][idx], enabled=True, callback=q.cbh, user_data=["Class Use", a, idx], tag=tag.cfeature.toggle(t,idx))
                         item_delete(t_tooltip)
                         with tooltip(t_spell, tag=t_tooltip):
                             spell_detail(spell)
@@ -284,8 +305,8 @@ class ui_upd_Class:
                 add_text(a, color=c_h1, tag=t_header)
                 item_delete(t_popup)
                 with popup(t_header, mousebutton=mvMouseButton_Left, tag=t_popup):
-                    add_combo(items=q.db.Spell["Book"][3], default_value=cdata["Select"][0], width=80, no_arrow_button=True, callback=cbh, user_data=["Class Select", a, 0], tag=tag.cfeature.select(t,0))
-                    add_combo(items=q.db.Spell["Book"][3], default_value=cdata["Select"][1], width=80, no_arrow_button=True, callback=cbh, user_data=["Class Select", a, 1], tag=tag.cfeature.select(t,1))
+                    add_combo(items=q.db.Spell["Book"][3], default_value=cdata["Select"][0], width=80, no_arrow_button=True, callback=q.cbh, user_data=["Class Select", a, 0], tag=tag.cfeature.select(t,0))
+                    add_combo(items=q.db.Spell["Book"][3], default_value=cdata["Select"][1], width=80, no_arrow_button=True, callback=q.cbh, user_data=["Class Select", a, 1], tag=tag.cfeature.select(t,1))
                 
                 for idx, spell in enumerate(cdata["Select"]):
                     if spell != "":
@@ -294,7 +315,7 @@ class ui_upd_Class:
                         t_tooltip = tag.cfeature.tooltip(t, spell_tag)
                         with group(horizontal=True):
                             add_text(spell, color=c_h2, tag=t_spell)
-                            add_checkbox(default_value=cdata["Use"][idx], enabled=True, callback=cbh, user_data=["Class Use", a, idx], tag=tag.cfeature.toggle(t,idx))
+                            add_checkbox(default_value=cdata["Use"][idx], enabled=True, callback=q.cbh, user_data=["Class Use", a, idx], tag=tag.cfeature.toggle(t,idx))
                         item_delete(t_tooltip)
                         with tooltip(t_spell, tag=t_tooltip):
                             spell_detail(spell)
@@ -317,11 +338,11 @@ class ui_upd_Class:
             with group(parent=self.parent):
                 with group(horizontal=True):
                     add_text(a, color=c_h1, tag=t_header)
-                    add_checkbox(default_value=cdata["Use"][0], enabled=True, callback=cbh, user_data=["Class Use", a, 0], tag=tag.cfeature.toggle(t, 0))
+                    add_checkbox(default_value=cdata["Use"][0], enabled=True, callback=q.cbh, user_data=["Class Use", a, 0], tag=tag.cfeature.toggle(t, 0))
                     add_button(label="Ward HP", enabled=False)
                     add_button(label=f"{cdata['HP']['Current']} / {cdata['HP']['Max']}", enabled=False, tag=t_hp)
-                    add_button(label="-", user_data=["Arcane Ward", -1], callback=cbh)
-                    add_button(label="+", user_data=["Arcane Ward", 1], callback=cbh)
+                    add_button(label="-", user_data=["Arcane Ward", -1], callback=q.cbh)
+                    add_button(label="+", user_data=["Arcane Ward", 1], callback=q.cbh)
                 add_text(description, color=c_text, wrap=size.gwrap, tag=t_desc)
 
         if "Projected Ward" in data:

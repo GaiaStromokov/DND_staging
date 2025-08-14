@@ -24,7 +24,7 @@ db = _load_json_data(get_db_path())
 
 pc = None
 w = None
-
+cbh = None
 
 def EXIT_save_json():
     if db:

@@ -8,11 +8,11 @@ from access_data.Grimoir import *
 # # Core values
 def Level(): return q.db.Core.L
 def PB(): return q.db.Core.PB
-def Race(): return q.db.Core.R.replace(" ", "")
-def Subrace(): return q.db.Core.SR.replace(" ", "")
-def Class(): return q.db.Core.C.replace(" ", "")
-def Subclass(): return q.db.Core.SC.replace(" ", "")
-def Background(): return q.db.Core.BG.replace(" ", "")
+def Race(): return q.db.Core.R.replace(" ", "_")
+def Subrace(): return q.db.Core.SR.replace(" ", "_")
+def Class(): return q.db.Core.C.replace(" ", "_")
+def Subclass(): return q.db.Core.SC.replace(" ", "_")
+def Background(): return q.db.Core.BG.replace(" ", "_")
 
 # # Core Setters
 
@@ -30,57 +30,12 @@ def aRace(): return q.db.Race["Abil"]
 def sClass(): return q.db.Class["Skill Select"]
 
 
-# def kMilestone(): return q.db.Milestone
-# def kProf(): return q.db.Prof
-# def kSkill(): return q.db.Skill
-# def kAC(): return q.db.AC
-# def kSpeed(): return q.db.Speed
-# def kVision(): return q.db.Vision
-# def kInitiative(): return q.db.Initiative
 def kHP(): return q.db.HP
-# def q.db.Condition: return q.db.Condition
+
 def dAtr(): return q.db.Atr
-# def kSavingthrow(): return q.db.SavingThrow
-# def q.db.Spell: return q.db.Spell
-# def q.db.Characteristic: return q.db.Characteristic
-# def q.db.Description: return q.db.Description
-# def kBackpack(): return q.db.Inventory.Backpack
-# def kEquip(): return q.db.Inventory.Equip
 
-
-
-# def pProf(): return q.pc.Prof
-
-# def pSpeed(): return q.pc.Speed
-# def pVision(): return q.pc.Vision
-# def pInitiative(): return q.pc.Initiative
-# def pAtr(): return q.pc.Atr
 
 def aMod(atr): return q.db.Atr[atr]["Mod"]
-
-# def cMilestone(): return q.pc.milestone_count
-
-# def q.pc.spell_data: return q.pc.spell_data
-
-# def Current_Equip(slot): return kEquip()[slot]
-# def Current_Backpack(): return list(q.db.Inventory.Backpack.keys())
-
-# def dBackpack(): return q.db.Inventory.Backpack
-
-# def bMult_Category(*categories): return q.pc.Bazaar.Mult_Category(*categories)
-
-# def bCategory(category): return q.pc.Bazaar.Category(category)
-
-# def bSlot(slot): return q.pc.Bazaar.Slot(slot)
-
-# def bProf(prof): return q.pc.Bazaar.Prof(prof)
-
-# def q.w.prop(prop): return q.pc.Bazaar.Property(prop)
-
-# def bItem(item): return q.pc.Bazaar.Item(item)
-
-
-# def bOffHand(): return q.pc.Bazaar.OffHand
 
 
 

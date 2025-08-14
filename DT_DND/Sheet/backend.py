@@ -1,6 +1,6 @@
 # backend.py
 import q
-from Sheet.getset import s, g
+from DT_DND.Sheet.get_set_import import s, g
 from colorist import *
 
 

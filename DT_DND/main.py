@@ -3,14 +3,15 @@ import q
 from colorist import *
 
 import sys, os
-
+from ui.call_back_handler import backend_manager
 from manager.character import init_pc
-from Sheet.UI import init_ui, populate_Start
+from ui.init_ui import init_ui
 
 
 def resource_path(relative_path):
     try: base_path = sys._MEIPASS
-    except Exception: base_path = os.path.abspath(".")
+    except Exception:
+        base_path = os.path.dirname(os.path.abspath(__file__))
     return os.path.join(base_path, relative_path)
 
 def on_exit_callback():
@@ -19,11 +20,15 @@ def on_exit_callback():
     stop_dearpygui()
 
 def startup():
+    backend = backend_manager()
+    q.cbh = backend.get_callback_handler()
+    
     init_pc()
     q.pc.start_configuration()
     init_ui()
-    populate_Start()
-    
+    q.cbh.Start()
+
+
 def main():
     create_context()
     with font_registry(): font_choice = add_font(resource_path("utils/Helvetica.ttf"), 13)
@@ -33,7 +38,9 @@ def main():
     set_exit_callback(on_exit_callback)
     bind_font(font_choice)
     setup_dearpygui()
+    
     startup()
+    
     show_viewport()
     start_dearpygui()
     destroy_context()
