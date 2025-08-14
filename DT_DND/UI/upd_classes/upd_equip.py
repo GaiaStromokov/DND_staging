@@ -25,8 +25,8 @@ class upd_equip:
             ("Armor", q.w.slot("Armor"), tag.equip.select("Armor")),
             ("Hand_1", q.w.slot("Weapon"), tag.equip.select("Hand_1")),
             ("Hand_2", q.w.list_off_hand, tag.equip.select("Hand_2")),
-            ("Ring_1", q.w.slot("Ring"), tag.equip.select("Ring_1")),
-            ("Ring_2", q.w.slot("Ring"), tag.equip.select("Ring_2")),
+            ("Ring_1", q.w.slot("Ring_1"), tag.equip.select("Ring_1")),
+            ("Ring_2", q.w.slot("Ring_2"), tag.equip.select("Ring_2")),
         ]
     
     def get_available_items(self, source):
@@ -49,6 +49,7 @@ class upd_equip:
         slots = self.get_slots()
         
         for slot_name, source, select_tag in slots:
+            print(slot_name,source,select_tag)
             items = self.get_available_items(source)
             default_value = self.get_default_value(slot_name)
             configure_item(select_tag, items=items, default_value=default_value)

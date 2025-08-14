@@ -8,7 +8,7 @@ class upd_backpack():
         self.fill_backpack()
         self.populate_backpack()
         
-    def fill_backpack():
+    def fill_backpack(self):
         bdata = q.db.Inventory.Backpack
         item_count = len(bdata)
         table_tag = tag.backpack.table()
@@ -31,7 +31,7 @@ class upd_backpack():
         for row_idx in range(item_count, existing_rows):
             delete_item(tag.backpack.row(row_idx))
 
-    def populate_backpack():
+    def populate_backpack(self):
         """Populate the cells with actual item data"""
         bdata = q.db.Inventory.Backpack
         

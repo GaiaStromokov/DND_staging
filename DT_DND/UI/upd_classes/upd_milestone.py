@@ -9,7 +9,7 @@ class upd_milestone:
         self.main()
 
 
-    def sub():
+    def sub(self):
         cdata = q.pc.milestone
         item_clear(tag.mfeature.sub())
         with group(parent=tag.mfeature.sub()):

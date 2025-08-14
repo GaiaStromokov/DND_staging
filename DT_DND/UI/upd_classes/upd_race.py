@@ -9,7 +9,7 @@ class upd_race:
         self.sub()
         self.main()
         
-    def sub():
+    def sub(self):
         configure_item(tag.rfeature.toggle("asi_0"), default_value = q.db.Race.Rasi[0])
         configure_item(tag.rfeature.toggle("asi_1"), default_value = q.db.Race.Rasi[1])
     

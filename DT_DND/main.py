@@ -26,7 +26,7 @@ def startup():
     init_pc()
     q.pc.start_configuration()
     init_ui()
-    q.cbh.Start()
+    backend.Start()
 
 
 def main():

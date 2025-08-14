@@ -7,32 +7,32 @@ class upd_sheet:
         pass
 
 
-    def core():
+    def core(self):
         cdata = q.db.Core
         configure_item(tag.core.val("level"), label=get.Level())
         configure_item(tag.core.val("pb"), label = f"PB: +{get.PB()}")
-        configure_item(tag.core.select("Race"), items=get.list_Race, default_value=get.Race())
-        configure_item(tag.core.select("Subrace"), items=get.option_Race[cdata.R], default_value=get.Subrace())
-        configure_item(tag.core.select("Class"), items=get.list_Class, default_value=get.Class())
-        configure_item(tag.core.select("Subclass"), items=get.option_Class[cdata.C] if get.valid_class() else [], default_value=get.Subclass())
-        configure_item(tag.core.select("Background"), items=get.list_Background, default_value=get.Background())
+        configure_item(tag.core.select("race"), items=get.list_Race, default_value=get.Race())
+        configure_item(tag.core.select("subrace"), items=get.option_Race[cdata.R], default_value=get.Subrace())
+        configure_item(tag.core.select("class"), items=get.list_Class, default_value=get.Class())
+        configure_item(tag.core.select("subclass"), items=get.option_Class[cdata.C] if get.valid_class() else [], default_value=get.Subclass())
+        configure_item(tag.core.select("background"), items=get.list_Background, default_value=get.Background())
             
 
 
-    def attributes():
+    def attributes(self):
         data=q.db.Atr
         for atr in get.list_Atr:
             cdata=data[atr]
             configure_item(tag.atr.sum(atr), label = cdata.Val)
             configure_item(tag.atr.mod(atr), label = cdata.Mod)
             configure_item(tag.atr.select(atr), default_value = cdata.Base)
-            configure_item(tag.atr.source("Base"), label = cdata.Base)
-            configure_item(tag.atr.source("Race"), label = cdata.Rasi)
-            configure_item(tag.atr.source("feat"), label = cdata.Milestone)
+            configure_item(tag.atr.source(atr, "base"), label = cdata.Base)
+            configure_item(tag.atr.source(atr, "race"), label = cdata.Rasi)
+            configure_item(tag.atr.source(atr, "feat"), label = cdata.Milestone)
 
 
 
-    def skills():
+    def skills(self):
         for skill in get.list_Skill:
             cdata=q.pc.Skill[skill]
             
@@ -44,7 +44,7 @@ class upd_sheet:
             # configure_item(f"skill_BG_{skill}", default_value=skill in cdata["Background"])
             # configure_item(f"skill_Feat_{skill}", default_value=skill in cdata["Feat"])
             
-    def health():
+    def health(self):
         hp = q.db.HP
         configure_item(tag.health.val("hp"), label = f"{hp["Current"]} / {hp["Sum"]}")
         configure_item(tag.health.val("temp"), label = hp["Temp"])
@@ -52,47 +52,47 @@ class upd_sheet:
         
 
         
-    def initiative():
+    def initiative(self):
         configure_item(tag.init.val(), label = get.Initiative_text())
         configure_item(tag.init.source("dex"), label = q.db.Atr["DEX"]["Mod"])
         configure_item(tag.init.source("race"), label = q.db.Initiative["Race"])
         configure_item(tag.init.source("class"), label = q.db.Initiative["Class"])
         
-    def vision():
+    def vision(self):
         cdata=q.pc.Vision
         configure_item(tag.vision.val(),label = cdata["Dark"])
         for i in get.list_Vision:configure_item(tag.vision.source(i),label = cdata[i])
 
-    def speed():
+    def speed(self):
         cdata=q.pc.Speed
         configure_item(tag.speed.val(),label = cdata["Walk"])
         for i in get.list_Speed: configure_item(tag.speed.source(i),label = cdata[i])
 
-    def armor_class():
+    def armor_class(self):
         ac=q.db.AC
         configure_item(tag.ac.val(), label = ac.Sum)
         configure_item(tag.ac.source("base"), label = ac.Base)
         configure_item(tag.ac.source("dex"), label = ac.Dex)
 
 
-    def conditions():
+    def conditions(self):
         for i in get.list_Condition:
             configure_item(tag.cond.toggle(i),default_value = q.db.Condition[i])
             configure_item(tag.cond.text(i), color = get.condition_color(i))
 
-    def character():
+    def character(self):
         cdata=q.db.Characteristic
         for i in get.list_Ideals:
             configure_item(tag.char.input(i), default_value=cdata[i])
-            configure_item(tag.char.test(i), default_value=cdata[i])
+            configure_item(tag.char.text(i), default_value=cdata[i])
         
         cdata=q.db.Description
         for i in get.list_Description:
             configure_item(tag.pdesc.input(i), default_value=cdata[i])
-            configure_item(tag.pdesc.test(i), default_value=cdata[i])
+            configure_item(tag.pdesc.text(i), default_value=cdata[i])
 
 
-    def proficiencies():
+    def proficiencies(self):
         cdata = q.pc.Prof
         for i in set(q.w.prof("Weapon")) & set(q.w.cat("Simple")):
             configure_item(tag.prof.multi("Simple", i, suffix="toggle"), default_value=i in cdata["Weapon"])

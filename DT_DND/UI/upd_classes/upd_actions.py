@@ -5,7 +5,7 @@ from ui.upd_helper_import import *
 class upd_actions:
     def __init__(self):
         pass
-    def main(self):
+    def whole(self):
         self.weapon()
     def weapon(self):
         for atr in get.list_weapon_attributes:
