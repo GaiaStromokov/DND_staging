@@ -12,8 +12,8 @@ class upd_actions:
             delete_item(tag.wactions.cell(atr,0), children_only=True)
             delete_item(tag.wactions.cell(atr,1), children_only=True)
 
-        Hand_1 = q.db.Inventory.Equip["Hand_1"]
-        Hand_2 = q.db.Inventory.Equip["Hand_2"]
+        Hand_1 = q.db.Inventory.Closet["Hand_1"]
+        Hand_2 = q.db.Inventory.Closet["Hand_2"]
         two_handed = Hand_1 in q.w.prop("Two-handed")
         Versatile = get.weapon_versatile()
         

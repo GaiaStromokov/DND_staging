@@ -1,5 +1,5 @@
 from ui.upd_helper_import import *
-
+from path_helper import get_path
 
 
 def create_attribute_row(stat: str):
@@ -107,7 +107,7 @@ def create_proficiency_addons(tLabel: str, proficiency_map: dict):
 
 
 
-def init_window_Skeleton():
+def init_window_skeleton():
     with window(no_title_bar=True, no_close=True, autosize=True, tag="window_main"):
         with group(horizontal=True):
             with group(horizontal=False):
@@ -149,6 +149,8 @@ def init_window_wallet():
 def init_window_core():
     w_max=size.w_core-16
     h_max=size.h_core-16
+    w_abtn=80
+    w_combo = w_max-88
     with group(parent=tag.core.window()):
         add_button(label="Character info", enabled=False, width=w_max, height = size.h_header_1)
         with group(horizontal=True):
@@ -157,21 +159,21 @@ def init_window_core():
             add_button(label="", width=25, tag=tag.core.val("level"))
             add_button(label=">", user_data=["Level Input", 1], callback=q.cbh)
             add_button(label="", enabled=False, width=55, tag=tag.core.val("pb"))
-            with group(horizontal=True):
-                add_button(label="Race", enabled=False, width=80)
-                add_combo(width=w_max-88, no_arrow_button=True, user_data=[f"Core Race"], callback = q.cbh, tag=tag.core.select("race"))
-            with group(horizontal=True):
-                add_button(label="Subrace", enabled=False, width=80)
-                add_combo(width=w_max-88, no_arrow_button=True, user_data=[f"Core Subrace"], callback = q.cbh, tag=tag.core.select("subrace"))
-            with group(horizontal=True):
-                add_button(label="Class", enabled=False, width=80)
-                add_combo(width=w_max-88, no_arrow_button=True, user_data=[f"Core Class"], callback = q.cbh, tag=tag.core.select("class"))        
-            with group(horizontal=True):
-                add_button(label="Subclass", enabled=False, width=80)
-                add_combo(width=w_max-88, no_arrow_button=True, user_data=[f"Core Subclass"], callback = q.cbh, tag=tag.core.select("subclass"))        
-            with group(horizontal=True):
-                add_button(label="Background", enabled=False, width=80)
-                add_combo(width=w_max-88, no_arrow_button=True, user_data=[f"Core Background"], callback = q.cbh, tag=tag.core.select("background"))
+        with group(horizontal=True):
+            add_button(label="Race", enabled=False, width=w_abtn)
+            add_combo(width=w_combo, no_arrow_button=True, user_data=[f"Core Race"], callback = q.cbh, tag=tag.core.select("race"))
+        with group(horizontal=True):
+            add_button(label="Subrace", enabled=False, width=w_abtn)
+            add_combo(width=w_combo, no_arrow_button=True, user_data=[f"Core Subrace"], callback = q.cbh, tag=tag.core.select("subrace"))
+        with group(horizontal=True):
+            add_button(label="Class", enabled=False, width=w_abtn)
+            add_combo(width=w_combo, no_arrow_button=True, user_data=[f"Core Class"], callback = q.cbh, tag=tag.core.select("class"))        
+        with group(horizontal=True):
+            add_button(label="Subclass", enabled=False, width=w_abtn)
+            add_combo(width=w_combo, no_arrow_button=True, user_data=[f"Core Subclass"], callback = q.cbh, tag=tag.core.select("subclass"))        
+        with group(horizontal=True):
+            add_button(label="Background", enabled=False, width=w_abtn)
+            add_combo(width=w_combo, no_arrow_button=True, user_data=[f"Core Background"], callback = q.cbh, tag=tag.core.select("background"))
 
 
                 
@@ -264,7 +266,7 @@ def init_window_speed():
 
 def init_window_conditions():
     with group(parent=tag.cond.window()):
-        add_button(label="Conditions", enabled=False, width=size.w_header_2, height=26, tag=tag.cond.label())
+        add_button(label="Conditions", enabled=False, width=size.w_header_2-72, height=26, tag=tag.cond.label())
     with popup(tag.cond.label(), mousebutton=mvMouseButton_Left):
         with child_window(auto_resize_x=True, auto_resize_y=True, border=True):
             for i in get.list_Condition:
@@ -277,8 +279,8 @@ def init_window_conditions():
 
 def init_window_rest():
     with group(parent=tag.rest.window()):
-        add_button(label="Short Rest", width=size.w_header_2, height=30, user_data=["Short Rest"], callback=q.cbh, tag=tag.rest.button("short"))
-        add_button(label="Long Rest", width=size.w_header_2, height=30, user_data=["Long Rest"], callback=q.cbh, tag=tag.rest.button("long"))
+        add_button(label="Short Rest", width=size.w_header_2-72, height=30, user_data=["Short Rest"], callback=q.cbh, tag=tag.rest.button("short"))
+        add_button(label="Long Rest", width=size.w_header_2-72, height=30, user_data=["Long Rest"], callback=q.cbh, tag=tag.rest.button("long"))
 
 
 def init_window_buffer():
@@ -378,8 +380,8 @@ def init_window_inventory():
     h=size.h_inventory
     with group(parent=tag.inve.window()):
         with tab_bar():
-            with tab(label="Equip"):
-                add_child_window(height=h-28, border=True, no_scrollbar=True, tag=tag.equip.window())
+            with tab(label="Closet"):
+                add_child_window(height=h-28, border=True, no_scrollbar=True, tag=tag.closet.window())
             with tab(label="Backpack"):
                 add_child_window(height=h-80, border=True, no_scrollbar=True, tag=tag.backpack.window())
                 add_child_window(height=h-294, border=True, tag=tag.backpack.window("totals"))
@@ -409,67 +411,67 @@ def init_window_inventory_bazaar():
                             with tab(label=rank):
                                 add_child_window(height=size.h_inventory - 85, border=True, no_scrollbar=True, tag=tag.bazaar.window(equipment_type, rank))
 def load_icons():
-    figure_w, figure_h, figure_channel, figure_data = load_image("DT_DND/image/Figure_Icon.png")
-    armor_w, armor_h, armor_channel, armor_data = load_image("DT_DND/image/Armor_Icon.png")
-    arms_w, arms_h, arms_channel, arms_data = load_image("DT_DND/image/Arms_Icon.png")
-    body_w, body_h, body_channel, body_data = load_image("DT_DND/image/Body_Icon.png")
-    face_w, face_h, face_channel, face_data = load_image("DT_DND/image/Face_Icon.png")
-    hands_w, hands_h, hands_channel, hands_data = load_image("DT_DND/image/Hands_Icon.png")
-    head_w, head_h, head_channel, head_data = load_image("DT_DND/image/Head_Icon.png")
-    mainhand_w, mainhand_h, mainhand_channel, mainhand_data = load_image("DT_DND/image/MainHand_Icon.png")
-    offhand_w, offhand_h, offhand_channel, offhand_data = load_image("DT_DND/image/OffHand_Icon.png")
-    ring1_w, ring1_h, ring1_channel, ring1_data = load_image("DT_DND/image/Ring_Icon.png")
-    ring2_w, ring2_h, ring2_channel, ring2_data = load_image("DT_DND/image/Ring_Icon.png")
-    shoulders_w, shoulders_h, shoulders_channel, shoulders_data = load_image("DT_DND/image/Shoulders_Icon.png")
-    throat_w, throat_h, throat_channel, throat_data = load_image("DT_DND/image/Throat_Icon.png")
-    waist_w, waist_h, waist_channel, waist_data = load_image("DT_DND/image/Waist_Icon.png")
-    feet_w, feet_h, feet_channel, feet_data = load_image("DT_DND/image/Feet_Icon.png")
+    figure_w, figure_h, figure_channel, figure_data = load_image(get_path("Image", "Figure_Icon.png"))
+    armor_w, armor_h, armor_channel, armor_data = load_image(get_path("Image", "Armor_Icon.png"))
+    arms_w, arms_h, arms_channel, arms_data = load_image(get_path("Image", "Arms_Icon.png"))
+    body_w, body_h, body_channel, body_data = load_image(get_path("Image", "Body_Icon.png"))
+    face_w, face_h, face_channel, face_data = load_image(get_path("Image", "Face_Icon.png"))
+    hands_w, hands_h, hands_channel, hands_data = load_image(get_path("Image", "Hands_Icon.png"))
+    head_w, head_h, head_channel, head_data = load_image(get_path("Image", "Head_Icon.png"))
+    hand1_w, hand1_h, hand1_channel, hand1_data = load_image(get_path("Image", "Hand1_Icon.png"))
+    hand2_w, hand2_h, hand2_channel, hand2_data = load_image(get_path("Image", "Hand2_Icon.png"))
+    ring1_w, ring1_h, ring1_channel, ring1_data = load_image(get_path("Image", "Ring_Icon.png"))
+    ring2_w, ring2_h, ring2_channel, ring2_data = load_image(get_path("Image", "Ring_Icon.png"))
+    shoulders_w, shoulders_h, shoulders_channel, shoulders_data = load_image(get_path("Image", "Shoulders_Icon.png"))
+    throat_w, throat_h, throat_channel, throat_data = load_image(get_path("Image", "Throat_Icon.png"))
+    waist_w, waist_h, waist_channel, waist_data = load_image(get_path("Image", "Waist_Icon.png"))
+    feet_w, feet_h, feet_channel, feet_data = load_image(get_path("Image", "Feet_Icon.png"))
 
     with texture_registry(show=False):
-        add_static_texture(width=figure_w, height=figure_h, default_value=figure_data, tag=tag.icon("Figure"))
-        add_static_texture(width=armor_w, height=armor_h, default_value=armor_data, tag=tag.icon("Armor"))
-        add_static_texture(width=arms_w, height=arms_h, default_value=arms_data, tag=tag.icon("Arms"))
-        add_static_texture(width=body_w, height=body_h, default_value=body_data, tag=tag.icon("Body"))
-        add_static_texture(width=face_w, height=face_h, default_value=face_data, tag=tag.icon("Face"))
-        add_static_texture(width=hands_w, height=hands_h, default_value=hands_data, tag=tag.icon("Hands"))
-        add_static_texture(width=head_w, height=head_h, default_value=head_data, tag=tag.icon("Head"))
-        add_static_texture(width=mainhand_w, height=mainhand_h, default_value=mainhand_data, tag=tag.icon("Hand_1"))
-        add_static_texture(width=offhand_w, height=offhand_h, default_value=offhand_data, tag=tag.icon("Hand_2"))
-        add_static_texture(width=ring1_w, height=ring1_h, default_value=ring1_data, tag=tag.icon("Ring_1"))
-        add_static_texture(width=ring2_w, height=ring2_h, default_value=ring2_data, tag=tag.icon("Ring_2"))
-        add_static_texture(width=shoulders_w, height=shoulders_h, default_value=shoulders_data, tag=tag.icon("Shoulders"))
-        add_static_texture(width=throat_w, height=throat_h, default_value=throat_data, tag=tag.icon("Throat"))
-        add_static_texture(width=waist_w, height=waist_h, default_value=waist_data, tag=tag.icon("Waist"))
-        add_static_texture(width=feet_w, height=feet_h, default_value=feet_data, tag=tag.icon("Feet"))
+        add_static_texture(width=figure_w, height=figure_h, default_value=figure_data, tag=tag.closet.icon("Figure"))
+        add_static_texture(width=armor_w, height=armor_h, default_value=armor_data, tag=tag.closet.icon("Armor"))
+        add_static_texture(width=arms_w, height=arms_h, default_value=arms_data, tag=tag.closet.icon("Arms"))
+        add_static_texture(width=body_w, height=body_h, default_value=body_data, tag=tag.closet.icon("Body"))
+        add_static_texture(width=face_w, height=face_h, default_value=face_data, tag=tag.closet.icon("Face"))
+        add_static_texture(width=hands_w, height=hands_h, default_value=hands_data, tag=tag.closet.icon("Hands"))
+        add_static_texture(width=head_w, height=head_h, default_value=head_data, tag=tag.closet.icon("Head"))
+        add_static_texture(width=hand1_w, height=hand1_h, default_value=hand1_data, tag=tag.closet.icon("Hand_1"))
+        add_static_texture(width=hand2_w, height=hand2_h, default_value=hand2_data, tag=tag.closet.icon("Hand_2"))
+        add_static_texture(width=ring1_w, height=ring1_h, default_value=ring1_data, tag=tag.closet.icon("Ring_1"))
+        add_static_texture(width=ring2_w, height=ring2_h, default_value=ring2_data, tag=tag.closet.icon("Ring_2"))
+        add_static_texture(width=shoulders_w, height=shoulders_h, default_value=shoulders_data, tag=tag.closet.icon("Shoulders"))
+        add_static_texture(width=throat_w, height=throat_h, default_value=throat_data, tag=tag.closet.icon("Throat"))
+        add_static_texture(width=waist_w, height=waist_h, default_value=waist_data, tag=tag.closet.icon("Waist"))
+        add_static_texture(width=feet_w, height=feet_h, default_value=feet_data, tag=tag.closet.icon("Feet"))
         
-def init_window_inventory_equip():
+def init_window_inventory_closet():
     wbtn = 98
     # Separate left and right equipment slots
     left_slots = ["Face", "Throat", "Body", "Hands", "Waist", "Feet", "Hand_1"]
     right_slots = ["Head", "Shoulders", "Armor", "Arms", "Ring_1", "Ring_2", "Hand_2"]
-    with group(parent=tag.equip.window()):
+    with group(parent=tag.closet.window()):
         with group(horizontal=False):
             with group(horizontal=True):
                 # Left side
                 with group(horizontal=False):
                     for slot in left_slots:
                         with group(horizontal=True):
-                            add_image_button(tag.icon(slot), callback=q.cbh, user_data=["Clear Equip", slot, "Clear"], tag=tag.img(slot))
+                            add_image_button(tag.closet.icon(slot), callback=q.cbh, user_data=["Closet Clear", slot, "Clear"], tag=tag.closet.img(slot))
                             with child_window(auto_resize_x=True, auto_resize_y=True, border=True, no_scrollbar=True):
-                                add_combo(width=wbtn, no_arrow_button=True, user_data=["Equip Equip", slot], callback=q.cbh, tag=tag.equip.select(slot))
+                                add_combo(width=wbtn, no_arrow_button=True, user_data=["Closet Equip", slot], callback=q.cbh, tag=tag.closet.select(slot))
                 # Center
-                add_image(tag.icon("Figure"))
+                add_image(tag.closet.icon("Figure"))
                 # Right side
                 with group(horizontal=False):
                     for slot in right_slots:
                         with group(horizontal=True):
                             with child_window(auto_resize_x=True, auto_resize_y=True, border=True, no_scrollbar=True):
-                                add_combo(width=wbtn, no_arrow_button=True, user_data=["Equip Equip", slot], callback=q.cbh, tag=tag.equip.select(slot))
-                            add_image_button(tag.icon(slot), callback=q.cbh, user_data=["Clear Equip", slot, "Clear"], tag=tag.img(slot))
+                                add_combo(width=wbtn, no_arrow_button=True, user_data=["Closet Equip", slot], callback=q.cbh, tag=tag.closet.select(slot))
+                            add_image_button(tag.closet.icon(slot), callback=q.cbh, user_data=["Closet Clear", slot, "Clear"], tag=tag.closet.img(slot))
 
 def init_ui():
     load_icons()
-    init_window_Skeleton()
+    init_window_skeleton()
     init_window_core()
     init_window_health()
     init_window_proficienices()
@@ -486,6 +488,7 @@ def init_ui():
     init_window_block()
     init_window_block_actions_weapons()
     init_window_inventory()
+    init_window_inventory_backpack()
     init_window_inventory_bazaar()
-    init_window_inventory_equip()
+    init_window_inventory_closet()
     init_window_wallet()

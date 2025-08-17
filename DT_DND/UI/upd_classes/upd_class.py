@@ -23,7 +23,7 @@ class upd_class:
             method_name = f"{Class}_{Subclass}"
             getattr(self, method_name)()
             
-    def sub():
+    def sub(self):
         item_clear(tag.cfeature.sub())
         with group(parent=tag.cfeature.sub()):
             with group(horizontal=True):

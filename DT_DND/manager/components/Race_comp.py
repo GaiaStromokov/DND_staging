@@ -38,11 +38,12 @@ class bRace():
         self.HP = 0
         self.SavingThrow = []
         if g.Race(): self.cRace = globals()[g.Race()](self)
-        if g.Subrace(): self.cSubrace = globals()[f"{g.Race()}_{g.Subrace()}"](self)
-    
+            
+        if g.Subrace() and g.Subrace() != "Empty":  self.cSubrace = globals()[f"{g.Race()}_{g.Subrace()}"](self)
+            
     def Upd(self):
         self.cRace.Upd()
-        if g.Subrace(): self.cSubrace.Upd()
+        if g.Subrace() and g.Subrace() != "Empty": self.cSubrace.Upd()
 
     def __repr__(self):
         def serialize(obj):

@@ -2,11 +2,11 @@
     "Core": {
         "L": 1,
         "PB": 2,
-        "R": "Gnome",
-        "SR": "Forest",
-        "C": "Fighter",
+        "R": "Human",
+        "SR": "Empty",
+        "C": "Empty",
         "SC": "",
-        "BG": "Charlatan"
+        "BG": "Empty"
     },
     "Atr": {
         "STR": {
@@ -340,7 +340,7 @@
             "Mod": 0
         },
         "Deception": {
-            "Mod": 2
+            "Mod": 0
         },
         "History": {
             "Mod": 0
@@ -374,7 +374,7 @@
             "Mod": 0
         },
         "Sleight of Hand": {
-            "Mod": 2
+            "Mod": 0
         },
         "Stealth": {
             "Mod": 0
@@ -402,7 +402,7 @@
         "Weight": ""
     },
     "Inventory": {
-        "Equip": {
+        "Closet": {
             "Face": "",
             "Throat": "",
             "Body": "",
@@ -410,7 +410,7 @@
             "Waist": "",
             "Feet": "",
             "Armor": "",
-            "Hand_1": "LongswordPPP2",
+            "Hand_1": "Dagger",
             "Hand_2": "LongswordPPP2",
             "Ring_1": "",
             "Ring_2": ""
@@ -438,9 +438,17 @@
             ],
             "Club": [
                 "Weapon",
-                2
+                3
             ],
             "Dagger": [
+                "Weapon",
+                1
+            ],
+            "Morningstar": [
+                "Weapon",
+                1
+            ],
+            "Lance": [
                 "Weapon",
                 1
             ]

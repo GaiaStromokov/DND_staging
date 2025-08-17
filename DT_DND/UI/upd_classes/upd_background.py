@@ -35,11 +35,11 @@ class upd_background:
                 for key in data:
                     for idx, val in enumerate(data[key]["Select"]):
                         tag_combo = tag.bfeature.select(key,idx)
-                        add_combo(items=["Clear"] + get.dict_Background_Skills[q.g.Background()], default_value=val, width=100, no_arrow_button=True, user_data=["Background Prof Select", key, idx], callback=q.cbh, tag=tag_combo)
+                        add_combo(items=["Clear"] + get.dict_Background_Skills[get.Background()], default_value=val, width=100, no_arrow_button=True, user_data=["Background Prof Select", key, idx], callback=q.cbh, tag=tag_combo)
 
 
     def main(self):
-        data = self.feature_map[q.g.Background()]
+        data = self.feature_map[get.Background()]
         name = data[0]
         desc = data[1]
         

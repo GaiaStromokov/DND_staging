@@ -10,8 +10,8 @@ class upd_race:
         self.main()
         
     def sub(self):
-        configure_item(tag.rfeature.toggle("asi_0"), default_value = q.db.Race.Rasi[0])
-        configure_item(tag.rfeature.toggle("asi_1"), default_value = q.db.Race.Rasi[1])
+        configure_item(tag.rfeature.select("asi_0"), default_value = q.db.Race.Rasi[0])
+        configure_item(tag.rfeature.select("asi_1"), default_value = q.db.Race.Rasi[1])
     
     def main(self):
         item_clear(self.parent)
@@ -30,7 +30,7 @@ class upd_race:
 
 
     def standard(self, name, descriptions):
-        a, t = gen_abil(name, 1)
+        a, t = gen_abil(name)
         t_header = tag.rfeature.header(t)
         desc_tags = [tag.rfeature.text(t, f"{i+1}") for i, _ in enumerate(descriptions)]
 
@@ -40,7 +40,7 @@ class upd_race:
                 add_text(desc, color=c_text, wrap=size.gwrap, tag=desc_tags[i])
 
     def standard_choice(self, name, items_list):
-        a, t = gen_abil(name, 1)
+        a, t = gen_abil(name)
         selection = q.db.Race.Abil[a]["Select"][0]
         t_header = tag.rfeature.header(t)
         t_label = tag.rfeature.label(t)
@@ -62,7 +62,7 @@ class upd_race:
                 add_combo(items=items_list, default_value=selection, width=120, no_arrow_button=True, user_data=["Race Spell Select", a], callback=q.cbh, tag=t_select)
 
     def standard_spell_list(self, name):
-        a, t = gen_abil(name, 1)
+        a, t = gen_abil(name)
         cdata = q.db.Race.Abil[a]
         t_header = tag.rfeature.header(t)
 
@@ -104,7 +104,7 @@ class upd_race:
         self.standard_toggle("Breath Weapon", Breath_Weapon_descriptions)
 
     def standard_toggle(self, name, descriptions):
-        a, t = gen_abil(name, 1)
+        a, t = gen_abil(name)
         t_header = tag.rfeature.header(t)
         desc_tags = [tag.rfeature.text(t, f"{i+1}") for i, _ in enumerate(descriptions)]
         use_data = q.db.Race.Abil[a]["Use"]
@@ -192,8 +192,8 @@ class upd_race:
         Speak_with_Small_Beasts_descriptions = ["Through sounds and gestures, you can communicate simple ideas with Small or smaller beasts."]
         self.standard("Speak with Small Beasts", Speak_with_Small_Beasts_descriptions)
 
-        a, t = gen_abil("Natural Illusionist", 1)
-        cdata = q.db.Race.Abil[a]
+        a, t = gen_abil("Natural Illusionist")
+        cdata = q.db.Race.Abil[t]
 
         with group(parent=self.parent):
             add_text(a, color=c_h1, wrap=size.gwrap)

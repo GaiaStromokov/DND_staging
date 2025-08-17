@@ -83,8 +83,9 @@ class upd_sheet:
     def character(self):
         cdata=q.db.Characteristic
         for i in get.list_Ideals:
-            configure_item(tag.char.input(i), default_value=cdata[i])
-            configure_item(tag.char.text(i), default_value=cdata[i])
+            name = i.lower()
+            configure_item(tag.char.input(name), default_value=cdata[i])
+            configure_item(tag.char.text(name), default_value=cdata[i])
         
         cdata=q.db.Description
         for i in get.list_Description:

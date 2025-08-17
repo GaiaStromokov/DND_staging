@@ -71,7 +71,7 @@ class upd_bazaar:
         for equipment_type, categories in self.dict_struct.items():
             for rank in range(5):
                 rarity = get.item_rarity(rank)
-                parent_container = tag.bazaar.container(equipment_type, rarity)
+                parent_container = tag.bazaar.window(equipment_type, rarity)
 
                 if not does_item_exist(parent_container):
                     continue

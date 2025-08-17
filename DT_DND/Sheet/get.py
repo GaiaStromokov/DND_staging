@@ -102,14 +102,14 @@ def skill_text( skill):
 
 
 def same_weapon():
-    cdata = q.db.Inventory.Equip
+    cdata = q.db.Inventory.Closet
     main_hand = cdata["Hand_1"]
     off_hand = cdata["Hand_2"]
     if main_hand == off_hand: return True
     else: return False
     
 def weapon_versatile():
-    cdata = q.db.Inventory.Equip
+    cdata = q.db.Inventory.Closet
     clist = q.w.prop("Versatile")
     main_hand = cdata["Hand_1"]
     off_hand = cdata["Hand_2"]

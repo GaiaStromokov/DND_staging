@@ -60,7 +60,12 @@ class tag:
         def cell(cls, *items): return cls.build(items if items else None, "cell")
         @classmethod
         def row(cls, *items): return cls.build(items if items else None, "row")
-        
+        @classmethod
+        def icon(cls, *items): return cls.build(items if items else None, "icon")
+        @classmethod
+        def img(cls, *items): return cls.build(items if items else None, "img")
+
+    
         @classmethod
         def wlevel(cls, level): 
             if cls.prefix is None: raise NotImplementedError("Subclasses must define prefix")
@@ -99,15 +104,7 @@ class tag:
         item = item.lower()
         return f"{item}_equip"
 
-    @staticmethod
-    def icon(item):
-        item = item.lower()
-        return f"{item}_icon"
 
-    @staticmethod
-    def img(item):
-        item = item.lower()
-        return f"{item}_img"
     class core(Base):      prefix = "core"
     class health(Base):    prefix = "health"
     class prof(Base):      prefix = "proficiencies"
@@ -136,7 +133,7 @@ class tag:
     class slearn(Base):    prefix = "block_spells_learn"
     class sprepare(Base):  prefix = "block_spells_prepare"
     
-    class equip(Base):  prefix = "inventory_equip"
+    class closet(Base):    prefix = "inventory_closet"
     class backpack(Base):  prefix = "inventory_backpack"
-    class bazaar(Base):  prefix = "inventory_bazaar"
+    class bazaar(Base):    prefix = "inventory_bazaar"
 

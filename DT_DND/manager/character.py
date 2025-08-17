@@ -202,7 +202,7 @@ class Character():
         base_ac = 10
         dex = dex_mod
 
-        armor = q.db.Inventory.Equip["Armor"]
+        armor = q.db.Inventory.Closet["Armor"]
         if armor:
             item = q.w.Item(armor)
             prof = item.Name in self.Prof["Armor"]

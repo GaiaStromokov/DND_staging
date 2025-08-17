@@ -286,27 +286,27 @@ def mod_item_backpack(sender, data, user_data):
     return backpack[item][1]
 
 
-def Equip_Equip(sender, data, user_data):
+def Closet_Equip(sender, data, user_data):
     cat = user_data[0]
-    equips = q.db.Inventory.Equip
+    closet = q.db.Inventory.Closet
     backpack = q.db.Inventory.Backpack
     two_handed_weapons = q.w.prop("Two-handed")
 
     if data == "Clear":
-        equips[cat] = ""
+        closet[cat] = ""
         return
 
     if data in q.w.slot("Weapon"):
-        Equip_1 = equips.get("Hand_1")
-        Equip_2 = equips.get("Hand_2")
+        Equip_1 = closet.get("Hand_1")
+        Equip_2 = closet.get("Hand_2")
 
         def is_versatile(item):
             return item in q.w.prop("Versatile")
 
         if cat == "Hand_1":
             if data in two_handed_weapons:
-                equips[cat] = data
-                equips["Hand_2"] = ""
+                closet[cat] = data
+                closet["Hand_2"] = ""
                 return
             if data == Equip_2 and not is_versatile(data):
                 owned = backpack[data][1]
@@ -320,7 +320,7 @@ def Equip_Equip(sender, data, user_data):
                 if owned <= 1:
                     return
 
-        equips[cat] = data
+        closet[cat] = data
         return
 
-    equips[cat] = data
+    closet[cat] = data

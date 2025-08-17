@@ -103,7 +103,7 @@ class backend_populate:
         self.Bazaar()
         self.Backpack()
         self.Equip()
-         
+        
     def Bazaar(self): 
         self.BAZAAR.whole()
 
@@ -338,14 +338,14 @@ class backend_stage:
         else:
             self.populate_fields("Mod Backpack")
 
-    def Equip_Equip(self, sender, data, user_data):
+    def Closet_Equip(self, sender, data, user_data):
         cat = user_data[0]
         if len(user_data) > 1:
             if user_data[1] == "Clear":
                 package = "Clear"
         else:
             package = data.replace(' + ', 'PPP').replace(' ', '_')
-        sett.Equip_Equip("stage_Equip_Equip", package, user_data)
+        sett.Closet_Equip("stage_Equip_Equip", package, user_data)
         if cat == "Weapon":
             pass
         if cat == "Armor":
@@ -390,8 +390,8 @@ class backend_input:
             "Description":              self.Stage.Description_Input,
             "Bazaar Add Item":          self.Stage.Bazaar_Add_Item,
             "Backpack Mod Item":        self.Stage.Backpack_Mod_Item,
-            "Equip Equip":              self.Stage.Equip_Equip,
-            "Clear Equip":              self.Stage.Equip_Equip
+            "Closet Equip":              self.Stage.Closet_Equip,
+            "Closet Clear":              self.Stage.Closet_Equip
         }
 
     def callback(self, sender, data, user_data):
