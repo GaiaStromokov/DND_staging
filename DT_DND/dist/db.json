@@ -1,10 +1,10 @@
 {
     "Core": {
-        "L": 1,
+        "L": 4,
         "PB": 2,
-        "R": "Human",
-        "SR": "Empty",
-        "C": "Empty",
+        "R": "Dwarf",
+        "SR": "Hill",
+        "C": "Fighter",
         "SC": "",
         "BG": "Empty"
     },
@@ -66,16 +66,17 @@
     },
     "HP": {
         "Temp": 0,
-        "Player": 20,
+        "Player": 30,
         "Race": 0,
         "Class": 0,
         "Feat": 0,
-        "Sum": 20,
-        "Current": 20
+        "Sum": 34,
+        "Current": 34
     },
     "AC": {
         "Base": 10,
         "Dex": 0,
+        "Shield": 0,
         "Sum": 10
     },
     "HD": {
@@ -159,6 +160,11 @@
                 ]
             },
             "Second Wind": {
+                "Use": [
+                    false
+                ]
+            },
+            "Action Surge": {
                 "Use": [
                     false
                 ]
@@ -410,35 +416,15 @@
             "Waist": "",
             "Feet": "",
             "Armor": "",
-            "Hand_1": "Dagger",
-            "Hand_2": "LongswordPPP2",
+            "Hand_1": "Longsword",
+            "Hand_2": "Longsword",
             "Ring_1": "",
             "Ring_2": ""
         },
         "Backpack": {
-            "Chain_Shirt": [
-                "Armor",
-                2
-            ],
-            "Splint": [
-                "Armor",
-                1
-            ],
-            "GreatswordPPP2": [
-                "Weapon",
-                2
-            ],
-            "LongswordPPP2": [
-                "Weapon",
-                1
-            ],
             "Spear": [
                 "Weapon",
                 1
-            ],
-            "Club": [
-                "Weapon",
-                3
             ],
             "Dagger": [
                 "Weapon",
@@ -449,6 +435,26 @@
                 1
             ],
             "Lance": [
+                "Weapon",
+                1
+            ],
+            "Shield": [
+                "Armor",
+                1
+            ],
+            "Battle_axePPP3": [
+                "Weapon",
+                1
+            ],
+            "HalberdPPP3": [
+                "Weapon",
+                1
+            ],
+            "BreastplatePPP3": [
+                "Armor",
+                1
+            ],
+            "Longsword": [
                 "Weapon",
                 1
             ]

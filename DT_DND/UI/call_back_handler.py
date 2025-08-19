@@ -13,7 +13,7 @@ class backend_populate:
         self.BACKPACK = upd_backpack()
         self.BAZAAR = upd_bazaar()
         self.CLASS = upd_class()
-        self.EQUIP = upd_equip()
+        self.CLOSET = upd_closet()
         self.MILESTONE = upd_milestone()
         self.RACE = upd_race()
         self.SHEET = upd_sheet()
@@ -89,7 +89,7 @@ class backend_populate:
         self.SHEET.character()
     def Static(self):
         self.Generic()
-        self.Equip()
+
 
 
     def HP(self): 
@@ -102,7 +102,7 @@ class backend_populate:
     def Inventory(self): 
         self.Bazaar()
         self.Backpack()
-        self.Equip()
+        self.Closet()
         
     def Bazaar(self): 
         self.BAZAAR.whole()
@@ -113,9 +113,10 @@ class backend_populate:
     def Backpack_mod(self): 
         self.BACKPACK.populate_backpack()
 
-    def Equip(self): 
+    def Closet(self): 
         self.ACTION.whole()
-        self.EQUIP.whole()
+        self.CLOSET.whole()
+        self.Armor()
 
     def Armor(self): 
         self.SHEET.armor_class()
@@ -143,7 +144,7 @@ class backend_stage:
             "Bazaar Add Item":          self.Populate.Inventory,
             "Reset Backpack":           self.Populate.Inventory,
             "Mod Backpack":             self.Populate.Backpack_mod,
-            "Mod Equip":                self.Populate.Equip,
+            "Refresh Closet":           self.Populate.Closet,
             "Mod Armor":                self.Populate.Armor
         }
 
@@ -339,19 +340,22 @@ class backend_stage:
             self.populate_fields("Mod Backpack")
 
     def Closet_Equip(self, sender, data, user_data):
+        
         cat = user_data[0]
-        if len(user_data) > 1:
-            if user_data[1] == "Clear":
-                package = "Clear"
+        if len(user_data) > 1 and user_data[1] == "Clear":
+            package = "Clear"
         else:
             package = data.replace(' + ', 'PPP').replace(' ', '_')
-        sett.Closet_Equip("stage_Equip_Equip", package, user_data)
-        if cat == "Weapon":
-            pass
-        if cat == "Armor":
-            q.pc.sum_AC()
-            self.populate_fields("Mod Armor")
-        self.populate_fields("Mod Equip")
+
+        # Delegate equip logic to system
+        sett.closet_equip("stage_Closet_Equip", package, user_data)
+
+
+        q.pc.sum_AC()
+        self.populate_fields("Mod Armor")
+
+        self.populate_fields("Refresh Closet")
+
 
 class backend_input:
     def __init__(self, stage):
@@ -390,8 +394,8 @@ class backend_input:
             "Description":              self.Stage.Description_Input,
             "Bazaar Add Item":          self.Stage.Bazaar_Add_Item,
             "Backpack Mod Item":        self.Stage.Backpack_Mod_Item,
-            "Closet Equip":              self.Stage.Closet_Equip,
-            "Closet Clear":              self.Stage.Closet_Equip
+            "Closet Equip":             self.Stage.Closet_Equip,
+            "Closet Clear":             self.Stage.Closet_Equip
         }
 
     def callback(self, sender, data, user_data):

@@ -6,9 +6,8 @@ class upd_bazaar:
     def __init__(self):
         self.dict_struct = {
             "Weapon": [("Simple", "Melee"), ("Simple", "Ranged"), ("Martial", "Melee"), ("Martial", "Ranged")],
-            "Armor": ["Light", "Medium", "Heavy"]
+            "Armor": ["Light", "Medium", "Heavy", "Shield"]
         }
-        
         
     def create_bazaar_button(self, item, category_type, parent):
         button_tag = tag.bazaar.button(item)
@@ -23,9 +22,10 @@ class upd_bazaar:
         for category_info in categories:
             if is_weapon_type:
                 tag1, tag2 = category_info
-                items = q.w.mcategory(rank, tag1, tag2)
+                items = q.w.search(Tier=rank, Slot="Weapon", Cat=[tag1, tag2])
             else:
-                items = q.w.mcategory(rank, category_info)
+                slot = "Shield" if category_info == "Shield" else "Armor"
+                items = q.w.search(Tier=rank, Slot=slot, Cat=category_info)
             target_set.update(items)
         return target_set
 
@@ -39,7 +39,6 @@ class upd_bazaar:
                     for button_id in row_children:
                         button_alias = get_item_alias(button_id)
                         if button_alias and "bazaar" in button_alias and "add" in button_alias:
-                            # Extract item from tag system instead of string parsing
                             current_items.add(button_id)
         return current_items
 
@@ -52,11 +51,12 @@ class upd_bazaar:
                 if is_weapon_type:
                     tag1, tag2 = category_info
                     label = f"{tag1} {tag2}"
-                    items = q.w.mcategory(rank, tag1, tag2)
+                    items = q.w.search(Tier=rank, Slot="Weapon", Cat=[tag1, tag2])
                     items.sort()
                 else:
-                    label = tag1 = category_info
-                    items = q.w.mcategory(rank, tag1)
+                    label = category_info
+                    slot = "Shield" if category_info == "Shield" else "Armor"
+                    items = q.w.search(Tier=rank, Slot=slot, Cat=category_info)
                     items.sort()
                 
                 add_separator(label=label if rank == 0 else f"{label} (+{rank})")

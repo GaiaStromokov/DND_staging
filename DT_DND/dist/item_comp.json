@@ -2544,11 +2544,9 @@
         "Base": "Plate"
     },
     "Shield": {
-        "Slot": "Hand",
+        "Slot": "Shield",
         "Cat": ["Shield"],
         "Prop": [],
-        "Damage": 0,
-        "Type": "",
         "AC": 2,
         "Weight": 6,
         "Cost": 10,
@@ -2557,11 +2555,9 @@
         "Base": "Shield"
     },
     "ShieldPPP1": {
-        "Slot": "Hand",
+        "Slot": "Shield",
         "Cat": ["Shield"],
         "Prop": [],
-        "Damage": 0,
-        "Type": "",
         "AC": 2,
         "Weight": 6,
         "Cost": 10,
@@ -2570,11 +2566,9 @@
         "Base": "Shield"
     },
     "ShieldPPP2": {
-        "Slot": "Hand",
+        "Slot": "Shield",
         "Cat": ["Shield"],
         "Prop": [],
-        "Damage": 0,
-        "Type": "",
         "AC": 2,
         "Weight": 6,
         "Cost": 10,
@@ -2583,11 +2577,9 @@
         "Base": "Shield"
     },
     "ShieldPPP3": {
-        "Slot": "Hand",
+        "Slot": "Shield",
         "Cat": ["Shield"],
         "Prop": [],
-        "Damage": 0,
-        "Type": "",
         "AC": 2,
         "Weight": 6,
         "Cost": 10,

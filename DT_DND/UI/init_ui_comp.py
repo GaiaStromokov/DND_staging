@@ -1,31 +1,91 @@
 from ui.upd_helper_import import *
 from path_helper import get_path
 
+class cPanel:
+    def __init__(self, parent_tag, **kwargs):
+        self.parent = parent_tag
+        self.config = kwargs
+    def build(self): raise NotImplementedError
+    def _panel_header(self, label: str):
+        add_button(label=label, enabled=False, width=size.h_header_1)
 
-def create_attribute_row(stat: str):
-    label_width=40
-    value_width=30
-
-    tSum = tag.atr.sum(stat)
-    tMod = tag.atr.mod(stat)
-    tCombo = tag.atr.select(stat)
-
-    with group(horizontal=True):
-        add_button(label=stat, enabled=False, width=label_width)
-        add_button(label="", enabled=False, width=value_width, tag=tSum)
-        add_button(label="", enabled=False, width=value_width, tag=tMod)
-
-    with popup(tSum, mousebutton=mvMouseButton_Left):
-        with group(horizontal=True):
-            add_button(label="Base", enabled=False, width=label_width)
-            add_combo(items=get.list_Base_Atr, default_value="", width=value_width, no_arrow_button=True, user_data=["Base Atr", stat], callback=q.cbh, tag=tCombo)
-
-    with tooltip(tSum):
-        for source in ["Base", "Race", "Feat"]:
+class Core_Info_Panel(cPanel):    
+    def build(self):
+        with group(parent=self.parent):
+            self._panel_header("Character Info")
             with group(horizontal=True):
-                add_button(label=source, enabled=False, width=label_width)
-                tSource = tag.atr.source(stat, source.lower())
-                add_button(label="", enabled=False, width=25, tag=tSource)
+                t_Level = tag.Core_Info.Value('Level')
+                t_PB = tag.Core_Info.Value('PB')
+                
+                add_button(label="Level", enabled=False, width=50)
+                add_button(label="<", callback=q.cbh)
+                add_button(label="", width=25, tag=t_Level)
+                add_button(label=">", callback=q.cbh)
+                add_button(label="", enabled=False, width=55, tag=t_PB)
+            self._create_combo("Race")
+            self._create_combo("Subrace")
+            self._create_combo("Class")
+            self._create_combo("Subclass")
+            self._create_combo("Background")
+    def _create_combo(self, name: str):
+        with group(horizontal=True):
+            t_Combo = tag.Core_Info.Select(name)
+            add_button(label=name, enabled=False, width=80)
+            add_combo(width=size.w_core-104, no_arrow_button=True, callback=q.cbh, tag=t_Combo)
+
+
+class AttributesPanel(cPanel):
+    def build(self):
+        with group(parent=self.parent):
+            self._create_panel_header("Attributes")
+            for stat in get.List_Atr:
+                self._create_attribute_row(stat)
+    def _create_attribute_row(self, stat: str):
+        w_label=40
+        w_value=30
+        t_Sum = tag.Attributes.Sum(stat)
+        t_Mod = tag.Attributes.Mod(stat)
+        t_Select = tag.Attributes.Select(stat)
+        with group(horizontal=True):
+            add_button(label=stat, enabled=False, width=w_label)
+            add_button(label="", enabled=False, width=w_value, tag=t_Sum)
+            add_button(label="", enabled=False, width=w_value, tag=t_Mod)
+        with popup(t_Sum, mousebutton=mvMouseButton_Left):
+            with group(horizontal=True):
+                add_button(label="Base", enabled=False, width=w_label)
+                add_combo(items=get.List_Base_Atr, width=w_value, no_arrow_button=True, user_data=["Base Atr", stat], callback=q.cbh, tag=t_Select)
+        with tooltip(t_Sum):
+            for source in ["Base", "Race", "Feat"]:
+                t_Source = tag.Attributes.Source(stat, source)
+                with group(horizontal=True):
+                    add_button(label=source, enabled=False, width=w_label)
+                    add_button(label="", enabled=False, width=w_value, tag=t_Source)
+
+class SkillsPanel(cPanel):
+    def build(self):
+        with group(parent=self.parent):
+            self._create_panel_header("Skills")
+            for skill in get.List_Skill:
+                self._create_skill_row(skill)
+    def _create_skill_row(self, skill: str):
+        w_label = 113; w_value = 30
+        t_Label = tag.Skills.Label(skill)
+        t_Toggle = tag.Skills.Toggle(skill)
+        t_Mod = tag.Skills.Mod(skill)
+        with group(horizontal=True):
+            add_button(label=skill, enabled=False, width=w_label, tag=t_Label)
+            add_checkbox(tag=t_Toggle)
+            add_button(label="", enabled=False, width=w_value, tag=t_Mod)
+        with tooltip(t_Label):
+            add_text(get.dict_Skill[skill]["Desc"])
+
+    with tooltip(t_Toggle):
+        for source in ["Player", "Race", "Class", "BG", "Feat"]:
+            with group(horizontal=True):
+                add_button(label=source, enabled=False, width=50)
+                
+                tSource = tag.skill.source(skill, source)
+                add_checkbox(default_value=False, enabled=False, user_data=[], callback=q.cbh, tag=tSource)
 
 
 

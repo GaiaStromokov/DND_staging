@@ -43,7 +43,7 @@ class upd_background:
         name = data[0]
         desc = data[1]
         
-        
+        item_clear(tag.bfeature.main())
         with group(parent=tag.bfeature.main()):
             tag_text = tag.bfeature.text()
             tag_tooltip = tag.bfeature.tooltip()

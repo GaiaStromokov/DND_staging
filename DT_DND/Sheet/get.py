@@ -110,7 +110,7 @@ def same_weapon():
     
 def weapon_versatile():
     cdata = q.db.Inventory.Closet
-    clist = q.w.prop("Versatile")
+    clist = q.w.search(Prop="Versatile")
     main_hand = cdata["Hand_1"]
     off_hand = cdata["Hand_2"]
 
@@ -118,7 +118,6 @@ def weapon_versatile():
         if main_hand in clist: return True
         else: return False
     else: return False
-
 
 
 def get_Fighting_Style( Style):
@@ -163,46 +162,57 @@ dict_Maneuver_map = {
 }
 
 
-    
+def weapon_action_handler(item):
+    item_data = q.w.items.get(item)
+    if not item_data: return {}
+    slot = item_data.get("Slot")
+    if slot == "Shield": return weapon_action_shield(item, item_data)
+    elif slot == "Weapon": return weapon_action_weapon(item, item_data)
+    else: return red("error")
 
-class weapon_action_sc:
-    def __init__(self, item):
-        item_data = q.w.Item(item)
-        tier = item_data.Tier
-        
-        mod = self._gam(item)
-        prof_bonus = q.db.Core.PB if item in q.db.Prof["Weapon"] else 0
-        
+
+class weapon_action_shield:
+    def __init__(self, item, item_data):
         self.Name = iName(item)
+        self.Category = "Shield"
+        base = item_data.AC
+        tier = item_data.Tier
+        if "Shield" in q.pc.Prof["Armor"]: self.AC = base + tier
+        else: self.AC = 0
+
+class weapon_action_weapon:
+    def __init__(self, item, item_data):
+        tier = item_data.Tier
+        mod = self._gam(item_data)
+        prof_bonus = q.db.Core.PB if item in q.pc.Prof["Weapon"] else 0
+
+        self.Name = iName(item)
+        self.Category = "Weapon"
         self.Range = " : ".join(f"{v} ft" for v in (item_data.get("Reach"), item_data.get("Range")) if v)
-        
+
         self.hNum = mod + prof_bonus + tier
         self.hSign = "+" if self.hNum >= 0 else "-"
         self.hColor = c_weapon_hit(self.hNum)
-        
+
         self.dNum = mod + tier
         self.dSign = "+" if self.dNum >= 0 else "-"
         self.dColor = c_weapon_dmg(self.dNum)
-        
+
         self.dDice = item_data.vDamage if weapon_versatile() else item_data.Damage
         self.dType = item_data.Type
         self.Prop = item_data.Prop
 
-    def _gam(self, item):
+    def _gam(self, item_data):
         str_mod = q.db.Atr["STR"]["Mod"]
         dex_mod = q.db.Atr["DEX"]["Mod"]
-        if item in q.w.prop("Finesse"): return max(str_mod, dex_mod)
-        if item in q.w.cat("Melee"): return str_mod
-        if item in q.w.cat("Ranged"): return dex_mod
+        props = item_data.get("Prop", [])
+        cats = item_data.get("Cat", [])
+
+        if "Finesse" in props: return max(str_mod, dex_mod)
+        if "Melee" in cats: return str_mod
+        if "Ranged" in cats: return dex_mod
         return 0
-# class s_item:
-#     def __init__(self, item_name):
-#         pass
-#     #     item_data = items.get(item_name)
-#     #     self.Name = item_name
-#     #     for key, value in item_data.items():setattr(self, key, value)
-#     # def __repr__(self):return f"s_item({', '.join(f'{k}={repr(v)}' for k, v in self.__dict__.items())})"
-#     # def get(self, key, default=None):return getattr(self, key, default)
+
 
 
 lnRarity = [0,1,2,3,4]
@@ -477,7 +487,10 @@ dict_weapon_prop = {
     "Reach": {"SC": "REH", "Desc": "Extends melee attack range by 5 feet."},
     "Thrown": {"SC": "TRN", "Desc": "Can be thrown. Uses melee attack modifier."},
     "Two-handed": {"SC": "THD", "Desc": "Requires two hands to use."},
-    "Versatile": {"SC": "VSL", "Desc": "Can be used one or two handed. Damage increases when used with two hands."}
+    "Versatile": {"SC": "VSL", "Desc": "Can be used one or two handed. Damage increases when used with two hands."},
+    "Special": {"SC": "SPL",
+                "Lance": "disadvantage on attack on targets withen 5 ft.. Requires two handes when not mounted.",
+                "Net": "Net description will fill in later"}
     }
 
 dict_weapon_dtype_description = {

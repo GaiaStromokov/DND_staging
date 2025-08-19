@@ -86,8 +86,9 @@ class Fighter():
     def __init__(self, p):
         self.p = p
         p.HD = 10
-        p.Armor.extend(q.w.prof("Armor"))
-        p.Weapon.extend(q.w.prof("Weapon"))
+        p.Armor.extend(q.w.search(Tier = 0, Slot="Armor"))
+        p.Armor.extend(q.w.search(Tier = 0, Slot="Shield"))
+        p.Weapon.extend(q.w.search(Tier = 0, Slot="Weapon"))
         
     def pre_Upd(self):
         skill_list = ["Acrobatics", "Animal Handling", "Athletics", "History", "Insight", "Intimidation", "Perception", "Survival"]

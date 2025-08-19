@@ -36,7 +36,7 @@ class upd_backpack():
         bdata = q.db.Inventory.Backpack
         
         for row_idx, item in enumerate(bdata):
-            cdata = q.w.Item(item)
+            cdata = q.w.dItem(item)
             qty = bdata[item][1]
             weight = 0
             cost = 0

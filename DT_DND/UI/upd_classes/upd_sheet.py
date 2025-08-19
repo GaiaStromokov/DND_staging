@@ -73,6 +73,7 @@ class upd_sheet:
         configure_item(tag.ac.val(), label = ac.Sum)
         configure_item(tag.ac.source("base"), label = ac.Base)
         configure_item(tag.ac.source("dex"), label = ac.Dex)
+        configure_item(tag.ac.source("shield"), label = ac.Shield)
 
 
     def conditions(self):
@@ -95,15 +96,15 @@ class upd_sheet:
 
     def proficiencies(self):
         cdata = q.pc.Prof
-        for i in set(q.w.prof("Weapon")) & set(q.w.cat("Simple")):
+        for i in q.w.search(Tier=0, Slot="Weapon", Cat="Simple"):
             configure_item(tag.prof.multi("Simple", i, suffix="toggle"), default_value=i in cdata["Weapon"])
             configure_item(tag.prof.multi("Simple", i, suffix="text"), color=get.prof_color("Weapon", i))
 
-        for i in set(q.w.prof("Weapon")) & set(q.w.cat("Martial")):
+        for i in q.w.search(Tier=0, Slot="Weapon", Cat="Martial"):
             configure_item(tag.prof.multi("Martial", i, suffix="toggle"), default_value=i in cdata["Weapon"])
             configure_item(tag.prof.multi("Martial", i, suffix="text"), color=get.prof_color("Weapon", i))
 
-        for i in q.w.prof("Armor"):
+        for i in q.w.search(Tier=0, Slot=["Armor", "Shield"]):
             configure_item(tag.prof.multi("Armor", i, suffix="toggle"), default_value=i in cdata["Armor"])
             configure_item(tag.prof.multi("Armor", i, suffix="text"), color=get.prof_color("Armor", i))
 

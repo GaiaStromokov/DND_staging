@@ -286,41 +286,55 @@ def mod_item_backpack(sender, data, user_data):
     return backpack[item][1]
 
 
-def Closet_Equip(sender, data, user_data):
+def closet_equip(sender, data, user_data):
     cat = user_data[0]
+    name = data
     closet = q.db.Inventory.Closet
     backpack = q.db.Inventory.Backpack
-    two_handed_weapons = q.w.prop("Two-handed")
 
     if data == "Clear":
         closet[cat] = ""
         return
 
-    if data in q.w.slot("Weapon"):
-        Equip_1 = closet.get("Hand_1")
-        Equip_2 = closet.get("Hand_2")
+    item = q.w.dItem(name)
+    item_type = item.Slot
 
-        def is_versatile(item):
-            return item in q.w.prop("Versatile")
+    if item_type == "Weapon": closet_equip_weapon(cat, name, item, closet, backpack)
+    elif item_type == "Armor": closet_equip_armor(cat, name , item, closet, backpack)
+    elif item_type == "Shield": closet_equip_shield(cat, name, item, closet, backpack)
 
-        if cat == "Hand_1":
-            if data in two_handed_weapons:
-                closet[cat] = data
-                closet["Hand_2"] = ""
-                return
-            if data == Equip_2 and not is_versatile(data):
-                owned = backpack[data][1]
-                if owned <= 1:
-                    return
-        elif cat == "Hand_2":
-            if Equip_1 in two_handed_weapons:
-                return
-            if data == Equip_1 and not is_versatile(data):
-                owned = backpack[data][1]
-                if owned <= 1:
-                    return
 
-        closet[cat] = data
-        return
+def closet_equip_weapon(cat, name, item, closet, backpack):
+    two_handed = "Two-handed" in item.Prop
+    versatile = "Versatile" in item.Prop
 
-    closet[cat] = data
+    h1 = closet["Hand_1"]
+    h2 = closet["Hand_2"]
+
+    def owned_count(i): return backpack[i][1] if i in backpack else 0
+
+    if cat == "Hand_1":
+        if two_handed:
+            closet["Hand_1"], closet["Hand_2"] = name, ""
+            return
+        if h2 == name:
+            if versatile or owned_count(name) > 1: closet["Hand_1"] = name
+        else: closet["Hand_1"] = name
+
+    elif cat == "Hand_2":
+        if h1 and "Two-handed" in q.w.dItem(h1).Prop: return
+        if h1 == name:
+            if versatile or owned_count(name) > 1: closet["Hand_2"] = name
+        else: closet["Hand_2"] = name
+
+
+def closet_equip_armor(cat, name, item, closet, backpack):
+    str_mod = q.db.Atr["STR"]["Mod"]
+    if str_mod < item.Str_Req: return
+    else: closet[cat] = name
+
+
+def closet_equip_shield(cat, name, item, closet, backpack):
+    h1 = closet["Hand_1"]
+    if h1 and "Two-handed" in q.w.dItem(h1).Prop: return
+    closet["Hand_2"] = name

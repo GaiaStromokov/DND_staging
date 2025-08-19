@@ -5,7 +5,7 @@ from manager.components.Milestone_comp import bMilestone
 from manager.components.Race_comp import bRace
 from manager.components.Equipment_comp import Bazaar
 import q
-import Sheet.get as g
+import Sheet.get as get
 from colorist import *
 
 class Character():
@@ -53,20 +53,20 @@ class Character():
 
     @property
     def Skill(self):
-        proficient_skills = set(self.Race.Skill) | set(self.Class.Skill+[skill for skill in g.sClass() if skill]) | set(self.Background.Skill) | set(self.Milestone.Skill)
-        return {skill: skill in proficient_skills for skill in g.list_Skill}
+        proficient_skills = set(self.Race.Skill) | set(self.Class.Skill+[skill for skill in get.sClass() if skill]) | set(self.Background.Skill) | set(self.Milestone.Skill)
+        return {skill: skill in proficient_skills for skill in get.list_Skill}
     
     @property
     def Speed(self):
         Race = self.Race
         Milestone = self.Milestone
-        return {speed: Race.Speed[speed] + Milestone.Speed[speed] for speed in g.list_Speed}
+        return {speed: Race.Speed[speed] + Milestone.Speed[speed] for speed in get.list_Speed}
 
     @property
     def Vision(self):
         Race = self.Race
         Milestone = self.Milestone
-        return {vision: Race.Vision[vision] + Milestone.Vision[vision] for vision in g.list_Vision}
+        return {vision: Race.Vision[vision] + Milestone.Vision[vision] for vision in get.list_Vision}
 
     @property
     def Initiative(self):
@@ -128,13 +128,13 @@ class Character():
         
 
     def update_spells(self):
-        if g.valid_spellclass(): self.Class.Spell_config()
+        if get.valid_spellclass(): self.Class.Spell_config()
 
 
     def wipe_data(self, source):
         if source == "Race Abil": q.db.Race.Abil={}
         if source == "Class Abil": q.db.Class.Abil={}
-        if source == "Class Spell": q.db.Spell=g.spell_default
+        if source == "Class Spell": q.db.Spell=get.spell_default
         if source == "Background Data": q.db.Background={"Prof": {}, "Equipment": {}}
 
     def recalculate_stats(self):
@@ -148,14 +148,14 @@ class Character():
 
     def pull_atr_data(self):
         cdata = q.db.Race.Rasi
-        for atr in g.list_Atr:
+        for atr in get.list_Atr:
             q.db.Atr[atr]["Rasi"] = 0
             for i, rasi_list in enumerate(cdata):
                 if atr in rasi_list:
                     q.db.Atr[atr]["Rasi"] = i + 1
                     break
         
-        for atr in g.list_Atr:
+        for atr in get.list_Atr:
             val = self.Atr[atr]
             mod = (val- 10) // 2
             q.db.Atr[atr]["Val"] = val
@@ -179,8 +179,8 @@ class Character():
 
     def sum_Skill(self):
         Skill = self.Skill
-        for skill in g.list_Skill:
-            q.db.Skill[skill]["Mod"] = q.db.Atr[g.dict_Skill[skill]["Atr"]]["Mod"]
+        for skill in get.list_Skill:
+            q.db.Skill[skill]["Mod"] = q.db.Atr[get.dict_Skill[skill]["Atr"]]["Mod"]
             if Skill[skill]: q.db.Skill[skill]["Mod"] += q.db.Core.PB
 
 
@@ -201,18 +201,30 @@ class Character():
 
         base_ac = 10
         dex = dex_mod
+        shield_bonus = 0
 
         armor = q.db.Inventory.Closet["Armor"]
         if armor:
-            item = q.w.Item(armor)
-            prof = item.Name in self.Prof["Armor"]
+            item = q.w.dItem(armor)
+            prof = item.Base in self.Prof["Armor"]
             if prof:
                 base_ac = item.AC
                 dex = min(dex_mod, item.Dex_Max)
-
+        
+        h2data  = q.db.Inventory.Closet["Hand_2"]
+        if h2data:
+            hand_2 = get.weapon_action_handler(h2data)   
+            if hand_2.Category == "Shield":
+                shield_bonus = hand_2.AC
+                
+                
+            
+        
+        
         q.db.AC.Base = base_ac
         q.db.AC.Dex = dex
-        q.db.AC.Sum = base_ac + dex
+        q.db.AC.Shield = shield_bonus
+        q.db.AC.Sum = base_ac + dex + shield_bonus
 
         
 
