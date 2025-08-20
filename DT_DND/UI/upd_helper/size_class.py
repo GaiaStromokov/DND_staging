@@ -1,67 +1,66 @@
+class Sz:
+    wMax = 1350
+    hMax = 880
 
-class sz:
-    w_max = 1350
-    h_max = 880
+    wBlock = wMax - 595
+    hBlock = hMax - 114
 
-    w_block = w_max - 595
-    h_block = h_max - 114
+    hHeader1 = 20
+    wHeader2 = 188
+    wHeader3 = 116
 
-    h_header_1 = 20
-    w_header_2 = 188
-    w_header_3 = 116
+    wrap = 650
 
-    gwrap = 640
+    wSBtn = 20
+    wMBtn = 46
+    wLBtn = 90
 
-    w_s_btn = 20
-    w_m_btn = 46
-    w_l_btn = 90
+    wArmorClass = 62
+    hArmorClass = 58
 
-    w_armor_class = 62
-    h_armor_class = 58
+    wAttributes = 132
+    hAttributes = 174
 
-    w_attributes = 132
-    h_attributes = 174
+    wBuffer1 = 132
+    hBuffer1 = 17
 
-    w_buffer_1 = 132
-    h_buffer_1 = 17
+    wBuffer2 = 210
+    hBuffer2 = 13
 
-    w_buffer_2 = 210
-    h_buffer_2 = 13
+    wCharacter = 210
+    hCharacter = 82
 
-    w_character = 210
-    h_character = 82
+    wConditions = 132
+    hConditions = 42
 
-    w_conditions = 132
-    h_conditions = 42
+    wCore = 210
+    hCore = 174
 
-    w_core = 210
-    h_core = 174
+    wHealth = 210
+    hHealth = 82
 
-    w_health = 210
-    h_health = 82
+    wInitiative = 62
+    hInitiative = 58
 
-    w_initiative = 62
-    h_initiative = 58
+    wInventory = 552
+    hInventory = 340
 
-    w_inventory = 552
-    h_inventory = 340
+    wItem = 117
 
-    w_item = 117
+    wProficiencies = 210
+    hProficiencies = 82
 
-    w_proficiencies = 210
-    h_proficiencies = 82
+    wRest = 132
+    hRest = 80
 
-    w_rest = 132
-    h_rest = 80
+    wSkill = 194
+    hSkill = 449
 
-    w_skill = 194
-    h_skill = 449
+    wSpeed = 62
+    hSpeed = 58
 
-    w_speed = 62
-    h_speed = 58
+    wVision = 62
+    hVision = 58
 
-    w_vision = 62
-    h_vision = 58
-
-    w_wallet = 412
-    h_wallet = 35
+    wWallet = 412
+    hWallet = 35

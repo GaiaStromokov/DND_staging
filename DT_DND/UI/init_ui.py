@@ -1,84 +1,248 @@
 from ui.upd_helper_import import *
 from path_helper import get_path
 tag = Tag()
+
+class build_atr:
+    def __init__(self, stat):
+        self.Sum = tag.atr.sum(stat)
+        self.Mod = tag.atr.mod(stat)
+        self.Select = tag.atr.select(stat)
+        self.Base = tag.atr.source(stat, "Base")
+        self.Race = tag.atr.source(stat, "Race")
+        self.Feat = tag.atr.source(stat, "Feat")
+        
+class build_skill:
+    def __init__(self, skill):
+        self.Label = tag.skill.label(skill)
+        self.Toggle = tag.skill.toggle(skill)
+        self.Mod = tag.skill.mod(skill)
+        self.Player = tag.skill.source(skill, "Player")
+        self.Race = tag.skill.source(skill, "Race")
+        self.Class = tag.skill.source(skill, "Class")
+        self.BG = tag.skill.source(skill, "BG")
+        self.Feat = tag.skill.source(skill, "Feat")
+
+class build_pdesc:
+    def __init__(self, item):
+        self.Input = tag.pdesc.input(item)
+        self.Text = tag.pdesc.text(item)
+
+class build_ideals:
+    def __init__(self, name):
+        self.Label = tag.char.label(name)
+        self.Input = tag.char.input(name)
+        self.Text = tag.char.text(name)
+
+class build_prof:
+    def __init__(self, category, item):
+        self.Toggle = tag.prof.toggle(category, item)
+        self.Text = tag.prof.text(category, item)
+        
+class build_proficiencies:
+    def __init__(self):
+        self.Weapon = tag.prof.label("Weapon")
+        self.Armor = tag.prof.label("Armor")
+        self.Tool = tag.prof.label("Tool")
+        self.Lang = tag.prof.label("Lang")
+
+class build_wallet:
+    def __init__(self, coin):
+        self.Val = tag.wallet.val(coin)
+
+class build_skeleton:
+    def __init__(self):
+        self.Main = "window_main"
+        self.Core = tag.core.window()
+        self.Health = tag.health.window()
+        self.Prof = tag.prof.window()
+        self.Char = tag.char.window()
+        self.Buffer1 = tag.buffer1.window()
+        self.Atr = tag.atr.window()
+        self.Init = tag.init.window()
+        self.AC = tag.ac.window()
+        self.Vision = tag.vision.window()
+        self.Speed = tag.speed.window()
+        self.Cond = tag.cond.window()
+        self.Rest = tag.rest.window()
+        self.Buffer2 = tag.buffer2.window()
+        self.Skill = tag.skill.window()
+        self.Inve = tag.inve.window()
+        self.Block = tag.block.window()
+        self.Wallet = tag.wallet.window()
+
+
+class build_health:
+    def __init__(self):
+        Hp = tag.health.val("HP")
+        Temp = tag.health.val("Temp")
+        Max = tag.health.max("HP")
+        Label = tag.health.label()
+
+class build_initiative:
+    def __init__(self):
+        self.Label = tag.init.label()
+        self.Val = tag.init.val()
+        self.Dex = tag.init.source("Dex")
+        self.Race = tag.init.source("Race")
+        self.Class = tag.init.source("Class")
+
+class build_armorclass:
+    def __init__(self):
+        self.Label = tag.ac.label()
+        self.Val = tag.ac.val()
+        self.Base = tag.ac.source("Base")
+        self.Dex = tag.ac.source("Dex")
+        self.Shield = tag.ac.source("Shield")
+        
+class build_vision:
+    def __init__(self):
+        self.Label = tag.vision.label()
+        self.Val = tag.vision.val()
+        self.Dark = tag.vision.source("Dark")
+        self.Blind = tag.vision.source("Blind")
+        self.Tremor = tag.vision.source("Tremor")
+        self.Tru = tag.vision.source("Tru")
+
+class build_speed:
+    def __init__(self):
+        self.Label = tag.speed.label()
+        self.Val = tag.speed.val()
+        self.Walk = tag.speed.source("Walk")
+        self.Climb = tag.speed.source("Climb")
+        self.Swim = tag.speed.source("Swim")
+        self.Fly = tag.speed.source("Fly")
+        self.Burrow = tag.speed.source("Burrow")
+        
+class build_condition:
+    def __init__(self, condition):
+        self.Toggle = tag.cond.toggle(condition)
+        self.Text = tag.cond.text(condition)
+
+class build_rest:
+    def __init__(self):
+        self.Short = tag.rest.button("Short")
+        self.Long = tag.rest.button("Long")
+
+class build_characteristics:
+    def __init__(self):
+        self.Label = tag.pdesc.label()
+        self.Traits = tag.char.label("traits")
+        self.Ideals = tag.char.label("ideals")
+        self.Bonds = tag.char.label("bonds")
+        self.Flaws = tag.char.label("flaws")
+
+
+class build_block:
+    def __init__(self):
+        self.Pparent = tag.wactions.window()
+        self.tabbar = tag.block.tabbar()
+        self.rfs = tag.rfeature.sub()
+        self.rfm = tag.rfeature.main()
+        self.rfa0 = tag.rfeature.select("asi_0")
+        self.rfa1 = tag.rfeature.select("asi_1")
+        self.rfac = tag.rfeature.button("asi_clear")
+        
+        self.cfs = tag.cfeature.sub()
+        self.cfm = tag.cfeature.main()
+        
+        self.mfs = tag.mfeature.sub()
+        self.mfm = tag.mfeature.main()
+        
+        self.bfs = tag.bfeature.sub()
+        self.bfm = tag.bfeature.main()
+        
+
+        
+class tui:
+    Prof = {}
+
+for stat in get.list_Atr: setattr(tui, stat, build_atr(stat))
+for skill in get.list_Skill: setattr(tui, skill, build_skill(skill))
+for item in get.list_Description: setattr(tui, item, build_pdesc(item))
+for name in get.list_Ideals: setattr(tui, name, build_ideals(name))
+for category, items in get.proficiency_map.items(): tui.Prof[category] = {item: build_prof(category, item) for item in items}
+for coin in get.list_Coins: setattr(tui, coin, build_wallet(coin))
+tui.Skeleton = build_skeleton()
+tui.Health = build_health()
+tui.Initiative = build_initiative()
+tui.Armorclass = build_armorclass()
+tui.Vision = build_vision()
+tui.Speed = build_speed()
+for condition in get.list_Condition:  setattr(tui, condition, build_condition(condition))
+tui.Rest = build_rest()
+tui.Proficiencies = build_proficiencies()
+tui.Characteristics = build_characteristics()
+tui.Block = build_block()
+
+
 def create_attribute_row(stat: str):
-    label_width=40
-    value_width=30
-
-    tSum = tag.atr.sum(stat)
-    tMod = tag.atr.mod(stat)
-    tCombo = tag.atr.select(stat)
-
+    wLabel = 40
+    wVal = 30
+    t = getattr(tui, stat)
     with group(horizontal=True):
-        add_button(label=stat, enabled=False, width=label_width)
-        add_button(label="", enabled=False, width=value_width, tag=tSum)
-        add_button(label="", enabled=False, width=value_width, tag=tMod)
-
-    with popup(tSum, mousebutton=mvMouseButton_Left):
-        with group(horizontal=True):
-            add_button(label="Base", enabled=False, width=label_width)
-            add_combo(items=get.list_Base_Atr, default_value="", width=value_width, no_arrow_button=True, user_data=["Base Atr", stat], callback=q.cbh, tag=tCombo)
-
-    with tooltip(tSum):
+        add_button(label=stat, enabled=False, width=wLabel)
+        add_button(label="", enabled=False, width=wVal, tag=t.Sum)
+        add_button(label="", enabled=False, width=wVal, tag=t.Mod)
+    with popup(t.Sum, mousebutton=mvMouseButton_Left):
+        add_button(label="Base", enabled=False, width=wLabel)
+        add_combo(items=get.list_Base_Atr, default_value="", width=wVal, no_arrow_button=True, user_data=["Base Atr", stat], callback=q.cbh, tag=t.Select)
+    with tooltip(t.Sum):
         for source in ["Base", "Race", "Feat"]:
             with group(horizontal=True):
-                add_button(label=source, enabled=False, width=label_width)
-                tSource = tag.atr.source(stat, source.lower())
-                add_button(label="", enabled=False, width=25, tag=tSource)
+                add_button(label=source, enabled=False, width=wLabel)
+                add_button(label="", enabled=False, width=25, tag=getattr(t, source))
+
+
 
 
 
 def create_skill_row(skill: str):
-    label_width = 113
-    mod_width = 30
-
-    tLabel = tag.skill.label(skill)
-    tToggle = tag.skill.toggle(skill)
-    tMod = tag.skill.mod(skill)
-    
-    
-    with group(horizontal=True): 
-        add_button(label=skill, enabled=False, width=label_width, tag=tLabel)
-        add_checkbox(default_value=False, enabled=False, user_data=[], callback=q.cbh, tag=tToggle)
-        add_button(label="", enabled=False, width=mod_width, tag=tMod)
-    with tooltip(tLabel):
-        add_text(get.dict_Skill[skill]["Desc"])
-        
-    with tooltip(tToggle):
+    wLabel = 113
+    wMod = 30
+    t = getattr(tui, skill)
+    with group(horizontal=True):
+        add_button(label=skill, enabled=False, width=wLabel, tag=t.Label)
+        add_checkbox(default_value=False, enabled=False, user_data=[], callback=q.cbh, tag=t.Toggle)
+        add_button(label="", enabled=False, width=wMod, tag=t.Mod)
+    with tooltip(t.Label): add_text(get.dict_Skill[skill]["Desc"])
+    with tooltip(t.Toggle):
         for source in ["Player", "Race", "Class", "BG", "Feat"]:
             with group(horizontal=True):
                 add_button(label=source, enabled=False, width=50)
-                
-                tSource = tag.skill.source(skill, source)
-                add_checkbox(default_value=False, enabled=False, user_data=[], callback=q.cbh, tag=tSource)
+                add_checkbox(default_value=False, enabled=False, user_data=[], callback=q.cbh, tag=getattr(t, source))
+
 
 
 def create_pdescription():
+    wBtn = sz.wLbtn
     tLabel = tag.pdesc.label()
+
     with popup(tLabel, mousebutton=mvMouseButton_Left):
-        for item in get.list_Description: 
-            tInput = tag.pdesc.input(item)
+        for item in get.list_Description:
+            t = getattr(tui, item)
             with group(horizontal=True):
-                add_button(label=item, enabled=False, width=sz.w_l_btn)
-                add_input_text(default_value="", on_enter=True, width = 70, user_data=["Description", item], callback=q.cbh, tag=tInput)
+                add_button(label=item, enabled=False, width=wBtn)
+                add_input_text(default_value="", on_enter=True, width=70, user_data=["Description", item], callback=q.cbh, tag=t.Input)
+
     with tooltip(tLabel):
-        for item in get.list_Description: 
-            tText = tag.pdesc.text(item)
+        for item in get.list_Description:
+            t = getattr(tui, item)
             with group(horizontal=True):
-                add_button(label=item, enabled=False, width=sz.w_l_btn)
-                add_text("", color=c_h2, wrap=400, tag=tText)
+                add_button(label=item, enabled=False, width=wBtn)
+                add_text("", color=c_h2, wrap=400, tag=t.Text)
+
 
 
 
 
 def create_ideals(name: str):
-    name = name.lower()
-    
-    tLabel = tag.char.label(name)
-    tInput = tag.char.input(name)
-    tText = tag.char.text(name)
-    with popup(tLabel, mousebutton=mvMouseButton_Left): add_input_text(default_value="", on_enter=True, user_data=["Characteristic", name], callback=q.cbh, tag=tInput)
-    with tooltip(tLabel): add_text("", tag=tText, wrap=400)
+    t = getattr(tui, name)
+
+    with popup(t.Label, mousebutton=mvMouseButton_Left):
+        add_input_text(default_value="", on_enter=True, user_data=["Characteristic", name], callback=q.cbh, tag=t.Input)
+
+    with tooltip(t.Label):
+        add_text("", tag=t.Text, wrap=400)
 
 
 def create_proficiency_addons(tLabel: str, proficiency_map: dict):
@@ -89,8 +253,8 @@ def create_proficiency_addons(tLabel: str, proficiency_map: dict):
                     add_text(category)
                     add_separator()
                     for item in items:
-                        tSelectable = tag.prof.toggle(category, item)
-                        add_selectable(label=get.pName(item), default_value=False, user_data=["Player Prof Input", category, item], callback=q.cbh, tag=tSelectable)
+                        t = tui.Prof[category][item]
+                        add_selectable(label=get.pName(item), default_value=False, user_data=["Player Prof Input", category, item], callback=q.cbh, tag=t.Toggle)
 
     with tooltip(tLabel):
         with group(horizontal=True):
@@ -99,50 +263,52 @@ def create_proficiency_addons(tLabel: str, proficiency_map: dict):
                     add_text(category)
                     add_separator()
                     for item in items:
-                        tText = tag.prof.text(category, item)
-                        add_text(get.pName(item), color=(0, 0, 0), tag=tText)
-
+                        t = tui.Prof[category][item]
+                        add_text(get.pName(item), color=(0, 0, 0), tag=t.Text)
 
 
 
 
 def init_window_skeleton():
-    with window(no_title_bar=True, no_close=True, autosize=True, tag="window_main"):
+    t = tui.Skeleton
+    with window(no_title_bar=True, no_close=True, autosize=True, tag=t.Main):
         with group(horizontal=True):
             with group(horizontal=False):
                 with group(horizontal=True):
                     with group(horizontal=False):
-                        add_child_window(tag=tag.core.window(), width=sz.w_core, height=sz.h_core, border=True, no_scrollbar=True)
-                        add_child_window(tag=tag.health.window(), width=sz.w_health, height=sz.h_health, border=True)
-                        add_child_window(tag=tag.prof.window(), width=sz.w_proficiencies, height=sz.h_proficiencies, border=True)
-                        add_child_window(tag=tag.char.window(), width=sz.w_character, height=sz.h_character, border=True)
-                        add_child_window(tag=tag.buffer1.window(), width=sz.w_buffer_2, height=sz.h_buffer_2, border=True, no_scrollbar=True)
+                        add_child_window(tag=t.Core, width=sz.w_core, height=sz.h_core, border=True, no_scrollbar=True)
+                        add_child_window(tag=t.Health, width=sz.w_health, height=sz.h_health, border=True)
+                        add_child_window(tag=t.Prof, width=sz.w_proficiencies, height=sz.h_proficiencies, border=True)
+                        add_child_window(tag=t.Char, width=sz.w_character, height=sz.h_character, border=True)
+                        add_child_window(tag=t.Buffer1, width=sz.w_buffer_2, height=sz.h_buffer_2, border=True, no_scrollbar=True)
                     with group(horizontal=False):
-                        add_child_window(tag=tag.atr.window(), width=sz.w_attributes, height=sz.h_attributes, border=True)
+                        add_child_window(tag=t.Atr, width=sz.w_attributes, height=sz.h_attributes, border=True)
                         with group(horizontal=True):
-                            add_child_window(tag=tag.init.window(), width=sz.w_initiative, height=sz.h_initiative, border=True)
-                            add_child_window(tag=tag.ac.window(), width=sz.w_armor_class, height=sz.h_armor_class, border=True)
+                            add_child_window(tag=t.Init, width=sz.w_initiative, height=sz.h_initiative, border=True)
+                            add_child_window(tag=t.AC, width=sz.w_armor_class, height=sz.h_armor_class, border=True)
                         with group(horizontal=True):
-                            add_child_window(tag=tag.vision.window(), width=sz.w_vision, height=sz.h_vision, border=True)
-                            add_child_window(tag=tag.speed.window(), width=sz.w_speed, height=sz.h_speed, border=True)
-                        add_child_window(tag=tag.cond.window(), width=sz.w_conditions, height=sz.h_conditions, border=True)
-                        add_child_window(tag=tag.rest.window(), width=sz.w_rest, height=sz.h_rest, border=True)
-                        add_child_window(tag=tag.buffer2.window(), width=sz.w_buffer_1, height=sz.h_buffer_1, border=True, no_scrollbar=True)
+                            add_child_window(tag=t.Vision, width=sz.w_vision, height=sz.h_vision, border=True)
+                            add_child_window(tag=t.Speed, width=sz.w_speed, height=sz.h_speed, border=True)
+                        add_child_window(tag=t.Cond, width=sz.w_conditions, height=sz.h_conditions, border=True)
+                        add_child_window(tag=t.Rest, width=sz.w_rest, height=sz.h_rest, border=True)
+                        add_child_window(tag=t.Buffer2, width=sz.w_buffer_1, height=sz.h_buffer_1, border=True, no_scrollbar=True)
                     with group(horizontal=False):
-                        add_child_window(tag=tag.skill.window(), width=sz.w_skill, height=sz.h_skill, border=True, no_scrollbar=True)
+                        add_child_window(tag=t.Skill, width=sz.w_skill, height=sz.h_skill, border=True, no_scrollbar=True)
                 with group(horizontal=False):
-                    add_child_window(tag=tag.inve.window(), width=sz.w_inventory, height=sz.h_inventory + 12, border=True, no_scrollbar=True)
+                    add_child_window(tag=t.Inve, width=sz.w_inventory, height=sz.h_inventory + 12, border=True, no_scrollbar=True)
             with group(horizontal=False):
-                add_child_window(tag=tag.block.window(), width=sz.w_block, height=sz.h_block, border=True, no_scrollbar=True)
-                add_child_window(tag=tag.wallet.window(), width=sz.w_wallet, height=sz.h_wallet, border=True, no_scrollbar=True)
+                add_child_window(tag=t.Block, width=sz.w_block, height=sz.h_block, border=True, no_scrollbar=True)
+                add_child_window(tag=t.Wallet, width=sz.w_wallet, height=sz.h_wallet, border=True, no_scrollbar=True)
+
 
 def init_window_wallet():
     with group(parent=tag.wallet.window()):
         with group(horizontal=True):
-            for i in get.list_Coins:
+            for coin in get.list_Coins:
+                t = getattr(tui, coin)
                 with group(horizontal=True):
-                    add_button(label=i)
-                    add_text("0", color=c_h9, tag=tag.wallet.val(i))
+                    add_button(label=coin)
+                    add_text("", color=c_h9, tag=t.Val)
 
 
 def init_window_core():
@@ -151,7 +317,7 @@ def init_window_core():
     w_abtn=80
     w_combo = w_max-88
     with group(parent=tag.core.window()):
-        add_button(label="Character info", enabled=False, width=w_max, height = sz.h_header_1)
+        add_button(label="Character info", enabled=False, width=w_max, height = sz.hHeader1)
         with group(horizontal=True):
             add_button(label="Level", enabled=False, width=50)
             add_button(label="<", user_data=["Level Input", -1], callback=q.cbh)
@@ -179,142 +345,149 @@ def init_window_core():
 def init_window_attributes():
     with group(parent=tag.atr.window()):
         w_max=sz.w_attributes-16
-        add_button(label="Attributes", enabled=False, width=w_max, height=sz.h_header_1)
+        add_button(label="Attributes", enabled=False, width=w_max, height=sz.hHeader1)
         for stat in get.list_Atr:
             create_attribute_row(stat)
 
 
 
 def init_window_health():
+    wBtn = sz.wSbtn
+    t = tui.health
     with group(parent=tag.health.window()):
         w_max=sz.w_health-16
         h_max=sz.h_health-15
-        add_button(label="Health", enabled=False, width=w_max, height=sz.h_header_1)
+        add_button(label="Health", enabled=False, width=w_max, height=sz.hHeader1)
         with group(horizontal=False):
             with group(horizontal=True):
-                add_button(label="+", width=sz.w_s_btn, user_data=["HP","HP", 1], callback=q.cbh)
-                add_button(label="CUR / MAX", enabled=False, width=w_max-108, tag="health_label")
+                add_button(label="+", width=wBtn, user_data=["HP","HP", 1], callback=q.cbh)
+                add_button(label="CUR / MAX", enabled=False, width=w_max-108, tag=t.Label)
                 add_button(label="TEMP", enabled=False, width=w_max-150)
-                add_button(label="+", width=sz.w_s_btn, user_data=["HP","Temp", 1], callback=q.cbh)
+                add_button(label="+", width=wBtn, user_data=["HP","Temp", 1], callback=q.cbh)
             with group(horizontal=True):
-                add_button(label="-", width=sz.w_s_btn, user_data=["HP","HP", -1], callback=q.cbh)
-                add_button(label="", enabled=False, width=w_max-108, tag=tag.health.val("hp"))
-                add_button(label="", enabled=False, width=w_max-150, tag=tag.health.val("temp"))
-                add_button(label="-", width=sz.w_s_btn, user_data=["HP","Temp", -1], callback=q.cbh)
+                add_button(label="-", width=wBtn, user_data=["HP","HP", -1], callback=q.cbh)
+                add_button(label="", enabled=False, width=w_max-108, tag=t.Hp)
+                add_button(label="", enabled=False, width=w_max-150, tag=t.Temp)
+                add_button(label="-", width=wBtn, user_data=["HP","Temp", -1], callback=q.cbh)
     
-    with popup("health_label", mousebutton=mvMouseButton_Left):
-        add_button(label="Max", width=sz.w_l_btn)
-        add_input_int(default_value=0, width=90, user_data=["Player HP Mod"], callback=q.cbh, tag=tag.health.max("hp"))
+    with popup(t.Label, mousebutton=mvMouseButton_Left):
+        add_button(label="Max", width=sz.wLbtn)
+        add_input_int(default_value=0, width=90, user_data=["Player HP Mod"], callback=q.cbh, tag=t.Max)
         
 
 def init_window_skills():
     w_max=sz.w_skill-16
     h_max=sz.w_skill-15
     with group(parent=tag.skill.window()):
-        add_button(label="Skills", enabled=False, width=w_max, height=sz.h_header_1)
+        add_button(label="Skills", enabled=False, width=w_max, height=sz.hHeader1)
         for skill in get.list_Skill:
             create_skill_row(skill)
 
 
 def init_window_initiatives():
-    with group(parent=tag.init.window()):
-        add_button(label="Init", enabled=False, width=sz.w_m_btn, tag=tag.init.label())
-        add_button(label="", enabled=False, width=sz.w_m_btn, tag=tag.init.val())
-    with tooltip(tag.init.label()):
+    t = tui.Initiative
+    with group(parent=tui.Skeleton.Init):
+        add_button(label="Init", enabled=False, width=sz.wMbtn, tag=t.Label)
+        add_button(label="", enabled=False, width=sz.wMbtn, tag=t.Val)
+    with tooltip(t.Label):
         for source in ["Dex", "Race", "Class"]:
             with group(horizontal=True):
                 add_button(label=source, enabled=False, width=40)
-                add_button(label="", enabled=False, width=25, tag=tag.init.source(source.lower()))
+                add_button(label="", enabled=False, width=25, tag=getattr(t, source))
+
 
 def init_window_armor():
-    with group(parent=tag.ac.window()):
-        add_button(label="AC", enabled=False, width=sz.w_m_btn, tag=tag.ac.label())
-        add_button(label="", enabled=False, width=sz.w_m_btn, tag=tag.ac.val())
-
-        with tooltip(tag.ac.label()):
-            for label in ["Base", "Dex", "Shield"]:
-                label_tag=label.lower()
-                with group(horizontal=True):
-                    add_button(label=label, enabled=False, width=50)
-                    add_button(label="", enabled=False, width=40, tag=tag.ac.source(label_tag))
+    t = tui.Armorclass
+    with group(parent=tui.Skeleton.AC):
+        add_button(label="AC", enabled=False, width=sz.wMbtn, tag=t.Label)
+        add_button(label="", enabled=False, width=sz.wMbtn, tag=t.Val)
+    with tooltip(t.Label):
+        for source in ["Base", "Dex", "Shield"]:
+            with group(horizontal=True):
+                add_button(label=source, enabled=False, width=50)
+                add_button(label="", enabled=False, width=40, tag=getattr(t, source))
 
 
 
 def init_window_vision():
-    with group(parent=tag.vision.window()):
-        add_button(label="Vision", enabled=False, width=sz.w_m_btn, tag = tag.vision.label())
-        add_button(label="", enabled=False, width=sz.w_m_btn, tag=tag.vision.val())
-    with tooltip(tag.vision.label()):
-        for i in get.list_Vision:
+    t = tui.Vision
+    with group(parent=tui.Skeleton.Vision):
+        add_button(label="Vision", enabled=False, width=sz.wMbtn, tag=t.Label)
+        add_button(label="", enabled=False, width=sz.wMbtn, tag=t.Val)
+    with tooltip(t.Label):
+        for i in ["Dark", "Blind", "Tremor", "Tru"]:
             with group(horizontal=True):
                 add_button(label=i, enabled=False, width=50)
-                add_button(label="", enabled=False, width=40, tag=tag.vision.source(i))
+                add_button(label="", enabled=False, width=40, tag=getattr(t, i))
 
 def init_window_speed():
-    with group(parent=tag.speed.window()):
-        add_button(label="Speed", enabled=False, width=sz.w_m_btn, tag = tag.speed.label())
-        add_button(label="", enabled=False, width=sz.w_m_btn, tag=tag.speed.val())
-    with tooltip(tag.speed.label()):
-        for i in get.list_Speed:
+    t = tui.Speed
+    with group(parent=tui.Skeleton.Speed):
+        add_button(label="Speed", enabled=False, width=sz.wMbtn, tag=t.Label)
+        add_button(label="", enabled=False, width=sz.wMbtn, tag=t.Val)
+    with tooltip(t.Label):
+        for i in ["Walk", "Climb", "Swim", "Fly", "Burrow"]:
             with group(horizontal=True):
                 add_button(label=i, enabled=False, width=50)
-                add_button(label="", enabled=False, width=40, tag=tag.speed.source(i))
+                add_button(label="", enabled=False, width=40, tag=getattr(t, i))
 
 
 
 def init_window_conditions():
-    with group(parent=tag.cond.window()):
+    with group(parent=tui.Skeleton.Cond):
         add_button(label="Conditions", enabled=False, width=sz.w_header_2-72, height=26, tag=tag.cond.label())
     with popup(tag.cond.label(), mousebutton=mvMouseButton_Left):
         with child_window(auto_resize_x=True, auto_resize_y=True, border=True):
             for i in get.list_Condition:
-                add_selectable(label=i, default_value=False, user_data=["Condition", i], callback=q.cbh, tag=tag.cond.toggle(i))
+                add_selectable(label=i, default_value=False, user_data=["Condition", i], callback=q.cbh, tag=getattr(tui, i).Toggle)
     with tooltip(tag.cond.label()):
         with child_window(auto_resize_x=True, auto_resize_y=True, border=True):
             for i in get.list_Condition:
-                add_text(i, color=(0, 0, 0), tag=tag.cond.text(i))
+                add_text(i, color=(0, 0, 0), tag=getattr(tui, i).Text)
 
 
 def init_window_rest():
-    with group(parent=tag.rest.window()):
-        add_button(label="Short Rest", width=sz.w_header_2-72, height=30, user_data=["Short Rest"], callback=q.cbh, tag=tag.rest.button("short"))
-        add_button(label="Long Rest", width=sz.w_header_2-72, height=30, user_data=["Long Rest"], callback=q.cbh, tag=tag.rest.button("long"))
-
+    with group(parent=tui.Skeleton.Rest):
+        add_button(label="Short Rest", width=sz.w_header_2-72, height=30, user_data=["Short Rest"], callback=q.cbh, tag=tui.Rest.Short)
+        add_button(label="Long Rest", width=sz.w_header_2-72, height=30, user_data=["Long Rest"], callback=q.cbh, tag=tui.Rest.Long)
 
 def init_window_buffer():
     pass
 
 
 def init_window_proficienices():
-    w_max=sz.w_proficiencies-16
-    h_max=sz.w_proficiencies-15
-    btn_w = w_max-101
-    with group(parent=tag.prof.window()):
-        add_button(label="Proficiencies", enabled=False, width=w_max, height=sz.h_header_1)
+    t = tui.Proficiencies
+    w_max = sz.w_proficiencies - 16
+    h_max = sz.w_proficiencies - 15
+    btn_w = w_max - 101
+    with group(parent=tui.Skeleton.Prof):
+        add_button(label="Proficiencies", enabled=False, width=w_max, height=sz.hHeader1)
         with group(horizontal=True):
-            add_button(label="Weapons", width=btn_w, tag=tag.prof.label("weapon"))
-            add_button(label="Armor", width=btn_w, tag=tag.prof.label("armor"))
+            add_button(label="Weapons", width=btn_w, tag=t.Weapon)
+            add_button(label="Armor", width=btn_w, tag=t.Armor)
         with group(horizontal=True):
-            add_button(label="Tools", width=btn_w, tag=tag.prof.label("tool"))
-            add_button(label="Languages", width=btn_w, tag=tag.prof.label("lang"))
+            add_button(label="Tools", width=btn_w, tag=t.Tool)
+            add_button(label="Languages", width=btn_w, tag=t.Lang)
 
-    create_proficiency_addons(tag.prof.label("weapon"), {k: q.w.search(Tier=0, Slot="Weapon", Cat=k) for k in ["Simple", "Martial"]})
-    create_proficiency_addons(tag.prof.label("armor"), {"Armor": q.w.search(Tier=0, Slot=["Armor", "Shield"])})
-    create_proficiency_addons(tag.prof.label("tool"), {"Artisan": get.list_Job, "Gaming": get.list_Game, "Musical": get.list_Music})
-    create_proficiency_addons(tag.prof.label("lang"), {"Languages": get.list_Lang})
+    create_proficiency_addons(t.Weapon, {k: q.w.search(Tier=0, Slot="Weapon", Cat=k) for k in ["Simple", "Martial"]})
+    create_proficiency_addons(t.Armor, {"Armor": q.w.search(Tier=0, Slot=["Armor", "Shield"])})
+    create_proficiency_addons(t.Tool, {"Artisan": get.list_Job, "Gaming": get.list_Game, "Musical": get.list_Music})
+    create_proficiency_addons(t.Lang, {"Languages": get.list_Lang})
+
 
 def init_window_characteristics():
-    w_max=sz.w_character-16
-    h_max=sz.h_character-15
-    btn_w = w_max-101
-    with group(parent=tag.char.window()):
-        add_button(label="Characteristics", enabled=False, width=w_max, height=sz.h_header_1, tag=tag.pdesc.label())
+    t = tui.Characteristics
+    w_max = sz.w_character - 16
+    h_max = sz.h_character - 15
+    btn_w = w_max - 101
+    with group(parent=tui.Skeleton.Char):
+        add_button(label="Characteristics", enabled=False, width=w_max, height=sz.hHeader1, tag=t.Label)
         with group(horizontal=True):
-            add_button(label="Traits", width=btn_w, tag=tag.char.label("traits"))
-            add_button(label="Ideals", width=btn_w, tag=tag.char.label("ideals"))
+            add_button(label="Traits", width=btn_w, tag=t.Traits)
+            add_button(label="Ideals", width=btn_w, tag=t.Ideals)
         with group(horizontal=True):
-            add_button(label="Bonds", width=btn_w, tag=tag.char.label("bonds"))
-            add_button(label="Flaws", width=btn_w, tag=tag.char.label("flaws"))
+            add_button(label="Bonds", width=btn_w, tag=t.Bonds)
+            add_button(label="Flaws", width=btn_w, tag=t.Flaws)
     for i in get.list_Ideals: create_ideals(i)
     create_pdescription()
 
@@ -322,41 +495,40 @@ def init_window_characteristics():
 
 
 
-
 def init_window_block():
+    t = tui.Block
     w1 = sz.w_block - 16
     w2 = w1 - 16
     h1 = sz.h_block - 40
     h2 = h1 - 15
-    with group(parent=tag.block.window()):
-        with tab_bar(tag=tag.block.tabbar()):
+    with group(parent=tui.Skeleton.Block):
+        with tab_bar(tag=t.tabbar):
             with tab(label="Features/Traits"):
                 with child_window(width=w1, height=h1, border=True):
                     add_separator(label="Race")
-                    with child_window(auto_resize_y=True, width=w2, border=True, tag = tag.rfeature.sub()):
+                    with child_window(auto_resize_y=True, width=w2, border=True, tag=t.rfs):
                         with group(horizontal=True):
                             add_text("Ability Score Increase: +1/+2", color=c_h1)
-                            add_combo(items=get.list_Atr, default_value="",  width=50, no_arrow_button=True, user_data=["Race Asi", 0], callback=q.cbh, tag=tag.rfeature.select("asi_0"))
-                            add_combo(items=get.list_Atr, default_value="",  width=50, no_arrow_button=True, user_data=["Race Asi", 1], callback=q.cbh, tag=tag.rfeature.select("asi_1"))
-                            add_button(label="Clear", enabled=True, width=50, user_data=["Race Asi","Clear"], callback=q.cbh, tag=tag.rfeature.button("asi_clear"))
-                    add_child_window(auto_resize_y=True, width=w2, border=True, tag=tag.rfeature.main())
+                            add_combo(items=get.list_Atr, default_value="", width=50, no_arrow_button=True, user_data=["Race Asi", 0], callback=q.cbh, tag=t.rfa0)
+                            add_combo(items=get.list_Atr, default_value="", width=50, no_arrow_button=True, user_data=["Race Asi", 1], callback=q.cbh, tag=t.rfa1)
+                            add_button(label="Clear", enabled=True, width=50, user_data=["Race Asi", "Clear"], callback=q.cbh, tag=t.rfac)
+                    add_child_window(auto_resize_y=True, width=w2, border=True, tag=t.rfm)
                     add_separator(label="Class")
-                    add_child_window(auto_resize_y=True, width=w2, border=True, tag=tag.cfeature.sub())
-                    add_child_window(auto_resize_y=True, width=w2, border=True, tag=tag.cfeature.main())
+                    add_child_window(auto_resize_y=True, width=w2, border=True, tag=t.cfs)
+                    add_child_window(auto_resize_y=True, width=w2, border=True, tag=t.cfm)
                     add_separator(label="Feat")
                     with child_window(auto_resize_y=True, width=w2, border=False):
                         with collapsing_header(label="Milestones"):
-                            add_child_window(auto_resize_y=True, width=w2, border=True, tag=tag.mfeature.sub())
-                    add_child_window(auto_resize_y=True, width=w2, border=True, tag=tag.mfeature.main())
+                            add_child_window(auto_resize_y=True, width=w2, border=True, tag=t.mfs)
+                    add_child_window(auto_resize_y=True, width=w2, border=True, tag=t.mfm)
                     add_separator(label="Background")
-                    add_child_window(auto_resize_y=True, width=w2, border=True, tag=tag.bfeature.sub())
-                    add_child_window(auto_resize_y=True, width=w2, border=True, tag=tag.bfeature.main())
+                    add_child_window(auto_resize_y=True, width=w2, border=True, tag=t.bfs)
+                    add_child_window(auto_resize_y=True, width=w2, border=True, tag=t.bfm)
             with tab(label="Actions"):
                 with child_window(auto_resize_x=True, auto_resize_y=True, border=True):
-                    with child_window(auto_resize_y=True, width=w2, border=True, tag = tag.wactions.window()):
+                    with child_window(auto_resize_y=True, width=w2, border=True, tag=t.waw):
                         add_separator(label="Weapons")
-
-
+                        
 
 def init_window_block_actions_weapons():
     with group(parent=tag.wactions.window()):
