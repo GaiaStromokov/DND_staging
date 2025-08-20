@@ -1,5 +1,5 @@
 
-class size:
+class sz:
     w_max = 1350
     h_max = 880
 

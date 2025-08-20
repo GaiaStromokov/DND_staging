@@ -1,6 +1,6 @@
 import functools
 list_Atr = ["STR","DEX","CON","INT","WIZ","CHA"]
-class TagFactory:
+class Tag:
     """
     A dynamic and fluent tag generator. It automatically creates and caches
     tagger objects for different UI panels, enforcing a strict and consistent

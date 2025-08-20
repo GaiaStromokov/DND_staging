@@ -4,7 +4,7 @@ from ui.upd_helper_import import *
 
 class upd_background:
     def __init__(self):
-        self.parent = tag.bfeature.main()
+        self.parent = Tag.bfeature.main()
         self.feature_map = {
             "Empty": ["No Feature", "You have no special feature from your background."],
             "Acolyte": ["Shelter of the Faithful", "As an acolyte, you command the respect of those who share your faith, and you can perform the religious ceremonies of your deity. You and your adventuring companions can expect to receive free healing and care at a temple, shrine, or other established presence of your faith, though you must provide any material components needed for Spell. Those who share your religion will support you (but only you) at a modest lifestyle. You might also have ties to a specific temple dedicated to your chosen deity or pantheon, and you have a residence there. This could be the temple where you used to serve, if you remain on good terms with it, or a temple where you have found a new home. While near your temple, you can call upon the priests for assistance, provided the assistance you ask for is not hazardous and you remain in good standing with your temple."],
@@ -27,14 +27,14 @@ class upd_background:
         self.main()
 
     def sub(self):
-        item_clear(tag.bfeature.sub())
+        item_clear(Tag.bfeature.sub())
         data = q.db.Background["Prof"]
-        with group(parent=tag.bfeature.sub()):
+        with group(parent=Tag.bfeature.sub()):
             with group(horizontal=True):
                 add_text("Proficiency Select", color=c_h1)
                 for key in data:
                     for idx, val in enumerate(data[key]["Select"]):
-                        tag_combo = tag.bfeature.select(key,idx)
+                        tag_combo = Tag.bfeature.select(key,idx)
                         add_combo(items=["Clear"] + get.dict_Background_Skills[get.Background()], default_value=val, width=100, no_arrow_button=True, user_data=["Background Prof Select", key, idx], callback=q.cbh, tag=tag_combo)
 
 
@@ -43,10 +43,10 @@ class upd_background:
         name = data[0]
         desc = data[1]
         
-        item_clear(tag.bfeature.main())
-        with group(parent=tag.bfeature.main()):
-            tag_text = tag.bfeature.text()
-            tag_tooltip = tag.bfeature.tooltip()
+        item_clear(Tag.bfeature.main())
+        with group(parent=Tag.bfeature.main()):
+            tag_text = Tag.bfeature.text()
+            tag_tooltip = Tag.bfeature.tooltip()
             add_text(name, color=c_h1, tag=tag_text)
             item_delete(tag_tooltip)
             with tooltip(tag_text, tag=tag_tooltip):
