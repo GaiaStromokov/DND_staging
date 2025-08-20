@@ -1,5 +1,5 @@
 from ui.upd_helper_import import *
-
+tag = Tag()
 
 
 class upd_sheet:
@@ -94,32 +94,32 @@ class upd_sheet:
             configure_item(tag.pdesc.text(i), default_value=cdata[i])
 
 
-    def proficiencies(self):
-        cdata = q.pc.Prof
-        for i in q.w.search(Tier=0, Slot="Weapon", Cat="Simple"):
-            configure_item(tag.prof.multi("Simple", i, suffix="toggle"), default_value=i in cdata["Weapon"])
-            configure_item(tag.prof.multi("Simple", i, suffix="text"), color=get.prof_color("Weapon", i))
+def proficiencies(self):
+    cdata = q.pc.Prof
+    for i in q.w.search(Tier=0, Slot="Weapon", Cat="Simple"):
+        configure_item(tag.prof.toggle("Simple", i), default_value=i in cdata["Weapon"])
+        configure_item(tag.prof.text("Simple", i), color=get.prof_color("Weapon", i))
 
-        for i in q.w.search(Tier=0, Slot="Weapon", Cat="Martial"):
-            configure_item(tag.prof.multi("Martial", i, suffix="toggle"), default_value=i in cdata["Weapon"])
-            configure_item(tag.prof.multi("Martial", i, suffix="text"), color=get.prof_color("Weapon", i))
+    for i in q.w.search(Tier=0, Slot="Weapon", Cat="Martial"):
+        configure_item(tag.prof.toggle("Martial", i), default_value=i in cdata["Weapon"])
+        configure_item(tag.prof.text("Martial", i), color=get.prof_color("Weapon", i))
 
-        for i in q.w.search(Tier=0, Slot=["Armor", "Shield"]):
-            configure_item(tag.prof.multi("Armor", i, suffix="toggle"), default_value=i in cdata["Armor"])
-            configure_item(tag.prof.multi("Armor", i, suffix="text"), color=get.prof_color("Armor", i))
+    for i in q.w.search(Tier=0, Slot=["Armor", "Shield"]):
+        configure_item(tag.prof.toggle("Armor", i), default_value=i in cdata["Armor"])
+        configure_item(tag.prof.text("Armor", i), color=get.prof_color("Armor", i))
 
-        for i in get.list_Job:
-            configure_item(tag.prof.multi("Artisan", i, suffix="toggle"), default_value=i in cdata["Tool"])
-            configure_item(tag.prof.multi("Artisan", i, suffix="text"), color=get.prof_color("Tool", i))
+    for i in get.list_Job:
+        configure_item(tag.prof.toggle("Artisan", i), default_value=i in cdata["Tool"])
+        configure_item(tag.prof.text("Artisan", i), color=get.prof_color("Tool", i))
 
-        for i in get.list_Game:
-            configure_item(tag.prof.multi("Gaming", i, suffix="toggle"), default_value=i in cdata["Tool"])
-            configure_item(tag.prof.multi("Gaming", i, suffix="text"), color=get.prof_color("Tool", i))
+    for i in get.list_Game:
+        configure_item(tag.prof.toggle("Gaming", i), default_value=i in cdata["Tool"])
+        configure_item(tag.prof.text("Gaming", i), color=get.prof_color("Tool", i))
 
-        for i in get.list_Music:
-            configure_item(tag.prof.multi("Musical", i, suffix="toggle"), default_value=i in cdata["Tool"])
-            configure_item(tag.prof.multi("Musical", i, suffix="text"), color=get.prof_color("Tool", i))
+    for i in get.list_Music:
+        configure_item(tag.prof.toggle("Musical", i), default_value=i in cdata["Tool"])
+        configure_item(tag.prof.text("Musical", i), color=get.prof_color("Tool", i))
 
-        for i in get.list_Lang:
-            configure_item(tag.prof.multi("Languages", i, suffix="toggle"), default_value=i in cdata["Lang"])
-            configure_item(tag.prof.multi("Languages", i, suffix="text"), color=get.prof_color("Lang", i))
+    for i in get.list_Lang:
+        configure_item(tag.prof.toggle("Languages", i), default_value=i in cdata["Lang"])
+        configure_item(tag.prof.text("Languages", i), color=get.prof_color("Lang", i))

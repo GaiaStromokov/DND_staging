@@ -1,5 +1,5 @@
 from ui.upd_helper_import import *
-
+tag = Tag()
 
 class upd_race:
     def __init__(self):
