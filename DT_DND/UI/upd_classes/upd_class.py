@@ -40,7 +40,7 @@ class upd_class:
         with group(parent=self.parent):
             add_text(a, color=c_h1, tag=t_header)
             for i, desc in enumerate(descriptions):
-                add_text(desc, color=c_text, wrap=sz.gwrap, tag=desc_tags[i])
+                add_text(desc, color=c_text, wrap=sz.wrap, tag=desc_tags[i])
 
     def standard_toggle(self, name, descriptions):
         a, t = gen_abil(name)
@@ -56,7 +56,7 @@ class upd_class:
                     add_checkbox(default_value=val, enabled=True, user_data=["Class Use", a, idx], callback=q.cbh, tag=t_toggle)
 
             for i, desc in enumerate(descriptions):
-                add_text(desc, color=c_text, wrap=sz.gwrap, tag=desc_tags[i])
+                add_text(desc, color=c_text, wrap=sz.wrap, tag=desc_tags[i])
 
     def standard_multi_choice(self, name):
         a, t = gen_abil(name)
@@ -76,7 +76,7 @@ class upd_class:
             for item in cdata["Select"]:
                 if item != "":
                     add_text(item, color=c_h2)
-                    add_text(get.get_Fighting_Style(item), color=c_text, wrap=sz.gwrap)
+                    add_text(get.get_Fighting_Style(item), color=c_text, wrap=sz.wrap)
 
     def Empty(self):
         pass
@@ -154,7 +154,7 @@ class upd_class:
                         add_text(item, color=c_h2, tag=t_item)
                         item_delete(t_tooltip)
                         with tooltip(t_item, tag=t_tooltip):
-                            add_text(get.dict_Maneuver_map[item], color=c_text, wrap=sz.gwrap)
+                            add_text(get.dict_Maneuver_map[item], color=c_text, wrap=sz.wrap)
         
         if "Student of War" in data:
             a, t = gen_abil("Student of War", 1)
@@ -191,7 +191,7 @@ class upd_class:
                 item_delete(t_tooltip)
                 with tooltip(t_header, tag=t_tooltip):
                     for desc in Weapon_Bond_descriptions:
-                        add_text(desc, color=c_text, wrap=sz.gwrap)
+                        add_text(desc, color=c_text, wrap=sz.wrap)
         
         if "War Magic" in data:
             War_Magic_descriptions = ["When you use your action to cast a cantrip, you can make one weapon attack as a bonus action."]
@@ -262,9 +262,9 @@ class upd_class:
                 item_delete(t_tooltip)
                 with tooltip(t_header, tag=t_tooltip):
                     add_text("Copying External Spells", color=c_h1)
-                    add_text(desc1, color=c_text, wrap=sz.gwrap)
+                    add_text(desc1, color=c_text, wrap=sz.wrap)
                     add_text("Copying Internal Spells", color=c_h1)
-                    add_text(desc2, color=c_text, wrap=sz.gwrap)
+                    add_text(desc2, color=c_text, wrap=sz.wrap)
 
         if "Arcane Recovery" in data:
             Arcane_Recovery_descriptions = [f"Once per day when you finish a short rest, you can choose expended spell slots to recover. The spell slots can have a combined level that is equal to or less than half your wizard level (rounded up), and none of the slots can be 6th level or higher."]
@@ -343,7 +343,7 @@ class upd_class:
                     add_button(label=f"{cdata['HP']['Current']} / {cdata['HP']['Max']}", enabled=False, tag=t_hp)
                     add_button(label="-", user_data=["Arcane Ward", -1], callback=q.cbh)
                     add_button(label="+", user_data=["Arcane Ward", 1], callback=q.cbh)
-                add_text(description, color=c_text, wrap=sz.gwrap, tag=t_desc)
+                add_text(description, color=c_text, wrap=sz.wrap, tag=t_desc)
 
         if "Projected Ward" in data:
             Projected_Ward_descriptions = ["(reaction) When a creature within 30 ft is hit, use your Arcane Ward to absorb the damage."]

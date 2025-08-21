@@ -1,5 +1,5 @@
 from ui.upd_helper_import import *
-
+tag = Tag()
 
 
 class upd_bazaar:
@@ -12,7 +12,7 @@ class upd_bazaar:
     def create_bazaar_button(self, item, category_type, parent):
         button_tag = tag.bazaar.button(item)
         tooltip_tag = tag.bazaar.tooltip(item)
-        add_button(label=get.isName(item), width=size.w_item, user_data=["Bazaar Add Item", category_type, item], callback=q.cbh, tag=button_tag, parent=parent)
+        add_button(label=get.isName(item), width=sz.wItem, user_data=["Bazaar Add Item", category_type, item], callback=q.cbh, tag=button_tag, parent=parent)
         with tooltip(button_tag, tag=tooltip_tag):
             item_detail_handler(item)
 

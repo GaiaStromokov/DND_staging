@@ -1,4 +1,4 @@
-class Sz:
+class sz:
     wMax = 1350
     hMax = 880
 
@@ -11,12 +11,12 @@ class Sz:
 
     wrap = 650
 
-    wSBtn = 20
-    wMBtn = 46
-    wLBtn = 90
+    wSbtn = 20
+    wMbtn = 46
+    wLbtn = 90
 
-    wArmorClass = 62
-    hArmorClass = 58
+    wAC = 62
+    hAC = 58
 
     wAttributes = 132
     hAttributes = 174

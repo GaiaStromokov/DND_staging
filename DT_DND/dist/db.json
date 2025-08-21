@@ -1,9 +1,9 @@
 {
     "Core": {
-        "L": 4,
+        "L": 3,
         "PB": 2,
-        "R": "Dwarf",
-        "SR": "Hill",
+        "R": "Elf",
+        "SR": "Shadar Kai",
         "C": "Fighter",
         "SC": "",
         "BG": "Empty"
@@ -70,8 +70,8 @@
         "Race": 0,
         "Class": 0,
         "Feat": 0,
-        "Sum": 34,
-        "Current": 34
+        "Sum": 30,
+        "Current": 30
     },
     "AC": {
         "Base": 10,
@@ -176,7 +176,14 @@
             "",
             ""
         ],
-        "Abil": {}
+        "Abil": {
+            "Blessing of the Raven Queen": {
+                "Use": [
+                    false,
+                    false
+                ]
+            }
+        }
     },
     "Milestone": {
         "Select": [
@@ -368,7 +375,7 @@
             "Mod": 0
         },
         "Perception": {
-            "Mod": 0
+            "Mod": 2
         },
         "Performance": {
             "Mod": 0
@@ -416,48 +423,11 @@
             "Waist": "",
             "Feet": "",
             "Armor": "",
-            "Hand_1": "Longsword",
-            "Hand_2": "Longsword",
+            "Hand_1": "HalberdPPP3",
+            "Hand_2": "",
             "Ring_1": "",
             "Ring_2": ""
         },
-        "Backpack": {
-            "Spear": [
-                "Weapon",
-                1
-            ],
-            "Dagger": [
-                "Weapon",
-                1
-            ],
-            "Morningstar": [
-                "Weapon",
-                1
-            ],
-            "Lance": [
-                "Weapon",
-                1
-            ],
-            "Shield": [
-                "Armor",
-                1
-            ],
-            "Battle_axePPP3": [
-                "Weapon",
-                1
-            ],
-            "HalberdPPP3": [
-                "Weapon",
-                1
-            ],
-            "BreastplatePPP3": [
-                "Armor",
-                1
-            ],
-            "Longsword": [
-                "Weapon",
-                1
-            ]
-        }
+        "Backpack": {}
     }
 }

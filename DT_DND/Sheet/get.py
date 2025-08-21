@@ -4,7 +4,7 @@ from access_data.color_reference import *
 from colorist import *
 from access_data.Grimoir import *
 
-
+def dt(idx): return idx.replace("_"," ")
 # # Core values
 def Level(): return q.db.Core.L
 def PB(): return q.db.Core.PB

@@ -51,4 +51,4 @@ class upd_background:
             add_text(name, color=c_h1, tag=tag_text)
             item_delete(tag_tooltip)
             with tooltip(tag_text, tag=tag_tooltip):
-                add_text(desc, color=c_text, wrap=sz.gwrap)
+                add_text(desc, color=c_text, wrap=sz.wrap)

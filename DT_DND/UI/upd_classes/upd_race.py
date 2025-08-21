@@ -15,19 +15,12 @@ class upd_race:
     
     def main(self):
         item_clear(self.parent)
-        Race = get.Race()
-        Subrace = get.Subrace()
-        
-        if hasattr(self, Race):
-            method_name = Race
-            getattr(self, method_name)()
+        race, subrace = get.Race(), get.Subrace()
 
-        if hasattr(self, f"{Race}_{Subrace}"):
-            method_name = f"{Race}_{Subrace}"
-            getattr(self, method_name)()
-
-    
-
+        for method in (race, f"{race}_{subrace}"):
+            func = getattr(self, method, None)
+            if callable(func):
+                func()
 
     def standard(self, name, descriptions):
         a, t = gen_abil(name)
@@ -37,7 +30,7 @@ class upd_race:
         with group(parent=self.parent):
             add_text(a, color=c_h1, tag=t_header)
             for i, desc in enumerate(descriptions):
-                add_text(desc, color=c_text, wrap=size.gwrap, tag=desc_tags[i])
+                add_text(desc, color=c_text, wrap=sz.wrap, tag=desc_tags[i])
 
     def standard_choice(self, name, items_list):
         a, t = gen_abil(name)

@@ -18,14 +18,15 @@ def on_exit_callback():
 def startup():
     backend = backend_manager()
     q.cbh = backend.get_callback_handler()
-    
     init_pc()
     q.pc.start_configuration()
     init_ui()
     backend.Start()
+    
 
 
 def main():
+    
     show_item_registry()
     create_context()
     with font_registry(): font_choice = add_font(get_path("utils", "Helvetica.ttf"), 13)

@@ -139,7 +139,7 @@ class Elf_Drow():
         if level >= 3: Fuse_2("Drow Magic", "Faerie Fire", 1)
 
 
-class Elf_ShadarKai():
+class Elf_Shadar_Kai():
     def __init__(self, p):
         self.p = p
 
@@ -324,7 +324,7 @@ class Dragonborn_White():
     def Select(self):
         Fuse_1("Breath Weapon", 1)
 
-class HalfOrc():
+class Half_Orc():
     def __init__(self, p):
         self.p = p
         self.p.Vision["Dark"] = 60

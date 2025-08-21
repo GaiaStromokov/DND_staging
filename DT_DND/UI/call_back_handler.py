@@ -59,10 +59,8 @@ class backend_populate:
         self.CLASS.whole()
         self.MILESTONE.whole()
         self.SPELL.whole()
-        
 
-    
-    
+
     def Spell(self): 
         self.SPELL.whole()
 
@@ -83,9 +81,9 @@ class backend_populate:
         self.SHEET.initiative()
         self.SHEET.vision()
         self.SHEET.speed()
-        self.SHEET.proficiencies()
+        self.SHEET.prof()
         self.SHEET.attributes()
-        self.SHEET.armor_class()
+        self.SHEET.ac()
         self.SHEET.character()
     def Static(self):
         self.Generic()
@@ -119,7 +117,7 @@ class backend_populate:
         self.Armor()
 
     def Armor(self): 
-        self.SHEET.armor_class()
+        self.SHEET.ac()
         
 class backend_stage:
     def __init__(self, populate):

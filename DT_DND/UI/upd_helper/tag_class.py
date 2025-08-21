@@ -1,11 +1,6 @@
 import functools
 list_Atr = ["STR","DEX","CON","INT","WIZ","CHA"]
 class Tag:
-    """
-    A dynamic and fluent tag generator. It automatically creates and caches
-    tagger objects for different UI panels, enforcing a strict and consistent
-    naming convention everywhere.
-    """
     def __init__(self):
         self._cache = {}
 

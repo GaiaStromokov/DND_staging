@@ -74,7 +74,8 @@ def item_detail_armor(data):
     pass
 
 def spell_detail(spell):
-    data = get.Grimoir[spell]
+    try: data = get.Grimoir[spell]
+    except (KeyError, AttributeError, TypeError): return  
     with group(horizontal=True):
         add_text("Level", color=c_h1)
         if data["Level"] == 0: add_text("Cantrip", color=c_text)
