@@ -22,7 +22,10 @@ class backend_populate:
 
 
 
-
+    def Startup(self):
+        self.Static()
+        self.Dynamic()
+        self.BAZAAR.whole()
     
     def All(self):
         self.Static()
@@ -98,18 +101,18 @@ class backend_populate:
         self.SHEET.character()
 
     def Inventory(self): 
-        self.Bazaar()
         self.Backpack()
         self.Closet()
+        self.ACTION.whole()
         
-    def Bazaar(self): 
-        self.BAZAAR.whole()
 
     def Backpack(self): 
         self.BACKPACK.whole()
         
+        
     def Backpack_mod(self): 
         self.BACKPACK.populate_backpack()
+        
 
     def Closet(self): 
         self.ACTION.whole()
@@ -413,4 +416,4 @@ class backend_manager:
         return self.Input.callback
     
     def Start(self):
-        self.Populate.All()
+        self.Populate.Startup()

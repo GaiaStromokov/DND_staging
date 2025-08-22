@@ -1,66 +1,53 @@
 from ui.upd_helper_import import *
 tag = Tag()
 
-
 class upd_sheet:
     def __init__(self):
         pass
 
-
     def core(self):
-        t = tui.Core
         cdata = q.db.Core
-        configure_item(t.Level, label=get.Level())
-        configure_item(t.PB, label = f"PB: +{get.PB()}")
-        configure_item(t.Race, items=get.list_Race, default_value=get.Race())
-        configure_item(t.Subrace, items=get.option_Race[cdata.R], default_value=get.Subrace())
-        configure_item(t.Class, items=get.list_Class, default_value=get.Class())
-        configure_item(t.Subclass, items=get.option_Class[cdata.C] if get.valid_class() else [], default_value=get.Subclass())
-        configure_item(t.Background, items=get.list_Background, default_value=get.Background())
+        configure_item(tag.core.val("Level"), label=get.Level())
+        configure_item(tag.core.val("PB"), label = f"PB: +{get.PB()}")
+        configure_item(tag.core.select("Race"), items=get.list_Race, default_value=get.Race())
+        configure_item(tag.core.select("Subrace"), items=get.option_Race[cdata.R], default_value=get.Subrace())
+        configure_item(tag.core.select("Class"), items=get.list_Class, default_value=get.Class())
+        configure_item(tag.core.select("Subclass"), items=get.option_Class[cdata.C] if get.valid_class() else [], default_value=get.Subclass())
+        configure_item(tag.core.select("Background"), items=get.list_Background, default_value=get.Background())
             
-
-
     def attributes(self):
         data=q.db.Atr
         for atr in get.list_Atr:
             cdata=data[atr]
-            t = getattr(tui, atr)
-            configure_item(t.Sum, label = cdata.Val)
-            configure_item(t.Mod, label = cdata.Mod)
-            configure_item(t.Select, default_value = cdata.Base)
-            configure_item(t.Base, label = cdata.Base)
-            configure_item(t.Race, label = cdata.Rasi)
-            configure_item(t.Feat, label = cdata.Milestone)
-
-
+            configure_item(tag.atr.sum(atr), label = cdata.Val)
+            configure_item(tag.atr.mod(atr), label = cdata.Mod)
+            configure_item(tag.atr.select(atr), default_value = cdata.Base)
+            configure_item(tag.atr.source(atr, "Base"), label = cdata.Base)
+            configure_item(tag.atr.source(atr, "Race"), label = cdata.Rasi)
+            configure_item(tag.atr.source(atr, "Feat"), label = cdata.Milestone)
 
     def skills(self):
         for skill in get.list_Skill:
-            t = getattr(tui, skill)
             cdata=q.pc.Skill[skill]
-            configure_item(t.Toggle, default_value=cdata)
-            configure_item(t.Mod, label=get.skill_text(skill))
+            configure_item(tag.skill.toggle(skill), default_value=cdata)
+            configure_item(tag.skill.mod(skill), label=get.skill_text(skill))
             # configure_item(f"skill_Player_{skill}", default_value=skill in cdata["Player"])
             # configure_item(f"skill_Race_{skill}", default_value=skill in cdata["Race"])
             # configure_item(f"skill_Class_{skill}", default_value=skill in cdata["Class"])
             # configure_item(f"skill_BG_{skill}", default_value=skill in cdata["Background"])
             # configure_item(f"skill_Feat_{skill}", default_value=skill in cdata["Feat"])
-            
+
     def health(self):
         hp = q.db.HP
-        t = tui.Health
-        configure_item(t.Hp, label = f"{hp["Current"]} / {hp["Sum"]}")
-        configure_item(t.Temp, label = hp["Temp"])
-        set_value(t.Max, hp["Player"])
-        
-
+        configure_item(tag.health.val("HP"), label = f"{hp["Current"]} / {hp["Sum"]}")
+        configure_item(tag.health.val("Temp"), label = hp["Temp"])
+        set_value(tag.health.val("Max"), hp["Player"])
         
     def initiative(self):
-        t = tui.Initiative
-        configure_item(t.Val, label = get.Initiative_text())
-        configure_item(t.Dex, label = q.db.Atr["DEX"]["Mod"])
-        configure_item(t.Race, label = q.db.Initiative["Race"])
-        configure_item(t.Class, label = q.db.Initiative["Class"])
+        configure_item(tag.init.val(), label = get.Initiative_text())
+        configure_item(tag.init.source("Dex"), label = q.db.Atr["DEX"]["Mod"])
+        configure_item(tag.init.source("Race"), label = q.db.Initiative["Race"])
+        configure_item(tag.init.source("Class"), label = q.db.Initiative["Class"])
         
     def vision(self):
         cdata=q.pc.Vision
@@ -79,7 +66,6 @@ class upd_sheet:
         configure_item(tag.ac.source("dex"), label = ac.Dex)
         configure_item(tag.ac.source("shield"), label = ac.Shield)
 
-
     def conditions(self):
         for i in get.list_Condition:
             configure_item(tag.cond.toggle(i),default_value = q.db.Condition[i])
@@ -96,7 +82,6 @@ class upd_sheet:
         for i in get.list_Description:
             configure_item(tag.pdesc.input(i), default_value=cdata[i])
             configure_item(tag.pdesc.text(i), default_value=cdata[i])
-
 
     def prof(self):
         cdata = q.pc.Prof
