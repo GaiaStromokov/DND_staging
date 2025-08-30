@@ -134,9 +134,9 @@ class Elf_Drow():
     
     def Upd(self):
         level = q.db.Core.L
-        Fgen("Drow Magic")
-        if level >= 1: Fuse_2("Drow Magic", "Dancing Lights", 1)
-        if level >= 3: Fuse_2("Drow Magic", "Faerie Fire", 1)
+        Fgen("Drow_Magic")
+        if level >= 1: Fuse_2("Drow_Magic", "Dancing Lights", 1)
+        if level >= 3: Fuse_2("Drow_Magic", "Faerie Fire", 1)
 
 
 class Elf_Shadar_Kai():
@@ -146,7 +146,7 @@ class Elf_Shadar_Kai():
 
     
     def Upd(self): 
-        Fuse_1("Blessing of the Raven Queen", q.db.Core.PB)
+        Fuse_1("Blessing_of_the_Raven_Queen", q.db.Core.PB)
 
 class Dwarf():
     def __init__(self, p):
@@ -260,7 +260,7 @@ class Dragonborn_Black():
 
     
     def Upd(self):
-        Fuse_1("Breath Weapon", 1)
+        Fuse_1("Breath_Weapon", 1)
 
 class Dragonborn_Blue():
     def __init__(self, p):
@@ -269,60 +269,60 @@ class Dragonborn_Blue():
 
     
     def Upd(self):
-        Fuse_1("Breath Weapon", 1)
+        Fuse_1("Breath_Weapon", 1)
 
 class Dragonborn_Brass():
     def __init__(self, p):
         self.p = p
-        Fuse_1("Breath Weapon", 1)
+        Fuse_1("Breath_Weapon", 1)
 
 class Dragonborn_Bronze():
     def __init__(self, p):
         self.p = p
 
     def Select(self):
-        Fuse_1("Breath Weapon", 1)
+        Fuse_1("Breath_Weapon", 1)
 
 class Dragonborn_Copper():
     def __init__(self, p):
         self.p = p
 
     def Select(self):
-        Fuse_1("Breath Weapon", 1)
+        Fuse_1("Breath_Weapon", 1)
 
 class Dragonborn_Gold():
     def __init__(self, p):
         self.p = p
         
-        Fuse_1("Breath Weapon", 1)
+        Fuse_1("Breath_Weapon", 1)
 
 class Dragonborn_Green():
     def __init__(self, p):
         self.p = p
 
     def Select(self):
-        Fuse_1("Breath Weapon", 1)
+        Fuse_1("Breath_Weapon", 1)
 
 class Dragonborn_Red():
     def __init__(self, p):
         self.p = p
 
     def Select(self):
-        Fuse_1("Breath Weapon", 1)
+        Fuse_1("Breath_Weapon", 1)
 
 class Dragonborn_Silver():
     def __init__(self, p):
         self.p = p
 
     def Select(self):
-        Fuse_1("Breath Weapon", 1)
+        Fuse_1("Breath_Weapon", 1)
 
 class Dragonborn_White():
     def __init__(self, p):
         self.p = p
 
     def Select(self):
-        Fuse_1("Breath Weapon", 1)
+        Fuse_1("Breath_Weapon", 1)
 
 class Half_Orc():
     def __init__(self, p):
@@ -338,9 +338,9 @@ class Half_Orc():
 
     
     def Upd(self):
-        Fgen("Relentless Endurance")
-        Fuse_1("Relentless Endurance", 1)
-        Fgen("Savage Attacks")
+        Fgen("Relentless_Endurance")
+        Fuse_1("Relentless_Endurance", 1)
+        Fgen("Savage_Attacks")
 
 class HalfOrc_Standard():
     def __init__(self, p):
@@ -371,11 +371,11 @@ class Tiefling_Asmodeus():
 
     
     def Upd(self):
-        Fgen("Infernal Legacy")
+        Fgen("Infernal_Legacy")
         level = q.db.Core.L
-        if level >= 1: Fuse_2("Infernal Legacy", "Thaumaturgy", 1)
-        if level >= 3: Fuse_2("Infernal Legacy", "Hellish Rebuke", 1)
-        if level >= 5: Fuse_2("Infernal Legacy", "Darkness", 1)
+        if level >= 1: Fuse_2("Infernal_Legacy", "Thaumaturgy", 1)
+        if level >= 3: Fuse_2("Infernal_Legacy", "Hellish Rebuke", 1)
+        if level >= 5: Fuse_2("Infernal_Legacy", "Darkness", 1)
 
 class Tiefling_Baalzebul():
     def __init__(self, p):
@@ -385,11 +385,11 @@ class Tiefling_Baalzebul():
 
     
     def Upd(self):
-        Fgen("Legacy of Maladomini")
+        Fgen("Legacy_of_Maladomini")
         level = q.db.Core.L
-        if level >= 1: Fuse_2("Legacy of Maladomini", "Thaumaturgy", 1)
-        if level >= 3: Fuse_2("Legacy of Maladomini", "Ray of Sickness", 1)
-        if level >= 5: Fuse_2("Legacy of Maladomini", "Crown of Madness", 1)
+        if level >= 1: Fuse_2("Legacy_of_Maladomini", "Thaumaturgy", 1)
+        if level >= 3: Fuse_2("Legacy_of_Maladomini", "Ray of Sickness", 1)
+        if level >= 5: Fuse_2("Legacy_of_Maladomini", "Crown of Madness", 1)
 
 class Tiefling_Dispater():
     def __init__(self, p):
@@ -398,11 +398,11 @@ class Tiefling_Dispater():
 
     
     def Upd(self):
-        Fgen("Legacy of Dis")
+        Fgen("Legacy_of_Dis")
         level = q.db.Core.L
-        if level >= 1: Fuse_2("Legacy of Dis", "Thaumaturgy", 1)
-        if level >= 3: Fuse_2("Legacy of Dis", "Disguise Self", 1)
-        if level >= 5: Fuse_2("Legacy of Dis", "Detect Thoughts", 1)
+        if level >= 1: Fuse_2("Legacy_of_Dis", "Thaumaturgy", 1)
+        if level >= 3: Fuse_2("Legacy_of_Dis", "Disguise Self", 1)
+        if level >= 5: Fuse_2("Legacy_of_Dis", "Detect Thoughts", 1)
 
 class Tiefling_Fierna():
     def __init__(self, p):
@@ -411,11 +411,11 @@ class Tiefling_Fierna():
 
     
     def Upd(self):
-        Fgen("Legacy of Minauros")
+        Fgen("Legacy_of_Minauros")
         level = q.db.Core.L
-        if level >= 1: Fuse_2("Legacy of Minauros", "Mage Hand", 1)
-        if level >= 3: Fuse_2("Legacy of Minauros", "Tensers Floating Disk", 1)
-        if level >= 5: Fuse_2("Legacy of Minauros", "Arcane Lock", 1)
+        if level >= 1: Fuse_2("Legacy_of_Minauros", "Mage Hand", 1)
+        if level >= 3: Fuse_2("Legacy_of_Minauros", "Tensers Floating Disk", 1)
+        if level >= 5: Fuse_2("Legacy_of_Minauros", "Arcane Lock", 1)
 
 class Tiefling_Glasya():
     def __init__(self, p):
@@ -424,11 +424,11 @@ class Tiefling_Glasya():
 
     
     def Upd(self):
-        Fgen("Legacy of Cania")
+        Fgen("Legacy_of_Cania")
         level = q.db.Core.L
-        if level >= 1: Fuse_2("Legacy of Cania", "Mage Hand", 1)
-        if level >= 3: Fuse_2("Legacy of Cania", "Burning Hands", 1)
-        if level >= 5: Fuse_2("Legacy of Cania", "Flame Blade", 1)
+        if level >= 1: Fuse_2("Legacy_of_Cania", "Mage Hand", 1)
+        if level >= 3: Fuse_2("Legacy_of_Cania", "Burning Hands", 1)
+        if level >= 5: Fuse_2("Legacy_of_Cania", "Flame Blade", 1)
 
 class Tiefling_Levistus():
     def __init__(self, p):
@@ -437,11 +437,11 @@ class Tiefling_Levistus():
 
     
     def Upd(self):
-        Fgen("Legacy of Stygia")
+        Fgen("Legacy_of_Stygia")
         level = q.db.Core.L
-        if level >= 1: Fuse_2("Legacy of Stygia", "Ray of Frost", 1)
-        if level >= 3: Fuse_2("Legacy of Stygia", "Armor of Agathys", 1)
-        if level >= 5: Fuse_2("Legacy of Stygia", "Darkness", 1)
+        if level >= 1: Fuse_2("Legacy_of_Stygia", "Ray of Frost", 1)
+        if level >= 3: Fuse_2("Legacy_of_Stygia", "Armor of Agathys", 1)
+        if level >= 5: Fuse_2("Legacy_of_Stygia", "Darkness", 1)
 
 class Tiefling_Mammon():
     def __init__(self, p):
@@ -450,11 +450,11 @@ class Tiefling_Mammon():
 
     
     def Upd(self):
-        Fgen("Legacy of Minauros")
+        Fgen("Legacy_of_Minauros")
         level = q.db.Core.L
-        if level >= 1: Fuse_2("Legacy of Minauros", "Mage Hand", 1)
-        if level >= 3: Fuse_2("Legacy of Minauros", "Tensers Floating Disk", 1)
-        if level >= 5: Fuse_2("Legacy of Minauros", "Arcane Lock", 1)
+        if level >= 1: Fuse_2("Legacy_of_Minauros", "Mage Hand", 1)
+        if level >= 3: Fuse_2("Legacy_of_Minauros", "Tensers Floating Disk", 1)
+        if level >= 5: Fuse_2("Legacy_of_Minauros", "Arcane Lock", 1)
 
 class Tiefling_Mephistopheles():
     def __init__(self, p):
@@ -463,11 +463,11 @@ class Tiefling_Mephistopheles():
 
     
     def Upd(self):
-        Fgen("Legacy of Cania")
+        Fgen("Legacy_of_Cania")
         level = q.db.Core.L
-        if level >= 1: Fuse_2("Legacy of Cania", "Mage Hand", 1)
-        if level >= 3: Fuse_2("Legacy of Cania", "Burning Hands", 1)
-        if level >= 5: Fuse_2("Legacy of Cania", "Flame Blade", 1)
+        if level >= 1: Fuse_2("Legacy_of_Cania", "Mage Hand", 1)
+        if level >= 3: Fuse_2("Legacy_of_Cania", "Burning Hands", 1)
+        if level >= 5: Fuse_2("Legacy_of_Cania", "Flame Blade", 1)
 
 class Tiefling_Zariel():
     def __init__(self, p):
@@ -476,11 +476,11 @@ class Tiefling_Zariel():
 
     
     def Upd(self):
-        Fgen("Legacy of Avernus")
+        Fgen("Legacy_of_Avernus")
         level = q.db.Core.L
-        if level >= 1: Fuse_2("Legacy of Avernus", "Thaumaturgy", 1)
-        if level >= 3: Fuse_2("Legacy of Avernus", "Searing Smite", 1)
-        if level >= 5: Fuse_2("Legacy of Avernus", "Branding Smite", 1)
+        if level >= 1: Fuse_2("Legacy_of_Avernus", "Thaumaturgy", 1)
+        if level >= 3: Fuse_2("Legacy_of_Avernus", "Searing Smite", 1)
+        if level >= 5: Fuse_2("Legacy_of_Avernus", "Branding Smite", 1)
             
 class Harengon():
     def __init__(self, p):
@@ -494,8 +494,8 @@ class Harengon():
 
     
     def Upd(self):
-        Fgen("Rabbit Hop")
-        Fuse_1("Rabbit Hop", q.db.Core.PB)
+        Fgen("Rabbit_Hop")
+        Fuse_1("Rabbit_Hop", q.db.Core.PB)
         self.p.Initiative = q.db.Core.PB
 
 class Harengon_Standard():

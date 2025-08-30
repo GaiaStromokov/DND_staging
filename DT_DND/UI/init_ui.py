@@ -396,13 +396,13 @@ def init_window_inventory_closet():
                         with group(horizontal=True):
                             add_image_button(tag.closet.icon(slot), callback=q.cbh, user_data=["Closet Clear", slot, "Clear"], tag=tag.closet.img(slot))
                             with child_window(auto_resize_x=True, auto_resize_y=True, border=True, no_scrollbar=True):
-                                add_combo(width=wbtn, no_arrow_button=True, user_data=["Closet Equip", slot], callback=q.cbh, tag=tag.closet.select(slot))
+                                add_combo(width=wbtn, no_arrow_button=True, user_data=["Closet Equip", slot, "Modify"], callback=q.cbh, tag=tag.closet.select(slot))
                 add_image(tag.closet.icon("Figure"))
                 with group(horizontal=False):
                     for slot in right_slots:
                         with group(horizontal=True):
                             with child_window(auto_resize_x=True, auto_resize_y=True, border=True, no_scrollbar=True):
-                                add_combo(width=wbtn, no_arrow_button=True, user_data=["Closet Equip", slot], callback=q.cbh, tag=tag.closet.select(slot))
+                                add_combo(width=wbtn, no_arrow_button=True, user_data=["Closet Equip", slot, "Modify"], callback=q.cbh, tag=tag.closet.select(slot))
                             add_image_button(tag.closet.icon(slot), callback=q.cbh, user_data=["Closet Clear", slot, "Clear"], tag=tag.closet.img(slot))
 
 def init_ui():

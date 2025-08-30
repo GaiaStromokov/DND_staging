@@ -9,11 +9,11 @@ class upd_sheet:
         cdata = q.db.Core
         configure_item(tag.core.val("Level"), label=get.Level())
         configure_item(tag.core.val("PB"), label = f"PB: +{get.PB()}")
-        configure_item(tag.core.select("Race"), items=get.list_Race, default_value=get.Race())
-        configure_item(tag.core.select("Subrace"), items=get.option_Race[cdata.R], default_value=get.Subrace())
-        configure_item(tag.core.select("Class"), items=get.list_Class, default_value=get.Class())
-        configure_item(tag.core.select("Subclass"), items=get.option_Class[cdata.C] if get.valid_class() else [], default_value=get.Subclass())
-        configure_item(tag.core.select("Background"), items=get.list_Background, default_value=get.Background())
+        configure_item(tag.core.select("Race"), items=get.list_Race, default_value=get.dt(cdata.R))
+        configure_item(tag.core.select("Subrace"), items=get.option_Race[cdata.R], default_value=get.dt(cdata.SR))
+        configure_item(tag.core.select("Class"), items=get.list_Class, default_value=get.dt(cdata.C))
+        configure_item(tag.core.select("Subclass"), items=get.option_Class[cdata.C] if get.valid_class() else [], default_value=get.dt(cdata.SC))
+        configure_item(tag.core.select("Background"), items=get.list_Background, default_value=get.dt(cdata.BG))
             
     def attributes(self):
         data=q.db.Atr

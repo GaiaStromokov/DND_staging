@@ -7,334 +7,243 @@ from access_data.Grimoir import *
 from Sheet.get import *
 
 
-
-def Level(value):
-    q.db.Core.L = max(1, min(value, 20))
-    q.db.Core.PB = (q.db.Core.L - 1) // 4 + 2
-
-def Class(value): q.db.Core.C = value
-def Subclass(value): q.db.Core.SC = value
-def Race(value): q.db.Core.R = value
-def Subrace(value): q.db.Core.SR = value
-def Background(value): q.db.Core.BG = value
-
-
-def input_rasi(sender, data, user_data):
-    cdata = q.db.Race
-    key = user_data[0]
-    if key == "Clear": cdata.Rasi = ["", ""]
-    else: cdata.Rasi[key] = data
-
-
-def use_race(sender, data, user_data):
-    key = user_data[0]
-    index = user_data[1]
-    q.db.Race.Abil[key]["Use"][index] = data
-
-
-def use_race_spell(sender, data, user_data):
-    key = user_data[0]
-    spell = user_data[1]
-    q.db.Race.Abil[key][spell]["Use"] = data
-
-
-def select_race_spell(sender, data, user_data):
-    key = user_data[0]
-    q.db.Race.Abil[key]["Select"][0] = data
-
-
-def input_base_atr(sender, data, user_data):
-    key = user_data[0]
-    q.db.Atr[key].Base = int(data)
-
-
-def select_prof_background(sender, data, user_data):
-    cdata = q.db.Background["Prof"]
-    cat = user_data[0]
-    index = user_data[1]
-    
-    if data != "Clear":
-        cdata[cat]["Select"][index] = data
-    else:
+class sett:
+    def __init__(self):
+        pass
+    def Core_Level(self, value):
+        q.db.Core.L = max(1, min(value, 20))
+        q.db.Core.PB = (q.db.Core.L - 1) // 4 + 2
+    def Core_Race(self, value): q.db.Core.R = value.replace(" ", "_")
+    def Core_Subrace(self, value): q.db.Core.SR = value.replace(" ", "_")
+    def Core_Class(self, value): q.db.Core.C = value.replace(" ", "_")
+    def Core_Subclass(self, value): q.db.Core.SC = value.replace(" ", "_")
+    def Core_Background(self, value): q.db.Core.BG = value.replace(" ", "_")
+    #---
+    def Atr_Modify(self, key, data):
+        q.db.Atr[key].Base = int(data)
+    #---
+    def Race_Asi_Clear(self): q.db.Race.Rasi = ["", ""]
+    def Race_Asi_Modify(self, key, data):
+        cdata = q.db.Race
+        cdata.Rasi[key] = data
+    def Race_Abil_Use(self, key, index, data): 
+        q.db.Race.Abil[key]["Use"][index] = data
+    def Race_Spell_Use(self, key, spell, data): 
+        print(key, spell, data)
+        q.db.Race.Abil[key][spell]["Use"] = data
+    def Race_Spell_Select(self, key, data): q.db.Race.Abil[key]["Select"][0] = data
+    #---
+    def Class_Skill_Select_Clear(self):
+        cdata = q.db.Class["Skill Select"]
+        for idx in range(len(cdata)): cdata[idx] = ""
+    def Class_Skill_Select_Modify(self, cat, data):
+        cdata = q.db.Class["Skill Select"]
+        cdata[cat] = data
+    def Class_Abil_Use(self, key, index, data):
+        q.db.Class.Abil[key]["Use"][index] = data
+    def Class_Abil_Select(self, key, index, data):
+        q.db.Class.Abil[key]["Select"][index] = data
+    #---
+    def Background_Prof_Clear(self):
+        cdata = q.db.Background["Prof"]
         for key in cdata:
             plen = len(cdata[key]["Select"])
             cdata[key]["Select"] = [""] * plen
-
-
-def select_prof_player(sender, data, user_data):
-    pass
-    # idx = user_data[0]
-    # cat = idx
-    # if idx in ["Artisan", "Gaming", "Musical"]:
-    #     cat = "Tool"
-
-    # item = user_data[1]
-    # prof_list = q.db.Prof[cat]["Player"]
-    
-
-
-def clear_level_select_milestone(sender, data, user_data):
-    cdata = q.db.Milestone
-    index = user_data[0]
-    if cdata["Feat"][index]:
+    def Background_Prof_Modify(self, cat, index, data):
+        cdata = q.db.Background["Prof"]
+        cdata[cat]["Select"][index] = data
+    #---
+    def Milestone_Top_Clear(self, index):
+        cdata = q.db.Milestone
         prefeat = cdata["Feat"][index]
-        for key in list(cdata["Data"].keys()):
-            if prefeat == key:
-                cdata["Data"].pop(key)
-                        
-    cdata["Select"][index] = ""
-    cdata["Feat"][index] = ""
-    cdata["Asi"][index] = ["", ""]
+        if prefeat and prefeat in cdata["Data"]:
+            cdata["Data"].pop(prefeat)
+        cdata["Select"][index] = ""
+        cdata["Feat"][index] = ""
+        cdata["Asi"][index] = ["", ""]
+    def Milestone_Top_Modify(self, index, data):
+        cdata = q.db.Milestone
+        cdata["Select"][index] = data
+        cdata["Feat"][index] = ""
+        cdata["Asi"][index] = ["", ""]
 
-
-def select_level_milestone(sender, data, user_data):
-    cdata = q.db.Milestone
-    index = user_data[0]
-    cdata["Select"][index] = data
-    
-    cdata["Feat"][index] = ""
-    cdata["Asi"][index] = ["", ""]
-
-
-def select_feat_milestone(sender, data, user_data):
-    cdata = q.db.Milestone
-    index = user_data[0]
-    if data not in cdata["Feat"]:
-        cdata["Feat"][index] = data
-    
-        if data in list_Feat_Select:
-            cdata["Data"][data] = {"Select": [""]}
-        elif data == "Weapon Master":
-            cdata["Data"][data] = {"Select": ["", "", "", ""]}
-        else: 
-            cdata["Data"][data] = {}
-
-
-def choice_feat_milestone(sender, data, user_data):
-    cdata = q.db.Milestone
-    feat = user_data[0]
-    index = user_data[1]
-    if data == "Clear":
-        output = ""
-    else:
-        output = data
-    
-    if feat in list(cdata["Data"].keys()):
-        cdata["Data"][feat]["Select"][index] = output
-
-
-def use_feat_milestone(sender, data, user_data):
-    cdata = q.db.Milestone
-    feat = user_data[0]
-    index = user_data[1]
-    
-    if feat in list(cdata["Data"].keys()):
-        cdata["Data"][feat]["Use"][index] = data
-
-
-def select_asi_milestone(sender, data, user_data):
-    key = user_data[0]
-    index = user_data[1]
-    q.db.Milestone["Asi"][key][index] = data
-
-
-def use_class(sender, data, user_data):
-    key = user_data[0]
-    index = user_data[1]
-    q.db.Class.Abil[key]["Use"][index] = data
-
-
-def select_skill_class(sender, data, user_data):
-    cdata = q.db.Class["Skill Select"]
-    cat = user_data[0]
-    if cat != "Clear":
-        cdata[cat] = data
-    else: 
-        for idx, val in enumerate(cdata):
-            cdata[idx] = ""
-
-
-def select_class(sender, data, user_data):
-    key = user_data[0]
-    index = user_data[1]
-    q.db.Class.Abil[key]["Select"][index] = data
-
-
-def learn_spell(sender, data, user_data):
-    spell = user_data[0]
-    level = user_data[1]
-    cspell = q.db.Spell["Book"]
-    sdata = q.pc.Class.spell_data
-    if level == 0:
-        max_known = sdata['cantrips_available']
-        current_known = cantrips_known()
-        if spell not in cspell[level]:  # add spell
-            if current_known < max_known:
-                cspell[level].append(spell)
-        elif spell in cspell[level]:   # remove spell
-            cspell[level].remove(spell)
-    else:
-        max_known = sdata['spells_available']
-        current_known = spells_known()
-        if spell not in cspell[level]:  # add spell
-            if current_known < max_known:
-                cspell[level].append(spell)
-        elif spell in cspell[level]:   # remove spell
-            cspell[level].remove(spell)
-
-
-def prepare_spell(sender, data, user_data):
-    spell = user_data[0]
-    level = user_data[1]
-    
-    cspell = q.db.Spell["Prepared"]
-    sdata = q.pc.Class.spell_data
-
-    max_prep = sdata['prepared_available']
-    current_prep = spells_prepared()
-
-    if spell not in cspell[level]:  # add spell
-        if current_prep < max_prep:
-            cspell[level].append(spell)
-    elif spell in cspell[level]:   # remove spell
-        cspell[level].remove(spell)
-
-
-def cast_spell(sender, data, user_data):
-    level = user_data[0]
-    slots = q.db.Spell["Slot"][level]
-    for i in range(len(slots)):
-        if not slots[i]:
-            slots[i] = True
-            break
-
-
-def long_rest(sender, data, user_data):
-    if valid_spellclass():
-        for level in [1, 2, 3, 4, 5, 6, 7, 8, 9]:
-            q.db.Spell["Slot"][level] = [False] * len(q.db.Spell["Slot"][level])
-
-
-def mod_health(sender, data, user_data):
-    place, delta = user_data
-    hp = kHP()
-    
-    if place == "Temp":
-        if delta > 0 or hp["Temp"] > 0:
-            hp["Temp"] += delta
-            
-    elif place == "HP":
-        if delta < 0:
-            if hp["Temp"] >= 1 and hp["Temp"] > 0:
-                hp["Temp"] -= 1
+    def Milestone_Feat_Clear(self, index):
+        cdata = q.db.Milestone
+        prefeat = cdata["Feat"][index]
+        if prefeat and prefeat in cdata["Data"]:
+            cdata["Data"].pop(prefeat)
+        cdata["Feat"][index] = ""
+    def Milestone_Feat_Modify(self, index, data):
+        cdata = q.db.Milestone
+        if data not in cdata["Feat"]:
+            cdata["Feat"][index] = data
+            if data in list_Feat_Select:
+                cdata["Data"][data] = {"Select": [""]}
+            elif data == "Weapon Master":
+                cdata["Data"][data] = {"Select": ["", "", "", ""]}
             else:
-                hp["Current"] -= 1
-        else:
-            hp["Current"] = min(hp["Current"] + 1, hp["Sum"])
+                cdata["Data"][data] = {}
+    def Milestone_Feat_Select(self, feat, index, data):
+        cdata = q.db.Milestone
+        if feat in cdata["Data"]: cdata["Data"][feat]["Select"][index] = data
+    def Milestone_Feat_Use(self, feat, index, data):
+        cdata = q.db.Milestone
+        if feat in cdata["Data"]: cdata["Data"][feat]["Use"][index] = data
 
+    def Milestone_Asi_Clear(self, key, index):
+        q.db.Milestone["Asi"][key][index] = ""
+    def Milestone_Asi_Modify(self, key, index, data):
+        q.db.Milestone["Asi"][key][index] = data
+    #---
+    def Proficiency_Player_Modify(self):
+        pass
+    #---
+    def _Toggle_Cantrip(self, spell, spell_list, max_known):
+        current_known = cantrips_known()
+        if spell in spell_list:       spell_list.remove(spell)
+        elif current_known < max_known: spell_list.append(spell)
 
-def mod_hp_player(sender, data, user_data):
-    kHP()["Player"] = int(data)
+    def _Toggle_Spell(self, spell, spell_list, max_known):
+        current_known = spells_known()
+        if spell in spell_list:       spell_list.remove(spell)
+        elif current_known < max_known: spell_list.append(spell)
 
+    def _Toggle_Prepare(self, spell, spell_list, max_known):
+        current_prep = spells_prepared()
+        if spell in spell_list:       spell_list.remove(spell)
+        elif current_prep < max_known: spell_list.append(spell)
 
-def mod_arcane_ward(sender, data, user_data):
-    num = user_data[0]
-    max_hp = aClass()["Arcane Ward"]["HP"]["Max"]
-    current_hp = aClass()["Arcane Ward"]["HP"]["Current"]
-    new_hp = current_hp + num
-    new_hp = max(0, min(new_hp, max_hp))
-    aClass()["Arcane Ward"]["HP"]["Current"] = new_hp
+    def Spell_Learn(self, spell, level):
+        cspell = q.db.Spell["Book"][level]
+        sdata = q.pc.Class.spell_data
+        if level == 0: self._Toggle_Cantrip(spell, cspell, sdata['cantrips_available'])
+        else:          self._Toggle_Spell(spell, cspell, sdata['spells_available'])
 
+    def Spell_Prepare(self, spell, level):
+        cspell = q.db.Spell["Prepared"][level]
+        sdata = q.pc.Class.spell_data
+        self._Toggle_Prepare(spell, cspell, sdata['prepared_available'])
+        
+    def Spell_Cast(self, level):
+        slots = q.db.Spell["Slot"][level]
+        for i in range(len(slots)):
+            if not slots[i]:
+                slots[i] = True
+                break
+    #---
+    def Rest_Long(self):
+        if valid_spellclass():
+            for level in range(1, 10):
+                if level in q.db.Spell["Slot"]:
+                    q.db.Spell["Slot"][level] = [False] * len(q.db.Spell["Slot"][level])
 
-def select_player_condition(sender, data, user_data):
-    index = user_data[0]
-    q.db.Condition[index] = data
+    def Rest_Short(self):
+        pass
+    #---
+    def Combat_Health_Hp(self, delta):
+        hp = kHP()
+        if delta < 0:
+            if hp["Temp"] > 0: hp["Temp"] -= 1
+            else: hp["Current"] -= 1
+        else: hp["Current"] = min(hp["Current"] + 1, hp["Sum"])
 
+    def Combat_Health_Temp(self, delta):
+        hp = kHP()
+        if delta > 0 or hp["Temp"] > 0: hp["Temp"] += delta
 
-def input_characteristic(sender, data, user_data):
-    name = user_data[0]
-    q.db.Characteristic[name] = data
+    def Combat_Health_Player(self, data):
+        kHP()["Player"] = int(data)
 
+    def Combat_Wizard_Arcane_Ward(self, num):
+        ward_data = aClass()["Arcane Ward"]["HP"]
+        new_hp = ward_data["Current"] + num
+        ward_data["Current"] = max(0, min(new_hp, ward_data["Max"]))
 
-def input_description(sender, data, user_data):
-    name = user_data[0]
-    q.db.Description[name] = data
+    def Combat_Condition_Modify(self, index, data):
+        q.db.Condition[index] = data
+    #---
+    def Info_Char_Modify(self, name, data):
+        q.db.Characteristic[name] = data
 
+    def Info_Desc_Modify(self, name, data):
+        q.db.Description[name] = data
+    #---
+    def Inventory_Backpack_Add(self, cat, item):
+        backpack = q.db.Inventory.Backpack
+        if item in backpack.keys(): backpack[item][1] += 1
+        else:                        backpack[item] = [cat, 1]
 
-def add_item_bazaar(sender, data, user_data):
-    backpack = q.db.Inventory.Backpack
-    cat = user_data[0]
-    item = user_data[1]
-    if item in backpack.keys():
-        backpack[item][1] += 1
-    else:
-        backpack[item] = [cat, 1]
-
-
-def mod_item_backpack(sender, data, user_data):
-    item = user_data[0]
-    delta = user_data[1]
-    backpack = q.db.Inventory.Backpack
-    if delta == "Clear":
-        backpack.pop(item, None)
+    def Inventory_Item_Clear(self, item):
+        q.db.Inventory.Backpack.pop(item, None)
         return 0
-    if item not in backpack: backpack[item] = [None, delta]
-    else: backpack[item][1] += delta
-    if backpack[item][1] <= 0:
-        backpack.pop(item, None)
-        return 0
-    return backpack[item][1]
 
+    def Inventory_Item_Modify(self, item, delta):
+        backpack = q.db.Inventory.Backpack
+        print(backpack)
+        if item not in backpack: backpack[item] = [None, delta]
+        else:                    backpack[item][1] += delta
+        
+        if backpack[item][1] <= 0:
+            backpack.pop(item, None)
+            
+            slot = item_slot(item)
+            if slot:
+                q.db.Inventory.Closet[slot] = ""
+            
+            return 0
+        
+        return backpack[item][1]
+    #---
+    def Closet_Equip_Clear(self, cat):
+        q.db.Inventory.Closet[cat] = ""
 
-def closet_equip(sender, data, user_data):
-    cat = user_data[0]
-    name = data
-    closet = q.db.Inventory.Closet
-    backpack = q.db.Inventory.Backpack
+    def Closet_Equip_Modify(self, cat, name):
+        closet = q.db.Inventory.Closet
+        backpack = q.db.Inventory.Backpack
+        item = q.w.dItem(name)
+        item_type = item.Slot
 
-    if data == "Clear":
-        closet[cat] = ""
-        return
+        if item_type == "Weapon": 
+            self.eWeapon(cat, name, item, closet, backpack)
+        elif item_type == "Armor": 
+            self.eArmor(cat, name, item, closet)
+        elif item_type == "Shield": 
+            self.eShield(cat, name, item, closet)
 
-    item = q.w.dItem(name)
-    item_type = item.Slot
+    def eWeapon(self, cat, name, item, closet, backpack):
+        two_handed = "Two-handed" in item.Prop
+        versatile = "Versatile" in item.Prop
+        h1 = closet["Hand_1"]
+        h2 = closet["Hand_2"]
 
-    if item_type == "Weapon": closet_equip_weapon(cat, name, item, closet, backpack)
-    elif item_type == "Armor": closet_equip_armor(cat, name , item, closet, backpack)
-    elif item_type == "Shield": closet_equip_shield(cat, name, item, closet, backpack)
+        def owned_count(i): 
+            return backpack[i][1] if i in backpack else 0
 
+        if cat == "Hand_1":
+            if two_handed:
+                closet["Hand_1"], closet["Hand_2"] = name, ""
+                return
+            if h2 == name:
+                if versatile or owned_count(name) > 1: 
+                    closet["Hand_1"] = name
+            else: 
+                closet["Hand_1"] = name
+        elif cat == "Hand_2":
+            if h1 and "Two-handed" in q.w.dItem(h1).Prop: 
+                return
+            if h1 == name:
+                if versatile or owned_count(name) > 1: 
+                    closet["Hand_2"] = name
+            else: 
+                closet["Hand_2"] = name
 
-def closet_equip_weapon(cat, name, item, closet, backpack):
-    two_handed = "Two-handed" in item.Prop
-    versatile = "Versatile" in item.Prop
+    def eArmor(self, cat, name, item, closet):
+        str_mod = q.db.Atr["STR"]["Mod"]
+        if str_mod < item.Str_Req:  return
+        else: closet[cat] = name
 
-    h1 = closet["Hand_1"]
-    h2 = closet["Hand_2"]
-
-    def owned_count(i): return backpack[i][1] if i in backpack else 0
-
-    if cat == "Hand_1":
-        if two_handed:
-            closet["Hand_1"], closet["Hand_2"] = name, ""
-            return
-        if h2 == name:
-            if versatile or owned_count(name) > 1: closet["Hand_1"] = name
-        else: closet["Hand_1"] = name
-
-    elif cat == "Hand_2":
+    def eShield(self, cat, name, item, closet):
+        h1 = closet["Hand_1"]
         if h1 and "Two-handed" in q.w.dItem(h1).Prop: return
-        if h1 == name:
-            if versatile or owned_count(name) > 1: closet["Hand_2"] = name
-        else: closet["Hand_2"] = name
-
-
-def closet_equip_armor(cat, name, item, closet, backpack):
-    str_mod = q.db.Atr["STR"]["Mod"]
-    if str_mod < item.Str_Req: return
-    else: closet[cat] = name
-
-
-def closet_equip_shield(cat, name, item, closet, backpack):
-    h1 = closet["Hand_1"]
-    if h1 and "Two-handed" in q.w.dItem(h1).Prop: return
-    closet["Hand_2"] = name
+        closet["Hand_2"] = name
+    #---

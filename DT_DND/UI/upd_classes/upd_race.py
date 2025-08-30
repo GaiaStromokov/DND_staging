@@ -56,7 +56,7 @@ class upd_race:
 
     def standard_spell_list(self, name):
         a, t = gen_abil(name)
-        cdata = q.db.Race.Abil[a]
+        cdata = q.db.Race.Abil[t]
         t_header = tag.rfeature.header(t)
 
         with group(parent=self.parent):
@@ -110,7 +110,7 @@ class upd_race:
                     add_checkbox(default_value=val, enabled=True, user_data=["Race Use", a, idx], callback=q.cbh, tag=t_toggle)
             
             for i, desc in enumerate(descriptions):
-                add_text(desc, color=c_text, wrap=size.gwrap, tag=desc_tags[i])
+                add_text(desc, color=c_text, wrap=sz.gwrap, tag=desc_tags[i])
 
     def Empty(self):
         pass
@@ -189,7 +189,7 @@ class upd_race:
         cdata = q.db.Race.Abil[t]
 
         with group(parent=self.parent):
-            add_text(a, color=c_h1, wrap=size.gwrap)
+            add_text(a, color=c_h1, wrap=sz.gwrap)
             for spell in cdata.keys():
                 t_label = tag.rfeature.label(t, spell)
                 t_tooltip = tag.rfeature.tooltip(t, spell)

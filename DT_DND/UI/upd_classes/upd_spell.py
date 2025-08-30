@@ -1,5 +1,5 @@
 from ui.upd_helper_import import *
-
+tag = Tag()
 class upd_Cast:
     def __init__(self):
         self.spell_data = None
@@ -114,9 +114,9 @@ class upd_spell:
         if does_item_exist(tag.spell.tab()):
             return
 
-        w1 = size.w_block - 16
+        w1 = sz.wBlock - 16
         w2 = w1 - 18
-        h1 = size.h_block - 40
+        h1 = sz.hBlock - 40
         h2 = h1 - 95
 
         with tab(label="Spell", tag=tag.spell.tab(), parent=tag.block.tabbar()):

@@ -27,7 +27,7 @@ def startup():
 
 def main():
     
-    show_item_registry()
+    #show_item_registry()
     create_context()
     with font_registry(): font_choice = add_font(get_path("utils", "Helvetica.ttf"), 13)
     configure_app(init_file=get_path("utils", "config_save.ini"), docking=True, docking_space=True)

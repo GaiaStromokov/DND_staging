@@ -1,20 +1,20 @@
 {
     "Core": {
-        "L": 3,
+        "L": 4,
         "PB": 2,
-        "R": "Elf",
-        "SR": "Shadar Kai",
+        "R": "Tiefling",
+        "SR": "Levistus",
         "C": "Fighter",
         "SC": "",
         "BG": "Empty"
     },
     "Atr": {
         "STR": {
-            "Base": 10,
+            "Base": 13,
             "Rasi": 0,
             "Milestone": 0,
-            "Val": 10,
-            "Mod": 0,
+            "Val": 13,
+            "Mod": 1,
             "ST": 0
         },
         "DEX": {
@@ -177,11 +177,13 @@
             ""
         ],
         "Abil": {
-            "Blessing of the Raven Queen": {
-                "Use": [
-                    false,
-                    false
-                ]
+            "Legacy_of_Stygia": {
+                "Ray of Frost": {
+                    "Use": false
+                },
+                "Armor of Agathys": {
+                    "Use": false
+                }
             }
         }
     },
@@ -350,7 +352,7 @@
             "Mod": 0
         },
         "Athletics": {
-            "Mod": 0
+            "Mod": 1
         },
         "Deception": {
             "Mod": 0
@@ -375,7 +377,7 @@
             "Mod": 0
         },
         "Perception": {
-            "Mod": 2
+            "Mod": 0
         },
         "Performance": {
             "Mod": 0
@@ -423,11 +425,24 @@
             "Waist": "",
             "Feet": "",
             "Armor": "",
-            "Hand_1": "Glaive",
+            "Hand_1": "",
             "Hand_2": "",
             "Ring_1": "",
             "Ring_2": ""
         },
-        "Backpack": {}
+        "Backpack": {
+            "Chain_Shirt": [
+                "Armor",
+                1
+            ],
+            "Dagger": [
+                "Weapon",
+                2
+            ],
+            "Maul": [
+                "Weapon",
+                2
+            ]
+        }
     }
 }

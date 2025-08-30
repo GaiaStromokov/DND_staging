@@ -8,11 +8,11 @@ def dt(idx): return idx.replace("_"," ")
 # # Core values
 def Level(): return q.db.Core.L
 def PB(): return q.db.Core.PB
-def Race(): return q.db.Core.R.replace(" ", "_")
-def Subrace(): return q.db.Core.SR.replace(" ", "_")
-def Class(): return q.db.Core.C.replace(" ", "_")
-def Subclass(): return q.db.Core.SC.replace(" ", "_")
-def Background(): return q.db.Core.BG.replace(" ", "_")
+def Race(): return q.db.Core.R.replace(" ","_")
+def Subrace(): return q.db.Core.SR.replace(" ","_")
+def Class(): return q.db.Core.C.replace(" ","_")
+def Subclass(): return q.db.Core.SC.replace(" ","_")
+def Background(): return q.db.Core.BG.replace(" ","_")
 
 # # Core Setters
 
@@ -98,8 +98,12 @@ def skill_text( skill):
 # def dc_val( atr):
 #     return 8 + kAtr()[atr]["Mod"] + vPB()
 
-
-
+def item_slot(item):
+    backpack = q.db.Inventory.Closet
+    for slot_name, slot_item in backpack.items():
+        if slot_item == item:
+            return slot_name
+    return None
 
 def same_weapon():
     cdata = q.db.Inventory.Closet
