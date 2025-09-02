@@ -33,8 +33,9 @@ class upd_race:
                 add_text(desc, color=c_text, wrap=sz.wrap, tag=desc_tags[i])
 
     def standard_choice(self, name, items_list):
+        blue(t)
         a, t = gen_abil(name)
-        selection = q.db.Race.Abil[a]["Select"][0]
+        selection = q.db.Race.Abil[t]["Select"][0]
         t_header = tag.rfeature.header(t)
         t_label = tag.rfeature.label(t)
         t_tooltip = tag.rfeature.tooltip(t)
@@ -52,7 +53,7 @@ class upd_race:
 
             item_delete(t_popup)
             with popup(t_header, mousebutton=mvMouseButton_Left, tag=t_popup):
-                add_combo(items=items_list, default_value=selection, width=120, no_arrow_button=True, user_data=["Race Spell Select", a], callback=q.cbh, tag=t_select)
+                add_combo(items=items_list, default_value=selection, width=120, no_arrow_button=True, user_data=["Race Spell Select", t], callback=q.cbh, tag=t_select)
 
     def standard_spell_list(self, name):
         a, t = gen_abil(name)
@@ -100,17 +101,17 @@ class upd_race:
         a, t = gen_abil(name)
         t_header = tag.rfeature.header(t)
         desc_tags = [tag.rfeature.text(t, f"{i+1}") for i, _ in enumerate(descriptions)]
-        use_data = q.db.Race.Abil[a]["Use"]
+        use_data = q.db.Race.Abil[t]["Use"]
 
         with group(parent=self.parent):
             with group(horizontal=True):
                 add_text(a, color=c_h1, tag=t_header)
                 for idx, val in enumerate(use_data):
                     t_toggle = tag.rfeature.toggle(t, idx)
-                    add_checkbox(default_value=val, enabled=True, user_data=["Race Use", a, idx], callback=q.cbh, tag=t_toggle)
+                    add_checkbox(default_value=val, enabled=True, user_data=["Race Use", t, idx], callback=q.cbh, tag=t_toggle)
             
             for i, desc in enumerate(descriptions):
-                add_text(desc, color=c_text, wrap=sz.gwrap, tag=desc_tags[i])
+                add_text(desc, color=c_text, wrap=sz.wrap, tag=desc_tags[i])
 
     def Empty(self):
         pass

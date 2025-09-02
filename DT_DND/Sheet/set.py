@@ -73,19 +73,25 @@ class sett:
         if prefeat and prefeat in cdata["Data"]:
             cdata["Data"].pop(prefeat)
         cdata["Feat"][index] = ""
-    def Milestone_Feat_Modify(self, index, data):
+
+    def Milestone_Feat_Select(self, index, feat):
         cdata = q.db.Milestone
-        if data not in cdata["Feat"]:
-            cdata["Feat"][index] = data
-            if data in list_Feat_Select:
-                cdata["Data"][data] = {"Select": [""]}
-            elif data == "Weapon Master":
-                cdata["Data"][data] = {"Select": ["", "", "", ""]}
+        if feat not in cdata["Feat"]:
+            cdata["Feat"][index] = feat
+            if feat in list_Feat_Select:
+                cdata["Data"][feat] = {"Select": [""]}
+            elif feat == "Weapon Master":
+                cdata["Data"][feat] = {"Select": ["", "", "", ""]}
             else:
-                cdata["Data"][data] = {}
-    def Milestone_Feat_Select(self, feat, index, data):
+                cdata["Data"][feat] = {}
+        
+    def Milestone_Feat_Modify(self, data, script, feat, index):
         cdata = q.db.Milestone
-        if feat in cdata["Data"]: cdata["Data"][feat]["Select"][index] = data
+        if feat not in cdata["Data"]: return
+        if script == "Clear": data= ""
+        cdata["Data"][feat]["Select"][index] = data
+            
+
     def Milestone_Feat_Use(self, feat, index, data):
         cdata = q.db.Milestone
         if feat in cdata["Data"]: cdata["Data"][feat]["Use"][index] = data

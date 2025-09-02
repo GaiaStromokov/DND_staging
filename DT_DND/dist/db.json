@@ -2,19 +2,19 @@
     "Core": {
         "L": 4,
         "PB": 2,
-        "R": "Tiefling",
-        "SR": "Levistus",
+        "R": "Dragonborn",
+        "SR": "Red",
         "C": "Fighter",
         "SC": "",
         "BG": "Empty"
     },
     "Atr": {
         "STR": {
-            "Base": 13,
+            "Base": 10,
             "Rasi": 0,
             "Milestone": 0,
-            "Val": 13,
-            "Mod": 1,
+            "Val": 10,
+            "Mod": 0,
             "ST": 0
         },
         "DEX": {
@@ -177,19 +177,16 @@
             ""
         ],
         "Abil": {
-            "Legacy_of_Stygia": {
-                "Ray of Frost": {
-                    "Use": false
-                },
-                "Armor of Agathys": {
-                    "Use": false
-                }
+            "Breath_Weapon": {
+                "Use": [
+                    false
+                ]
             }
         }
     },
     "Milestone": {
         "Select": [
-            "",
+            "Asi",
             "",
             "",
             "",
@@ -210,8 +207,8 @@
         ],
         "Asi": [
             [
-                "",
-                ""
+                "STR",
+                "INT"
             ],
             [
                 "",
@@ -352,7 +349,7 @@
             "Mod": 0
         },
         "Athletics": {
-            "Mod": 1
+            "Mod": 0
         },
         "Deception": {
             "Mod": 0

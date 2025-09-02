@@ -1,5 +1,5 @@
 import q
-import Sheet.get as g
+import Sheet.get as get
 
 import json
 
@@ -25,7 +25,7 @@ def fSelect_1(name, num):
 
 
 
-class bRace():
+class bRace:
     def __init__(self):
         self.Speed = {"Walk": 0, "Climb": 0, "Swim": 0, "Fly": 0, "Burrow": 0}
         self.Vision = {"Dark": 0, "Blind": 0, "Tremor": 0, "Tru": 0}
@@ -37,13 +37,13 @@ class bRace():
         self.Initiative = 0
         self.HP = 0
         self.SavingThrow = []
-        if g.Race(): self.cRace = globals()[g.Race()](self)
+        if get.Race(): self.cRace = globals()[get.Race()](self)
             
-        if g.Subrace() and g.Subrace() != "Empty":  self.cSubrace = globals()[f"{g.Race()}_{g.Subrace()}"](self)
+        if get.Subrace() and get.Subrace() != "Empty":  self.cSubrace = globals()[f"{get.Race()}_{get.Subrace()}"](self)
             
     def Upd(self):
         self.cRace.Upd()
-        if g.Subrace() and g.Subrace() != "Empty": self.cSubrace.Upd()
+        if get.Subrace() and get.Subrace() != "Empty": self.cSubrace.Upd()
 
     def __repr__(self):
         def serialize(obj):
@@ -61,7 +61,7 @@ class bRace():
         return json.dumps(data, indent=4)
 
 
-class Empty():
+class Empty:
     def __init__(self, p):
         self.p = p
         self.p.Speed["Walk"] = 30
@@ -70,7 +70,7 @@ class Empty():
     def Upd(self):
         pass
         
-class Human():
+class Human:
     def __init__(self, p):
         self.p = p
         self.p.Lang.extend(["Common"])
@@ -79,7 +79,7 @@ class Human():
     def Upd(self):
         pass
 
-class Human_Standard():
+class Human_Standard:
     def __init__(self, p):
         self.p = p
 
@@ -87,14 +87,14 @@ class Human_Standard():
     def Upd(self):
         pass
 
-class Human_Variant():
+class Human_Variant:
     def __init__(self, p):
         self.p = p
 
     def Upd(self):
         pass
 
-class Elf():
+class Elf:
     def __init__(self, p):
         self.p = p
         self.p.Vision["Dark"] = 60
@@ -106,7 +106,7 @@ class Elf():
     def Upd(self):
         pass
 
-class Elf_High():
+class Elf_High:
     def __init__(self, p):
         self.p = p
         self.p.Weapon.extend(["Longsword", "Shortsword", "Shortbow", "Longbow"])
@@ -115,7 +115,7 @@ class Elf_High():
     def Upd(self):
         fSelect_1("Cantrip", 1)
 
-class Elf_Wood():
+class Elf_Wood:
     def __init__(self, p):
         self.p = p
         self.p.Speed["Walk"] = 35
@@ -124,7 +124,7 @@ class Elf_Wood():
     def Upd(self):
         pass
 
-class Elf_Drow():
+class Elf_Drow:
     def __init__(self, p):
         self.p = p
         self.p.Vision["Dark"] = 120
@@ -139,7 +139,7 @@ class Elf_Drow():
         if level >= 3: Fuse_2("Drow_Magic", "Faerie Fire", 1)
 
 
-class Elf_Shadar_Kai():
+class Elf_Shadar_Kai:
     def __init__(self, p):
         self.p = p
 
@@ -148,7 +148,7 @@ class Elf_Shadar_Kai():
     def Upd(self): 
         Fuse_1("Blessing_of_the_Raven_Queen", q.db.Core.PB)
 
-class Dwarf():
+class Dwarf:
     def __init__(self, p):
         self.p = p
         self.p.Vision["Dark"] = 60
@@ -162,7 +162,7 @@ class Dwarf():
     def Upd(self):
         pass
 
-class Dwarf_Hill():
+class Dwarf_Hill:
     def __init__(self, p):
         self.p = p
 
@@ -171,7 +171,7 @@ class Dwarf_Hill():
     def Upd(self): 
         self.p.HP = q.db.Core.L
 
-class Dwarf_Mountain():
+class Dwarf_Mountain:
     def __init__(self, p):
         self.p = p
         self.p.Armor.extend(["Light", "Medium"])
@@ -181,7 +181,7 @@ class Dwarf_Mountain():
     def Upd(self):
         pass
 
-class Halfling():
+class Halfling:
     def __init__(self, p):
         self.p = p
         self.p.Speed["Walk"] = 25
@@ -193,7 +193,7 @@ class Halfling():
     def Upd(self):
         pass
 
-class Halfling_Lightfoot():
+class Halfling_Lightfoot:
     def __init__(self, p):
         self.p = p
         
@@ -202,7 +202,7 @@ class Halfling_Lightfoot():
     def Upd(self):
         pass
 
-class Halfling_Stout():
+class Halfling_Stout:
     def __init__(self, p):
         self.p = p
 
@@ -211,7 +211,7 @@ class Halfling_Stout():
     def Upd(self):
         pass
 
-class Gnome():
+class Gnome:
     def __init__(self, p):
         self.p = p
         self.p.Speed["Walk"] = 25
@@ -223,7 +223,7 @@ class Gnome():
     def Upd(self):
         pass
 
-class Gnome_Forest():
+class Gnome_Forest:
     def __init__(self, p):
         self.p = p
 
@@ -232,7 +232,7 @@ class Gnome_Forest():
     def Upd(self):
         pass
 
-class Gnome_Rock():
+class Gnome_Rock:
     def __init__(self, p):
         self.p = p
         self.p.Tool.extend("Tinker")
@@ -242,7 +242,7 @@ class Gnome_Rock():
     def Upd(self):
         pass
 
-class Dragonborn():
+class Dragonborn:
     def __init__(self, p):
         self.p = p
         self.p.Speed["Walk"] = 30
@@ -253,7 +253,7 @@ class Dragonborn():
     def Upd(self):
         pass
 
-class Dragonborn_Black():
+class Dragonborn_Black:
     def __init__(self, p):
         self.p = p
 
@@ -262,7 +262,7 @@ class Dragonborn_Black():
     def Upd(self):
         Fuse_1("Breath_Weapon", 1)
 
-class Dragonborn_Blue():
+class Dragonborn_Blue:
     def __init__(self, p):
         self.p = p
 
@@ -271,60 +271,60 @@ class Dragonborn_Blue():
     def Upd(self):
         Fuse_1("Breath_Weapon", 1)
 
-class Dragonborn_Brass():
+class Dragonborn_Brass:
     def __init__(self, p):
         self.p = p
         Fuse_1("Breath_Weapon", 1)
 
-class Dragonborn_Bronze():
+class Dragonborn_Bronze:
     def __init__(self, p):
         self.p = p
 
-    def Select(self):
+    def Upd(self):
         Fuse_1("Breath_Weapon", 1)
 
-class Dragonborn_Copper():
+class Dragonborn_Copper:
     def __init__(self, p):
         self.p = p
 
-    def Select(self):
+    def Upd(self):
         Fuse_1("Breath_Weapon", 1)
 
-class Dragonborn_Gold():
+class Dragonborn_Gold:
     def __init__(self, p):
         self.p = p
         
         Fuse_1("Breath_Weapon", 1)
 
-class Dragonborn_Green():
+class Dragonborn_Green:
     def __init__(self, p):
         self.p = p
 
-    def Select(self):
+    def Upd(self):
         Fuse_1("Breath_Weapon", 1)
 
-class Dragonborn_Red():
+class Dragonborn_Red:
     def __init__(self, p):
         self.p = p
 
-    def Select(self):
+    def Upd(self):
         Fuse_1("Breath_Weapon", 1)
 
-class Dragonborn_Silver():
+class Dragonborn_Silver:
     def __init__(self, p):
         self.p = p
 
-    def Select(self):
+    def Upd(self):
         Fuse_1("Breath_Weapon", 1)
 
-class Dragonborn_White():
+class Dragonborn_White:
     def __init__(self, p):
         self.p = p
 
-    def Select(self):
+    def Upd(self):
         Fuse_1("Breath_Weapon", 1)
 
-class Half_Orc():
+class Half_Orc:
     def __init__(self, p):
         self.p = p
         self.p.Vision["Dark"] = 60
@@ -342,7 +342,7 @@ class Half_Orc():
         Fuse_1("Relentless_Endurance", 1)
         Fgen("Savage_Attacks")
 
-class HalfOrc_Standard():
+class HalfOrc_Standard:
     def __init__(self, p):
         self.p = p
 
@@ -351,7 +351,7 @@ class HalfOrc_Standard():
     def Upd(self):
         pass
 
-class Tiefling():
+class Tiefling:
     def __init__(self, p):
         self.p = p
         self.p.Vision["Dark"] = 60
@@ -364,7 +364,7 @@ class Tiefling():
     def Upd(self):
         pass
 
-class Tiefling_Asmodeus():
+class Tiefling_Asmodeus:
     def __init__(self, p):
         self.p = p
 
@@ -377,7 +377,7 @@ class Tiefling_Asmodeus():
         if level >= 3: Fuse_2("Infernal_Legacy", "Hellish Rebuke", 1)
         if level >= 5: Fuse_2("Infernal_Legacy", "Darkness", 1)
 
-class Tiefling_Baalzebul():
+class Tiefling_Baalzebul:
     def __init__(self, p):
         self.p = p
 
@@ -391,7 +391,7 @@ class Tiefling_Baalzebul():
         if level >= 3: Fuse_2("Legacy_of_Maladomini", "Ray of Sickness", 1)
         if level >= 5: Fuse_2("Legacy_of_Maladomini", "Crown of Madness", 1)
 
-class Tiefling_Dispater():
+class Tiefling_Dispater:
     def __init__(self, p):
         self.p = p
 
@@ -404,7 +404,7 @@ class Tiefling_Dispater():
         if level >= 3: Fuse_2("Legacy_of_Dis", "Disguise Self", 1)
         if level >= 5: Fuse_2("Legacy_of_Dis", "Detect Thoughts", 1)
 
-class Tiefling_Fierna():
+class Tiefling_Fierna:
     def __init__(self, p):
         self.p = p
 
@@ -417,7 +417,7 @@ class Tiefling_Fierna():
         if level >= 3: Fuse_2("Legacy_of_Minauros", "Tensers Floating Disk", 1)
         if level >= 5: Fuse_2("Legacy_of_Minauros", "Arcane Lock", 1)
 
-class Tiefling_Glasya():
+class Tiefling_Glasya:
     def __init__(self, p):
         self.p = p
 
@@ -430,7 +430,7 @@ class Tiefling_Glasya():
         if level >= 3: Fuse_2("Legacy_of_Cania", "Burning Hands", 1)
         if level >= 5: Fuse_2("Legacy_of_Cania", "Flame Blade", 1)
 
-class Tiefling_Levistus():
+class Tiefling_Levistus:
     def __init__(self, p):
         self.p = p
 
@@ -443,7 +443,7 @@ class Tiefling_Levistus():
         if level >= 3: Fuse_2("Legacy_of_Stygia", "Armor of Agathys", 1)
         if level >= 5: Fuse_2("Legacy_of_Stygia", "Darkness", 1)
 
-class Tiefling_Mammon():
+class Tiefling_Mammon:
     def __init__(self, p):
         self.p = p
 
@@ -456,7 +456,7 @@ class Tiefling_Mammon():
         if level >= 3: Fuse_2("Legacy_of_Minauros", "Tensers Floating Disk", 1)
         if level >= 5: Fuse_2("Legacy_of_Minauros", "Arcane Lock", 1)
 
-class Tiefling_Mephistopheles():
+class Tiefling_Mephistopheles:
     def __init__(self, p):
         self.p = p
 
@@ -469,7 +469,7 @@ class Tiefling_Mephistopheles():
         if level >= 3: Fuse_2("Legacy_of_Cania", "Burning Hands", 1)
         if level >= 5: Fuse_2("Legacy_of_Cania", "Flame Blade", 1)
 
-class Tiefling_Zariel():
+class Tiefling_Zariel:
     def __init__(self, p):
         self.p = p
 
@@ -482,7 +482,7 @@ class Tiefling_Zariel():
         if level >= 3: Fuse_2("Legacy_of_Avernus", "Searing Smite", 1)
         if level >= 5: Fuse_2("Legacy_of_Avernus", "Branding Smite", 1)
             
-class Harengon():
+class Harengon:
     def __init__(self, p):
         self.p = p
         self.p.Speed["Walk"] = 30
@@ -498,7 +498,7 @@ class Harengon():
         Fuse_1("Rabbit_Hop", q.db.Core.PB)
         self.p.Initiative = q.db.Core.PB
 
-class Harengon_Standard():
+class Harengon_Standard:
     def __init__(self, p):
         self.p = p
 
