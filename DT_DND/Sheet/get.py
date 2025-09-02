@@ -8,18 +8,18 @@ def dt(idx): return idx.replace("_"," ")
 # # Core values
 def Level(): return q.db.Core.L
 def PB(): return q.db.Core.PB
-def Race(): return q.db.Core.R.replace(" ","_")
-def Subrace(): return q.db.Core.SR.replace(" ","_")
-def Class(): return q.db.Core.C.replace(" ","_")
-def Subclass(): return q.db.Core.SC.replace(" ","_")
-def Background(): return q.db.Core.BG.replace(" ","_")
+def Race(): return q.db.Core.R
+def Subrace(): return q.db.Core.SR
+def Class(): return q.db.Core.C
+def Subclass(): return q.db.Core.SC
+def Background(): return q.db.Core.BG
 
 # # Core Setters
 
 
 # # Core Data get
 def dClass(): return q.db.Class
-def dRace(): return q.db.Race
+def dRace(): return q.db.Race 
 def dBackground(): return q.db.Background
 
 # # Core Abil get

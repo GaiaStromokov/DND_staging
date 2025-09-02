@@ -138,6 +138,7 @@ class Character():
         if source == "Background Data": q.db.Background={"Prof": {}, "Equipment": {}}
 
     def recalculate_stats(self):
+        print("recalculation")
         self.pull_atr_data()
         self.sum_Skill()
         self.sum_Speed()
@@ -163,17 +164,19 @@ class Character():
 
     @property
     def Prof(self):
-        K_weapon = q.db.Prof["Weapon"]
-        k_armor = q.db.Prof["Armor"]
-        k_tool = q.db.Prof["Tool"]
-        k_lang = q.db.Prof["Lang"]
-
-        return {
-            "Weapon": list(set(self.Race.Weapon + K_weapon["Race"] + self.Class.Weapon + K_weapon["Class"] + self.Background.Weapon + K_weapon["Background"] + self.Milestone.Weapon + K_weapon["Feat"] + K_weapon["Player"])),
-            "Armor": list(set(self.Race.Armor + k_armor["Race"] + self.Class.Armor + k_armor["Class"] + self.Background.Armor + k_armor["Background"] + self.Milestone.Armor + k_armor["Feat"] + k_armor["Player"])),
-            "Tool": list(set(self.Race.Tool + k_tool["Race"] + self.Class.Tool + k_tool["Class"] + self.Background.Tool + k_tool["Background"] + self.Milestone.Tool + k_tool["Feat"] + k_tool["Player"])),
-            "Lang": list(set(self.Race.Lang + k_lang["Race"] + self.Class.Lang + k_lang["Class"] + self.Background.Lang + k_lang["Background"] + self.Milestone.Lang + k_lang["Feat"] + k_lang["Player"])),
-        }
+        prof_db = q.db.Prof
+        categories = ["Weapon", "Armor", "Tool", "Lang"]
+        sources = [self.Race, self.Class, self.Background, self.Milestone]
+        source_keys = ["Race", "Class", "Background", "Feat"]
+        result = {}
+        for category in categories:
+            db_profs = prof_db[category]
+            proficiencies = []
+            for source in sources: proficiencies.extend(getattr(source, category, []))
+            for key in source_keys: proficiencies.extend(db_profs.get(key, []))
+            proficiencies.extend(db_profs.get("Player", []))
+            result[category] = list(set(proficiencies))
+        return result
 
 
 

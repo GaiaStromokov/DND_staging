@@ -18,7 +18,7 @@ class upd_milestone:
                 with group(horizontal=True):
                     add_text(f"Milestone {i}: ", color=c_h1)
                     data = cdata["Select"][i]
-                    add_combo(items=["Feat", "Asi", "Clear"], default_value=data,  width=50, no_arrow_button=True, user_data=["Milestone Level Select", i], callback=q.cbh, tag=tag.mfeature.select("level", i))
+                    add_combo(items=["Feat", "Asi", "Clear"], default_value=data,  width=50, no_arrow_button=True, user_data=["Milestone Top Select", i], callback=q.cbh, tag=tag.mfeature.select("top", i))
                     if data == "Feat":
                         cdata = cdata["Feat"][i]
                         add_combo(items=get.list_Feat, default_value=cdata,  width=150, no_arrow_button=True, user_data=["Milestone Feat Select", i], callback=q.cbh, tag=tag.mfeature.select("feat", i))
@@ -41,17 +41,17 @@ class upd_milestone:
 
 
     def standard(self, name, descriptions):
-        a, t = gen_abil(name, 1)
+        a, t = gen_abil(name)
         t_header = tag.mfeature.header(t)
         desc_tags = [tag.mfeature.text(t, f"{i+1}") for i, _ in enumerate(descriptions)]
 
         with group(parent=self.parent):
             add_text(a, color=c_h1, tag=t_header)
             for i, desc in enumerate(descriptions):
-                add_text(desc, color=c_text, wrap=size.gwrap, tag=desc_tags[i])
+                add_text(desc, color=c_text, wrap=sz.wrap, tag=desc_tags[i])
 
     def standard_popup(self, name, descriptions, num_choices=1):
-        a, t = gen_abil(name, 1)
+        a, t = gen_abil(name)
         t_header = tag.mfeature.header(t)
         desc_tags = [tag.mfeature.text(t, f"{i+1}") for i, _ in enumerate(descriptions)]
         t_popup = tag.mfeature.popup(t)
@@ -61,29 +61,30 @@ class upd_milestone:
         with group(parent=self.parent):
             add_text(a, color=c_h1, tag=t_header)
             for i, desc in enumerate(descriptions):
-                add_text(desc, color=c_text, wrap=size.gwrap, tag=desc_tags[i])
+                add_text(desc, color=c_text, wrap=sz.wrap, tag=desc_tags[i])
 
         with popup(t_header, mousebutton=mvMouseButton_Left, max_size=[500,400], tag=t_popup):
             with group(horizontal=False):
                 for i in range(num_choices):
                     t_select = tag.mfeature.select(t, i)
-                    add_combo(items=get.dict_Feat_Lists[a], default_value=q.db.Milestone.Data[a]["Select"][i], width=100, no_arrow_button=True, user_data=["Milestone Feat Choice", a, i], callback=q.cbh, tag=t_select)
-                    add_button(label="X", user_data=["Milestone Feat Choice Clear", a, i], callback=q.cbh)
+                    add_combo(items=get.dict_Feat_Lists[t], default_value=q.db.Milestone.Data[t]["Select"][i], width=100, no_arrow_button=True, user_data=["Milestone Feat Modify","Modify", t, i], callback=q.cbh, tag=t_select)
+                    add_button(label="X", user_data=["Milestone Feat Modify", "Clear", t, i], callback=q.cbh)
 
     def standard_toggle(self, name, descriptions):
-        a, t = gen_abil(name, 1)
+        a, t = gen_abil(name)
         t_header = tag.mfeature.header(t)
         desc_tags = [tag.mfeature.text(t, f"{i+1}") for i, _ in enumerate(descriptions)]
-        use = q.db.Milestone["Data"][a]["Use"]
+        use = q.db.Milestone["Data"][t]["Use"]
 
         with group(parent=self.parent):
             with group(horizontal=True):
                 add_text(a, color=c_h1, tag=t_header)
                 for idx, val in enumerate(use):
-                    add_checkbox(default_value=val, enabled=True, user_data=["Milestone Feat Use", a, idx], callback=q.cbh, tag=f"checkbox.fMilestone.{t}.Use.{idx}")
+                    box_tag = tag.mfeature.toggle(t,idx)
+                    add_checkbox(default_value=val, enabled=True, user_data=["Milestone Feat Use", t, idx], callback=q.cbh, tag=box_tag)
             
             for i, desc in enumerate(descriptions):
-                add_text(desc, color=c_text, wrap=size.gwrap, tag=desc_tags[i])
+                add_text(desc, color=c_text, wrap=sz.wrap, tag=desc_tags[i])
 
 
     def Actor(self):

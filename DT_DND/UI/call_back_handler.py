@@ -213,10 +213,8 @@ class backend_stage:
     def Race_Asi_Modify(self, sender, data, user_data):
         print(f"Race Asi Modify: {data}, {user_data}")
         key = user_data[0]
-        if key == "Clear": 
-            sett.Race_Asi_Clear()
-        else: 
-            sett.Race_Asi_Modify(key, data)
+        if key == "Clear":  sett.Race_Asi_Clear()
+        else:  sett.Race_Asi_Modify(key, data)
         q.pc.update_Atr()
         self.populate_fields("Atr")
 
@@ -240,18 +238,22 @@ class backend_stage:
         q.pc.update_Milestone_Feat()
         self.populate_fields("All")
 
-    def Milestone_Feat_Modify(self, sender, data, user_data):
+    def Milestone_Feat_Select(self, sender, data, user_data):
         index = user_data[0]
-        sett.Milestone_Feat_Modify(index, data)
+        feat = data
+        if data == "Clear": sett.Milestone_Feat_Clear(index)
+        else: sett.Milestone_Feat_Select(index, feat)
+        q.pc.update_Milestone_Feat()
+        self.populate_fields("Milestone")
+        
+        
+    def Milestone_Feat_Modify(self, sender, data, user_data):
+        script, feat, index = user_data
+        sett.Milestone_Feat_Modify(data, script, feat, index)
         q.pc.update_Milestone_Feat()
         self.populate_fields("Milestone")
 
-    def Milestone_Feat_Select(self, sender, data, user_data):
-        feat, index = user_data
-        if data == "Clear": sett.Milestone_Feat_Clear(index)
-        else: sett.Milestone_Feat_Select(feat, index, data)
-        q.pc.update_Milestone_Feat()
-        self.populate_fields("Milestone")
+
 
     def Milestone_Feat_Use(self, sender, data, user_data):
         feat, index = user_data
@@ -269,9 +271,10 @@ class backend_stage:
         sett.Class_Abil_Use(key, index, data)
 
     def Class_Skill_Select(self, sender, data, user_data):
-        cat = user_data[0]
-        if data == "Clear": sett.Class_Skill_Select_Clear()
-        else: sett.Class_Skill_Select_Modify(cat, data)
+        
+        script = user_data[0]
+        if script == "Clear": sett.Class_Skill_Select_Clear()
+        else: sett.Class_Skill_Select_Modify(script, data)
         q.pc.update_Class_Select()
         self.populate_fields("Class")
 
@@ -399,9 +402,9 @@ class backend_input:
             "Race Use": self.Stage.Race_Abil_Use,
             "Race Spell Use": self.Stage.Race_Spell_Use,
             "Race Spell Select": self.Stage.Race_Spell_Select,
-            "Milestone Level Select": self.Stage.Milestone_Top_Select,
-            "Milestone Feat Modify": self.Stage.Milestone_Feat_Modify,
+            "Milestone Top Select": self.Stage.Milestone_Top_Select,
             "Milestone Feat Select": self.Stage.Milestone_Feat_Select,
+            "Milestone Feat Modify": self.Stage.Milestone_Feat_Modify,
             "Milestone Feat Use": self.Stage.Milestone_Feat_Use,
             "Milestone Asi Select": self.Stage.Milestone_Asi_Select,
             "Class Use": self.Stage.Class_Use,

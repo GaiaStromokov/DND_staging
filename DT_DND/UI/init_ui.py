@@ -224,7 +224,7 @@ def init_window_conditions():
     with tooltip(tag.cond.label()):
         with child_window(auto_resize_x=True, auto_resize_y=True, border=True):
             for i in get.list_Condition:
-                add_text(i, color=(0, 0, 0), tag=tag.cond.text(i))
+                add_text(i, color=c_text, tag=tag.cond.text(i))
 
 def init_window_rest():
     with group(parent=tag.rest.window()):
