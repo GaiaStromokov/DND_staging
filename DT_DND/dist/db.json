@@ -179,10 +179,14 @@
         "Abil": {
             "Legacy_of_Stygia": {
                 "Ray of Frost": {
-                    "Use": false
+                    "Use": [
+                        false
+                    ]
                 },
                 "Armor of Agathys": {
-                    "Use": false
+                    "Use": [
+                        false
+                    ]
                 }
             }
         }
