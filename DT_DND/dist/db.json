@@ -53,7 +53,7 @@
             "Base": 10,
             "Rasi": 0,
             "Milestone": 0,
-            "Val": 10,
+            "Val": 11,
             "Mod": 0,
             "ST": 0
         }
@@ -188,12 +188,17 @@
                         false
                     ]
                 }
+            },
+            "Breath_Weapon": {
+                "Use": [
+                    false
+                ]
             }
         }
     },
     "Milestone": {
         "Select": [
-            "Asi",
+            "Feat",
             "",
             "",
             "",
@@ -203,7 +208,7 @@
             ""
         ],
         "Feat": [
-            "",
+            "Empty",
             "",
             "",
             "",
@@ -214,8 +219,8 @@
         ],
         "Asi": [
             [
-                "STR",
-                "INT"
+                "",
+                ""
             ],
             [
                 "",
@@ -246,7 +251,9 @@
                 ""
             ]
         ],
-        "Data": {}
+        "Data": {
+            "Empty": {}
+        }
     },
     "Background": {
         "Prof": {},
@@ -434,19 +441,6 @@
             "Ring_1": "",
             "Ring_2": ""
         },
-        "Backpack": {
-            "Chain_Shirt": [
-                "Armor",
-                1
-            ],
-            "Dagger": [
-                "Weapon",
-                2
-            ],
-            "Maul": [
-                "Weapon",
-                2
-            ]
-        }
+        "Backpack": {}
     }
 }

@@ -32,13 +32,21 @@ class Character():
         self.Background = bBackground()
         self.Milestone = bMilestone()
         
-        
     @property
     def Atr(self):
-        cdata = q.db.Atr
-        Class = self.Class.Atr
-        Milestone = self.Milestone.Atr
-        return {"STR":cdata["STR"]["Base"]+cdata["STR"]["Rasi"]+Class["STR"]+Milestone["STR"],"DEX":cdata["DEX"]["Base"]+cdata["DEX"]["Rasi"]+Class["DEX"]+Milestone["DEX"],"CON":cdata["CON"]["Base"]+cdata["CON"]["Rasi"]+Class["CON"]+Milestone["CON"],"INT":cdata["INT"]["Base"]+cdata["INT"]["Rasi"]+Class["INT"]+Milestone["INT"],"WIS":cdata["WIS"]["Base"]+cdata["WIS"]["Rasi"]+Class["WIS"]+Milestone["WIS"],"CHA":cdata["CHA"]["Base"]+cdata["CHA"]["Rasi"]+Class["CHA"]+Milestone["STR"]}
+        dClass = self.Class.Atr
+        dMilestone = self.Milestone.Atr
+        print(dMilestone)
+        dAtr = q.db.Atr
+        for atr in get.list_Atr:
+            vBase = dAtr[atr].get("Base", 0)
+            vRace = dAtr[atr].get("Rasi", 0)
+            vMilestone1 = dAtr[atr].get("Milestone", 0)
+            vClass = dClass.get(atr, 0)
+            vMilestone2 = dMilestone.get(atr, 0)
+            fScore = vBase + vRace + vClass + vMilestone1 + vMilestone2
+            dAtr[atr]["Val"] = fScore
+            dAtr[atr]["Mod"] = (fScore - 10) // 2
 
     @property
     def Prof(self):
@@ -101,7 +109,7 @@ class Character():
         
 
     def update_Atr(self):
-        self.wipe_data("Atr")
+        self.Atr
         self.Milestone.Upd()
         self.recalculate_stats()
         self.update_spells()
@@ -138,8 +146,6 @@ class Character():
         if source == "Background Data": q.db.Background={"Prof": {}, "Equipment": {}}
 
     def recalculate_stats(self):
-        print("recalculation")
-        self.pull_atr_data()
         self.sum_Skill()
         self.sum_Speed()
         self.sum_Vision()
@@ -147,20 +153,6 @@ class Character():
         self.sum_HP()
         self.sum_AC()
 
-    def pull_atr_data(self):
-        cdata = q.db.Race.Rasi
-        for atr in get.list_Atr:
-            q.db.Atr[atr]["Rasi"] = 0
-            for i, rasi_list in enumerate(cdata):
-                if atr in rasi_list:
-                    q.db.Atr[atr]["Rasi"] = i + 1
-                    break
-        
-        for atr in get.list_Atr:
-            val = self.Atr[atr]
-            mod = (val- 10) // 2
-            q.db.Atr[atr]["Val"] = val
-            q.db.Atr[atr]["Mod"] = mod
 
     @property
     def Prof(self):
@@ -181,9 +173,11 @@ class Character():
 
 
     def sum_Skill(self):
+        dAtr = q.db.Atr
         Skill = self.Skill
         for skill in get.list_Skill:
-            q.db.Skill[skill]["Mod"] = q.db.Atr[get.dict_Skill[skill]["Atr"]]["Mod"]
+            stat = get.dict_Skill[skill]["Atr"]
+            q.db.Skill[skill]["Mod"] = dAtr[stat]["Mod"]  
             if Skill[skill]: q.db.Skill[skill]["Mod"] += q.db.Core.PB
 
 

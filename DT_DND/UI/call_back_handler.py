@@ -214,7 +214,8 @@ class backend_stage:
         print(f"Race Asi Modify: {data}, {user_data}")
         key = user_data[0]
         if key == "Clear":  sett.Race_Asi_Clear()
-        else:  sett.Race_Asi_Modify(key, data)
+        else: sett.Race_Asi_Modify(key, data)
+        sett.Race_Asi_Finalize()
         q.pc.update_Atr()
         self.populate_fields("Atr")
 
@@ -235,6 +236,7 @@ class backend_stage:
         index = user_data[0]
         if data == "Clear": sett.Milestone_Top_Clear(index)
         else: sett.Milestone_Top_Modify(index, data)
+        sett.Milestone_Asi_Finalize()
         q.pc.update_Milestone_Feat()
         self.populate_fields("All")
 
@@ -243,6 +245,7 @@ class backend_stage:
         feat = data
         if data == "Clear": sett.Milestone_Feat_Clear(index)
         else: sett.Milestone_Feat_Select(index, feat)
+        sett.Milestone_Asi_Finalize()
         q.pc.update_Milestone_Feat()
         self.populate_fields("Milestone")
         
@@ -263,6 +266,7 @@ class backend_stage:
         key, index = user_data
         if data == "Clear": sett.Milestone_Asi_Clear(key, index)
         else: sett.Milestone_Asi_Modify(key, index, data)
+        sett.Milestone_Asi_Finalize()
         q.pc.update_Atr()
         self.populate_fields("Atr")
 

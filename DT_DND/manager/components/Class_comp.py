@@ -3,6 +3,7 @@ import Sheet.get as g
 from colorist import *
 
 
+
 def Fgen(name): q.db.Class.Abil.setdefault(name, {})
     
     

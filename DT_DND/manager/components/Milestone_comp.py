@@ -1,6 +1,11 @@
 import q
 from Sheet.get import *
 
+def gen_abil(name: str):
+    an, tn = name, name.replace(" ", "_")
+    return an, tn 
+
+
 dict_Feat_Count = {
     'Empty': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     'Fighter': [0, 0, 0, 0, 1, 1, 2, 2, 3, 3, 3, 3, 4, 4, 5, 5, 6, 6, 6, 7, 7],
@@ -76,7 +81,10 @@ class bMilestone():
         if select: self.Atr[select] += 1
 
 
-
+class Empty():
+    def __init__(self, p):
+        pass
+        
 class Actor():
     def __init__(self, p):
         p.Atr["CHA"] += 1
@@ -87,7 +95,7 @@ class Alert():
 
 class Athlete():
     def __init__(self, p):
-        feat = "Athlete"
+        _ ,feat = gen_abil("Athlete") 
         Fselect_1(feat, 1)
         p.select_atr(feat)
 
@@ -96,18 +104,18 @@ class Charger():
     def __init__(self, p):
         pass        
 
-class CrossbowExpert():
+class Crossbow_Expert():
     def __init__(self, p):
         pass
     
-class classensiveDuelist():
+class classensive_Duelist():
     def __init__(self, p):
         pass
-class DualWielder():
+class Dual_Wielder():
     def __init__(self, p):
         pass
     
-class DungeonDelver():
+class Dungeon_Delver():
     def __init__(self, p):
         pass
     
@@ -115,14 +123,15 @@ class Durable():
     def __init__(self, p):
         p.Atr["CON"] += 1
 
-class ElementalAdept():
+class Elemental_Adept():
     def __init__(self, p):
-        Fselect_1("ElementalAdept", 1)
+        _ ,feat = gen_abil("Elemental Adept") 
+        Fselect_1(feat, 1)
 
 class Grappler():
     def __init__(self, p):
         pass
-class GreatWeaponMaster():
+class Great_Weapon_Master():
     def __init__(self, p):
         pass
 class Healer():
@@ -133,27 +142,27 @@ class HeavilyArmored():
         p.Atr["STR"] += 1
         p.Armor.extend(["Heavy"])
 
-class HeavyArmorMaster():
+class Heavy_Armor_Master():
     def __init__(self, p):
         p.Atr["STR"] += 1
 
-class InspiringLeader():
+class Inspiring_Leader():
     def __init__(self, p):
         pass
-class KeenMind():
+class Keen_Mind():
     def __init__(self, p):
         p.Atr["INT"] += 1
 
-class LightlyArmored():
+class Lightly_Armored():
     def __init__(self, p):
-        feat = "LightlyArmored"
+        _ ,feat = gen_abil("Lightly Armored") 
         p.Armor.extend(["Light"])
         Fselect_1(feat, 1)
         p.select_atr(feat)
 
 class Lucky():
     def __init__(self, p):
-        feat = "Lucky"
+        _ ,feat = gen_abil("Lucky") 
         Fuse_1(feat, 3)
 
 class MageSlayer():
@@ -166,25 +175,25 @@ class Mobile():
     def __init__(self, p):
         p.Speed["Walk"] += 10
 
-class ModeratelyArmored():
+class Moderately_Armored():
     def __init__(self, p):
-        feat = "MediumArmorMaster"
+        _ ,feat = gen_abil("Moderately_Armored") 
         p.Armor.extend(["Medium", "Shield"])
         Fselect_1(feat, 1)
         p.select_atr(feat)
 
-class MountedCombatant():
+class Mounted_Combatant():
     def __init__(self, p):
         pass
-class PolearmMaster():
+class Polearm_Master():
     def __init__(self, p):
         pass
 class Resilient():
     def __init__(self, p):
-        feat = "Resilient"
+        _ ,feat = gen_abil("Resilient") 
         Fselect_1(feat, 1)
 
-class SavageAttacker():
+class Savage_Attacker():
     def __init__(self, p):
         pass
 class Sentinel():
@@ -193,25 +202,25 @@ class Sentinel():
 class Sharpshooter():
     def __init__(self, p):
         pass
-class ShieldMaster():
+class Shield_Master():
     def __init__(self, p):
         pass
 class Skulker():
     def __init__(self, p):
         pass
-class TavernBrawler():
+class Tavern_Brawler():
     def __init__(self, p):
         pass
 class Tough():
     def __init__(self, p):
         p.HP += q.db.Core.L * 2
 
-class WarCaster():
+class War_Caster():
     def __init__(self, p):
         pass
-class WeaponMaster():
+class Weapon_Master():
     def __init__(self, p):
-        feat = "WeaponMaster"
+        _ ,feat = gen_abil("Weapon Master") 
         Fselect_1(feat, 4)
         collection = []
         for i in q.db.Milestone["Data"][feat]["Select"]:

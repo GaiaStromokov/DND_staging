@@ -24,8 +24,8 @@ class upd_milestone:
                         add_combo(items=get.list_Feat, default_value=cdata,  width=150, no_arrow_button=True, user_data=["Milestone Feat Select", i], callback=q.cbh, tag=tag.mfeature.select("feat", i))
                     elif data == "Asi":
                         cdata = cdata["Asi"][i]
-                        add_combo(items=get.list_Atr, default_value=cdata[0],  width=50, no_arrow_button=True, user_data=["Milestone Asi Select", i, 0], callback=q.cbh, tag=tag.mfeature.select("asi_0", i))
-                        add_combo(items=get.list_Atr, default_value=cdata[1],  width=50, no_arrow_button=True, user_data=["Milestone Asi Select", i, 1], callback=q.cbh, tag=tag.mfeature.select("asi_1", i))
+                        add_combo(items=get.list_Atr + ["Clear"], default_value=cdata[0],  width=50, no_arrow_button=True, user_data=["Milestone Asi Select", i, 0], callback=q.cbh, tag=tag.mfeature.select("asi_0", i))
+                        add_combo(items=get.list_Atr + ["Clear"], default_value=cdata[1],  width=50, no_arrow_button=True, user_data=["Milestone Asi Select", i, 1], callback=q.cbh, tag=tag.mfeature.select("asi_1", i))
 
 
 

@@ -22,10 +22,23 @@ class sett:
     def Atr_Modify(self, key, data):
         q.db.Atr[key].Base = int(data)
     #---
-    def Race_Asi_Clear(self): q.db.Race.Rasi = ["", ""]
+    def Race_Asi_Clear(self): 
+        q.db.Race.Rasi = ["", ""]
+        for atr in list_Atr: q.db.Atr[atr].Rasi = 0
+        
     def Race_Asi_Modify(self, key, data):
         cdata = q.db.Race
         cdata.Rasi[key] = data
+
+    def Race_Asi_Finalize(self):
+        cdata = q.db.Race.Rasi
+        sdata = q.db.Atr
+        atr_1, atr_2 = cdata[0], cdata[1]
+        for atr in list_Atr: 
+            if atr == atr_1: sdata[atr].Rasi = 1
+            elif atr == atr_2: sdata[atr].Rasi = 2
+            else: sdata[atr].Rasi = 0
+
     def Race_Abil_Use(self, key, index, data): 
         q.db.Race.Abil[key]["Use"][index] = data
     def Race_Spell_Use(self, key, spell, data): 
@@ -61,11 +74,13 @@ class sett:
         cdata["Select"][index] = ""
         cdata["Feat"][index] = ""
         cdata["Asi"][index] = ["", ""]
+        
     def Milestone_Top_Modify(self, index, data):
         cdata = q.db.Milestone
         cdata["Select"][index] = data
         cdata["Feat"][index] = ""
         cdata["Asi"][index] = ["", ""]
+        
 
     def Milestone_Feat_Clear(self, index):
         cdata = q.db.Milestone
@@ -96,10 +111,26 @@ class sett:
         cdata = q.db.Milestone
         if feat in cdata["Data"]: cdata["Data"][feat]["Use"][index] = data
 
+
+
     def Milestone_Asi_Clear(self, key, index):
         q.db.Milestone["Asi"][key][index] = ""
     def Milestone_Asi_Modify(self, key, index, data):
         q.db.Milestone["Asi"][key][index] = data
+        
+    def Milestone_Asi_Finalize(self):
+        print("Finalizing Milestone Asi")
+        stats = {"STR": 0, "DEX": 0, "CON": 0, "INT": 0, "WIS": 0, "CHA": 0}
+        dAsi = q.db.Milestone["Asi"]
+        dAtr = q.db.Atr
+        for idx1,idx2 in dAsi:
+            if idx1: stats[idx1] += 1
+            if idx2: stats[idx2] += 1
+        for atr in stats:
+            dAtr[atr].Milestone = stats[atr]
+            
+
+
     #---
     def Proficiency_Player_Modify(self):
         pass

@@ -38,27 +38,11 @@ class bRace:
         self.HP = 0
         self.SavingThrow = []
         if get.Race(): self.cRace = globals()[get.Race()](self)
-            
         if get.Subrace() and get.Subrace() != "Empty":  self.cSubrace = globals()[f"{get.Race()}_{get.Subrace()}"](self)
             
     def Upd(self):
         self.cRace.Upd()
         if get.Subrace() and get.Subrace() != "Empty": self.cSubrace.Upd()
-
-    def __repr__(self):
-        def serialize(obj):
-            if hasattr(obj, "__dict__"):
-                return {k: serialize(v) for k, v in obj.__dict__.items() if k not in ("cRace", "cSubrace")}
-            elif isinstance(obj, dict):
-                return {k: serialize(v) for k, v in obj.items()}
-            elif isinstance(obj, list):
-                return [serialize(v) for v in obj]
-            else:
-                return obj
-        data = serialize(self)
-        if hasattr(self, "cRace"): data["cRace"] = serialize(self.cRace)
-        if hasattr(self, "cSubrace"): data["cSubrace"] = serialize(self.cSubrace)
-        return json.dumps(data, indent=4)
 
 
 class Empty:
