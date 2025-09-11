@@ -6,7 +6,7 @@ class upd_class:
     def __init__(self):
         self.parent = tag.cfeature.main()
     
-    def whole(self):
+    def Whole(self):
         self.sub()
         self.main()
         

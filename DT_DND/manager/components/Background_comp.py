@@ -12,16 +12,11 @@ def Fselect_1(name, num):
 
 class bBackground():
     def __init__(self):
-        self.Skill = []
-        self.Weapon = []
-        self.Armor = []
-        self.Tool = []
-        self.Lang = []
-
-
         dBackground()["Prof"] = {}
         if q.db.Core.BG: self.cBackground = globals()[q.db.Core.BG](self)
-        
+    @property
+    def data(self):
+        return q.dbm.Stats.BG
 
 
 class Empty():
@@ -33,7 +28,7 @@ class Empty():
 class Acolyte():
     def __init__(self, p):
 
-        p.Skill = ["Insight", "Religion"]
+        p.data.Skill.extend(["Insight", "Religion"])
         Fselect_1("Lang", 2)
 
         
@@ -41,48 +36,48 @@ class Acolyte():
 
 class Charlatan():
     def __init__(self, p):
-        p.Skill = ["Deception", "Sleight of Hand"]
-        p.Tool = ["Disguise", "Forgery"]
+        p.data.Skill.extend(["Deception", "Sleight of Hand"])
+        p.data.Tool.extend(["Disguise", "Forgery"])
 
 
 
 class Criminal():
     def __init__(self, p):
-        p.Skill = ["Deception", "Stealth"]
-        p.Tool = ["Thief"]
+        p.data.Skill.extend(["Deception", "Stealth"])
+        p.data.Tool.extend(["Thief"])
         Fselect_1("Game", 1)
 
 class Entertainer():
     def __init__(self, p):
-        p.Skill = ["Acrobatics", "Performance"]
-        p.Tool = ["Disguise"]
+        p.data.Skill.extend(["Acrobatics", "Performance"])
+        p.data.Tool.extend(["Disguise"])
         Fselect_1("Music", 1)
 
 class FolkHero():
     def __init__(self, p):
-        p.Skill = ["Animal Handling", "Survival"]
+        p.data.Skill.extend(["Animal Handling", "Survival"])
         Fselect_1("Job", 1)
 
 class GuildArtisan():
     def __init__(self, p):
 
-        p.Skill = ["Insight", "Persuasion"]
-        p.Tool = ["Tinker"]
+        p.data.Skill.extend(["Insight", "Persuasion"])
+        p.data.Tool.extend(["Tinker"])
         Fselect_1("Job", 1)
         Fselect_1("Lang", 1)
 
 
 class Hermit():
     def __init__(self, p):
-        p.Skill = ["Medicine", "Religion"]
-        p.Tool = ["Herbalism Kit"]
+        p.data.Skill.extend(["Medicine", "Religion"])
+        p.data.Tool.extend(["Herbalism Kit"])
         Fselect_1("Lang", 1)
 
 
 
 class Noble():
     def __init__(self, p):
-        p.Skill = ["History", "Persuasion"]
+        p.data.Skill.extend(["History", "Persuasion"])
         Fselect_1("Lang", 1)
         Fselect_1("Game", 1)
 
@@ -90,30 +85,30 @@ class Noble():
 
 class Outlander():
     def __init__(self, p):
-        p.Skill = ["Athletics", "Survival"]
+        p.data.Skill.extend(["Athletics", "Survival"])
         Fselect_1("Music", 1)
         Fselect_1("Lang", 1)
 
 
 class Sage():
     def __init__(self, p):
-        p.Skill = ["Arcana", "History"]
+        p.data.Skill.extend(["Arcana", "History"])
         Fselect_1("Lang", 2)
 
 
 
 class Sailor():
     def __init__(self, p):
-        p.Skill = ["Athletics", "Perception"]
-        p.Tool = ["Navigator"]
+        p.data.Skill.extend(["Athletics", "Perception"])
+        p.data.Tool.extend(["Navigator"])
 
 class Soldier():
     def __init__(self, p):
-        p.Skill = ["Athletics", "Intimidation"]
+        p.data.Skill.extend(["Athletics", "Intimidation"])
         Fselect_1("Game", 1)
 
 
 class Urchin():
     def __init__(self, p):
-        p.Skill = ["Sleight of Hand", "Stealth"]
-        p.Tool = ["Disguise", "Thief"]
+        p.data.Skill.extend(["Sleight of Hand", "Stealth"])
+        p.data.Tool.extend(["Disguise", "Thief"])

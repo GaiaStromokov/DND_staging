@@ -2,19 +2,19 @@
     "Core": {
         "L": 4,
         "PB": 2,
-        "R": "Dragonborn",
-        "SR": "Red",
+        "R": "Empty",
+        "SR": "",
         "C": "Fighter",
         "SC": "",
         "BG": "Empty"
     },
     "Atr": {
         "STR": {
-            "Base": 10,
+            "Base": 14,
             "Rasi": 0,
             "Milestone": 0,
-            "Val": 10,
-            "Mod": 0,
+            "Val": 14,
+            "Mod": 2,
             "ST": 0
         },
         "DEX": {
@@ -53,7 +53,7 @@
             "Base": 10,
             "Rasi": 0,
             "Milestone": 0,
-            "Val": 11,
+            "Val": 10,
             "Mod": 0,
             "ST": 0
         }
@@ -176,25 +176,7 @@
             "",
             ""
         ],
-        "Abil": {
-            "Legacy_of_Stygia": {
-                "Ray of Frost": {
-                    "Use": [
-                        false
-                    ]
-                },
-                "Armor of Agathys": {
-                    "Use": [
-                        false
-                    ]
-                }
-            },
-            "Breath_Weapon": {
-                "Use": [
-                    false
-                ]
-            }
-        }
+        "Abil": {}
     },
     "Milestone": {
         "Select": [
@@ -252,6 +234,7 @@
             ]
         ],
         "Data": {
+            "Alert": {},
             "Empty": {}
         }
     },

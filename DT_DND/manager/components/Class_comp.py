@@ -1,74 +1,75 @@
 import q
 import Sheet.get as g
 from colorist import *
+db = q.db
 
 
-
-def Fgen(name): q.db.Class.Abil.setdefault(name, {})
+def Fgen(name): db.Class.Abil.setdefault(name, {})
     
     
 def Fuse_1(name, num):
-    cdata = q.db.Class.Abil
+    cdata = db.Class.Abil
     cdata.setdefault(name, {})
     past = cdata.get(name, {}).get("Use", [False])
     cdata[name]["Use"] = (past + [False] * num)[:num]
 
 def Fselect_1(name, num):
-    cdata = q.db.Class.Abil
+    cdata = db.Class.Abil
     cdata.setdefault(name, {})
     past = cdata.get(name, {}).get("Select", [])
     cdata[name]["Select"] = (past + [""] * num)[:num]
 
-def remove_ability(name): q.db.Class.Abil.pop(name, None)
+def remove_ability(name): db.Class.Abil.pop(name, None)
 
 
+
+# "Caster": "",
+# "MSL": 0,
+# "CA": 0,
+# "SA": 0,
+# "PA": 0,
+# "Slots": [[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0]],
+# "Abil": "",
+# "DC": 0,
+# "Mod": 0,
+# "Atk": ""
+def Spell_Setter(self, Caster):
+    cSpell = g.Spell_Class_Data(Caster)
+    q.dbm.dSpell = {
+        "Caster": cSpell.Caster,
+        "MSL": cSpell.MSL,
+        "CA": cSpell.CA,
+        "SA": cSpell.SA,
+        "PA": cSpell.PA,
+        "Slots": cSpell.Slot,
+        "Abil": cSpell.CAbil,
+        "DC": cSpell.DC,
+        "Mod": cSpell.Mod,
+        "Atk": cSpell.ATK
+    }
+    past = db.Spell["Slot"]
+    for index,val in enumerate(cSpell.Slot): db.Spell.Slot[index] = (past[index] + [False] * val)[:val]
+    
 
 
 class bClass():
     def __init__(self):
         
-        self.Atr = {"STR": 0, "DEX": 0, "CON": 0, "INT": 0, "WIS": 0, "CHA": 0}
-        self.Skill = []
-        self.Weapon = []
-        self.Armor = []
-        self.Tool = []
-        self.Lang = []
-        self.Initiative = 0
-        self.HP = 0
-        self.HD = 0
-        
-        self.spell_data = {
-            "Caster": "",
-            "max_spell_level": 0,
-            "cantrips_available": 0,
-            "spells_available": 0,
-            "slots": [[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0]],
-            "abil": "",
-            "dc": 0,
-            "mod": 0,
-            "atk": "",
-            "prepared_available": 0,
-            
-        }
-        
-        if q.db.Core.C: self.cClass = globals()[q.db.Core.C](self)
-        if q.db.Core.SC: self.cSubclass = globals()[f"{q.db.Core.C}_{q.db.Core.SC}"](self)
+        if db.Core.C: self.cClass = globals()[db.Core.C]()
+        if db.Core.SC: self.cSubclass = globals()[f"{db.Core.C}_{db.Core.SC}"]()
 
-
-        
-        
     def pre_Upd(self):
         self.cClass.pre_Upd()
-        if q.db.Core.SC: self.cSubclass.pre_Upd()
+        if db.Core.SC: self.cSubclass.pre_Upd()
         
         
     def Upd(self):
         self.cClass.Upd()
-        if q.db.Core.SC: self.cSubclass.Upd()
+        if db.Core.SC: self.cSubclass.Upd()
     
     def Spell_config(self):      
-        if q.db.Core.SC in g.list_Spellcast: self.cSubclass.Spell_config()
-        elif q.db.Core.C in g.list_Spellcast: self.cClass.Spell_config()
+        if db.Core.SC in g.list_Spellcast: Spell_Setter(db.Core.SC)
+        elif db.Core.C in g.list_Spellcast: Spell_Setter(db.Core.C)
         
 
     def __repr__(self):
@@ -79,27 +80,25 @@ class bClass():
     
     
 class Empty():
-    def __init__(self, p): pass
+    def __init__(self): pass
     def pre_Upd(self): pass
     def Upd(self): pass
     
 class Fighter():
-    def __init__(self, p):
-        self.p = p
-        p.HD = 10
-        p.Armor.extend(q.w.search(Tier = 0, Slot="Armor"))
-        p.Armor.extend(q.w.search(Tier = 0, Slot="Shield"))
-        p.Weapon.extend(q.w.search(Tier = 0, Slot="Weapon"))
-        
-    def pre_Upd(self):
-        skill_list = ["Acrobatics", "Animal Handling", "Athletics", "History", "Insight", "Intimidation", "Perception", "Survival"]
-        past = q.db.Class["Skill Select"]
-        q.db.Class["Skill Select"] = ([s for s in past if s in skill_list and s != ""] + ["", ""])[:2]
-
-
+    def __init__(self):
+        cdata = q.dbm.Stats.C
+        cdata.Combat.HD = 10
+        cdata.Prof.Armor.extend(q.w.search(Tier = 0, Slot="Armor"))
+        cdata.Prof.Armor.extend(q.w.search(Tier = 0, Slot="Shield"))
+        cdata.Prof.Weapon.extend(q.w.search(Tier = 0, Slot="Weapon"))
 
     def Upd(self):
-        level = q.db.Core.L
+        level = q.dbm.Core.g.L
+        skill_list = ["Acrobatics", "Animal Handling", "Athletics", "History", "Insight", "Intimidation", "Perception", "Survival"]
+        past = db.Class["Skill Select"]
+        db.Class["Skill Select"] = ([s for s in past if s in skill_list and s != ""] + ["", ""])[:2]
+
+
         if level >= 1:
             Fselect_1("Fighting Style", 1)
             Fuse_1("Second Wind", g.Fighter_Second_Wind_Use[level])
@@ -116,12 +115,8 @@ class Fighter():
 
 
 class Fighter_Champion():
-    def __init__(self, p):
-        pass
-    def pre_Upd(self):
-        pass
     def Upd(self):
-        level = q.db.Core.L
+        level = q.dbm.Core.g.L
         if level >= 3: Fgen("Improved Critical")
         else: remove_ability("Improved Critical")
         if level >= 7: Fgen("Remarkable Athlete")
@@ -134,35 +129,26 @@ class Fighter_Champion():
         if level >= 18: Fgen("Survivor")
         else: remove_ability("Survivor")
 
-class Fighter_BattleMaster():
-    def __init__(self, p):
-        pass
-    def pre_Upd(self):
-        if q.db.Core.L >= 3:
-            Fselect_1("Student of War", 1)
-            selected_tool = q.db.Class.Abil["Student of War"].get("Select", [""])[0]
-            if selected_tool and selected_tool not in q.db.Prof["Class"]["Tool"]:
-                self.Tool = [selected_tool]
-        else:
-            remove_ability("Student of War")
+class Fighter_Battle_Master():
     def Upd(self):
-        level = q.db.Core.L
+        level = db.Core.L
         if level >= 3:
             Fuse_1("Combat Superiority", g.Fighter_Combat_Superiority_Use[level])
             Fselect_1("Combat Superiority", g.Fighter_Combat_Superiority_Select[level])
-            
+
+            Fselect_1("Student of War", 1)
+            selected_tool = db.Class.Abil["Student of War"].get("Select", [""])[0]
+            if selected_tool and selected_tool not in db.Prof["Class"]["Tool"]: q.dbm.Stats.C.Prof.Tool.extend(selected_tool)
+
             Fgen("Relentless")
         else:
+            remove_ability("Student of War")
             remove_ability("Combat Superiority")
             remove_ability("Relentless")
 
-class Fighter_EldrichKnight():
-    def __init__(self, p):
-        self.p = p
-    def pre_Upd(self):
-        pass
+class Fighter_Eldrich_Knight():
     def Upd(self):
-        level = q.db.Core.L
+        level = q.dbm.Core.g.L
         if level >= 3: Fgen("Weapon Bond")
         else: remove_ability("Weapon Bond")
         if level >= 7: Fgen("War Magic")
@@ -176,45 +162,18 @@ class Fighter_EldrichKnight():
             Fgen("Improved War Magic")
         else: remove_ability("Improved War Magic")
         
-    def Spell_config(self):
-        cspell=self.p.spell_data
-        level = q.db.Core.L
-        pb = q.db.Core.PB
-        Class = "Eldrich Knight"
-        abil = g.casting_abil[Class]
-        
-        cspell["Caster"] = g.casting_class[Class]
-        cspell["max_spell_level"] = g.max_spell_Level[Class][level]
-        cspell["cantrips_available"] = g.cantrips_available[Class][level]
-        cspell["spells_available"] = g.spells_available[Class][level]
-        cspell["abil"] = abil
-        cspell["slots"] = g.spell_slots[Class][level]
-        cspell["mod"] = q.db.Atr[abil]["Mod"]
-        mod = cspell["mod"]
-        cspell["atk"] = f"{'+' if (pb + mod) >= 0 else ''}{pb + mod}"
-
-        cspell["dc"] = 8 + pb + mod
-        cspell["prepared_available"] = mod + q.db.Core.L
-        
-        past = q.db.Spell["Slot"]
-        for index,val in enumerate(cspell["slots"]):
-            q.db.Spell.Slot[index] = (past[index] + [False] * val)[:val]
 
 class Fighter_Samuri():
-    def __init__(self, p):
-        pass
-    def pre_Upd(self):
-        if q.db.Core.L >= 3:
-            Fselect_1("Bonus Proficiency", 1)
-            select = q.db.Class.Abil["Bonus Proficiency"].get("Select", [""])[0]
-            if select and select not in q.db.Skill["Class"]:
-                self.Skill = [select]
-        else:
-            remove_ability("Bonus Proficiency")
     def Upd(self):
-        level = q.db.Core.L
-        if level >= 3: Fuse_1("Fighting Spirit", 3)
-        else: remove_ability("Fighting Spirit")
+        level = q.dbm.Core.g.L
+        if level >= 3: 
+            Fuse_1("Fighting Spirit", 3)
+            Fselect_1("Bonus Proficiency", 1)
+            select = db.Class.Abil["Bonus Proficiency"].get("Select", [""])[0]
+            if select and select not in db.Skill["Class"]: q.dbm.Stats.C.Prof.Skill.extend(select)
+        else: 
+            remove_ability("Fighting Spirit")
+            remove_ability("Bonus Proficiency")
         if level >= 7: Fgen("Elegant Courtier")
         else: remove_ability("Elegant Courtier")
         if level >= 10: Fgen("Tireless Spirit")
@@ -227,42 +186,19 @@ class Fighter_Samuri():
 
 
 class Wizard():
-    def __init__(self, p):
-        self.p = p
-        self.p.HD = 6
-        self.p.Weapon.extend(["Dagger", "Dart", "Sling", "Quarterstaff", "Light Crossbow"])
-
-    def pre_Upd(self):
-        skill_list = ["Arcana", "History", "Insight", "Investigation", "Medicine", "Religion"]
-        past = q.db.Class["Skill Select"]
-        q.db.Class["Skill Select"] = ([s for s in past if s in skill_list and s != ""] + ["", ""])[:2]
+    def __init__(self):
+        cdata = q.dbm.Stats.C
+        cdata.Combat.HD = 6
+        cdata.Prof.Weapon.extend(["Dagger", "Dart", "Sling", "Quarterstaff", "Light Crossbow"])
 
 
-        
-    def Spell_config(self):
-        cspell = self.p.spell_data
-        level = q.db.Core.L
-        pb = q.db.Core.PB
-        Class = "Wizard"
-        abil = g.casting_abil[Class]
-        
-        cspell["Caster"] = g.casting_class[Class]
-        cspell["max_spell_level"] = g.max_spell_Level[Class][level]
-        cspell["cantrips_available"] = g.cantrips_available[Class][level]
-        cspell["spells_available"]= level * 2
-        cspell["slots"] = g.spell_slots[Class][level] 
-        cspell["abil"] = abil
-        cspell["mod"] = q.db.Atr[abil]["Mod"]
-        mod = cspell["mod"]
-        cspell["atk"] = f"{'+' if (pb + mod) >= 0 else ''}{pb + mod}"
-
-        cspell["dc"] = 8 + pb + mod
-        cspell["prepared_available"] = mod + level
-        
-        past = q.db.Spell["Slot"]
-        for index,val in enumerate(cspell["slots"]): q.db.Spell.Slot[index] = (past[index] + [False] * val)[:val]
     def Upd(self):
-        level = q.db.Core.L
+        level = q.dbm.Core.g.L
+        
+        skill_list = ["Arcana", "History", "Insight", "Investigation", "Medicine", "Religion"]
+        past = db.Class["Skill Select"]
+        db.Class["Skill Select"] = ([s for s in past if s in skill_list and s != ""] + ["", ""])[:2]
+
         if level >=1:
             Fgen("Spellcasting")
             Fuse_1("Arcane Recovery", 1)
@@ -282,19 +218,13 @@ class Wizard():
 
 
 class Wizard_Abjuration():
-    def __init__(self, p):
-        pass
-    def pre_Upd(self):
-        pass
-    def Spell_config(self):
-        pass
     def Upd(self):
-        level = q.db.Core.L
+        level = q.dbm.Core.g.L
         if level >= 2:
             Fgen("Abjuration Savant")
             
             ab_ward = Fgen("Arcane Ward")
-            ward_max_hp = level + q.db.Atr["INT"]["Mod"]
+            ward_max_hp = level + db.Atr["INT"]["Mod"]
             ward_current_hp = ab_ward.get("HP", {}).get("Current", ward_max_hp)
             ab_ward["HP"] = {"Max": ward_max_hp, "Current": ward_current_hp}
             Fuse_1("Arcane Ward", 1)
@@ -309,30 +239,21 @@ class Wizard_Abjuration():
         else: remove_ability("Spell Resistance")
 
 class Wizard_Conjuration():
-    def __init__(self, p):
-        pass
-    def pre_Upd(self):
-        pass
-    def Spell_config(self):
-        pass
     def Upd(self):
-        level = q.db.Core.L
+        level = q.dbm.Core.g.L
         if level >= 2:
             Fgen("Conjuration Savant")
             Fgen("Minor Conjuration")
-            
         else:
             remove_ability("Conjuration Savant")
             remove_ability("Minor Conjuration")
+            
         if level >= 6: Fuse_1("Benign Transportation", 1)
-        
         else: remove_ability("Benign Transportation")
         
         if level >= 10: Fgen("Focused Conjuration")
-        
         else: remove_ability("Focused Conjuration")
             
         if level >= 14: Fgen("Durable Summons")
-        
         else: remove_ability("Durable Summons")
 

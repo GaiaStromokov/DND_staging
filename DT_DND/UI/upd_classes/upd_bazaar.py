@@ -67,7 +67,7 @@ class upd_bazaar:
                         for item in items[i:i+4]:
                             self.create_bazaar_button(item, equipment_type, parent=horizontal_group_id)
     
-    def whole(self):
+    def Whole(self):
         for equipment_type, categories in self.dict_struct.items():
             for rank in range(5):
                 rarity = get.item_rarity(rank)

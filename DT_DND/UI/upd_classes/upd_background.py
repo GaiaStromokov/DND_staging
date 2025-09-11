@@ -23,7 +23,7 @@ class upd_background:
             "Urchin": ["City Secrets", "You know the secret patterns and flow to cities and can find passages through the urban sprawl that others would misq.pc. When you are not in combat, you (and companions you lead) can travel between any two locations in the city twice as fast as your speed would normally allow."]
         }
 
-    def whole(self):
+    def Whole(self):
         self.sub()
         self.main()
 

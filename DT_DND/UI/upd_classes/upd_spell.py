@@ -4,17 +4,17 @@ class upd_Cast:
     def __init__(self):
         self.spell_data = None
 
-    def update(self):
+    def Update(self):
         self.spell_data = q.pc.Class.spell_data
-        self.update_stats()
-        self.update_content()
+        self.Update_Stats()
+        self.Update_Content()
 
-    def update_stats(self):
+    def Update_Stats(self):
         configure_item(tag.spell.text("Abil"), default_value=self.spell_data["abil"])
         configure_item(tag.spell.text("atk"), default_value=self.spell_data["atk"])
         configure_item(tag.spell.text("dc"), default_value=self.spell_data["dc"])
 
-    def update_content(self):
+    def Update_Content(self):
         item_clear(tag.scast.main())
         with group(parent=tag.scast.main()):
             for level in range(0, self.spell_data["max_spell_level"] + 1):
@@ -42,18 +42,18 @@ class upd_Learn:
     def __init__(self):
         self.spell_data = None
 
-    def update(self):
+    def Update(self):
         self.spell_data = q.pc.Class.spell_data
-        self.update_stats()
-        self.update_content()
+        self.Update_Stats()
+        self.Update_Content()
         
-    def update_stats(self):
+    def Update_Stats(self):
         configure_item(tag.slearn.known("cantrip"), default_value=get.cantrips_known())
         configure_item(tag.slearn.available("cantrip"), default_value=self.spell_data["cantrips_available"])
         configure_item(tag.slearn.known("spell"), default_value=get.spells_known())
         configure_item(tag.slearn.available("spell"), default_value=self.spell_data["spells_available"])
 
-    def update_content(self):
+    def Update_Content(self):
         for level in range(1, self.spell_data["max_spell_level"] + 1):
             available_spells = get.List_Spells(self.spell_data["Caster"], level)
             item_clear(tag.slearn.wlevel(level))
@@ -71,16 +71,16 @@ class upd_Prepare:
     def __init__(self):
         self.spell_data = None
 
-    def update(self):
+    def Update(self):
         self.spell_data = q.pc.Class.spell_data
-        self.update_stats()
-        self.update_content()
+        self.Update_Stats()
+        self.Update_Content()
 
-    def update_stats(self):
+    def Update_Stats(self):
         configure_item(tag.sprepare.current(), default_value=get.spells_prepared())
         configure_item(tag.sprepare.available(), default_value=self.spell_data["prepared_available"])
 
-    def update_content(self):
+    def Update_Content(self):
         for level in range(1, self.spell_data["max_spell_level"] + 1):
             item_clear(tag.sprepare.wlevel(level))
             known_spells = q.db.Spell["Book"][level]
@@ -100,17 +100,17 @@ class upd_spell:
         self.Learn = upd_Learn()
         self.Prepare = upd_Prepare()
 
-    def whole(self):
-        if not get.valid_spellclass():
+    def Whole(self):
+        if not q.dbm.Spell.Validate:
             item_delete(tag.spell.tab())
             return
         
-        self.check_ui()
-        self.Cast.update()
-        self.Learn.update()
-        self.Prepare.update()
+        self.Check_UI()
+        self.Cast.Update()
+        self.Learn.Update()
+        self.Prepare.Update()
 
-    def check_ui(self):
+    def Check_UI(self):
         if does_item_exist(tag.spell.tab()):
             return
 

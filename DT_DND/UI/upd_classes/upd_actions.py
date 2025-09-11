@@ -4,7 +4,7 @@ class upd_actions:
     def __init__(self):
         pass
 
-    def whole(self):
+    def Whole(self):
         self.weapon()
 
     def weapon(self):

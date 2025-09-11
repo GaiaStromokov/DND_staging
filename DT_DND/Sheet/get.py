@@ -39,9 +39,6 @@ def aMod(atr): return q.db.Atr[atr]["Mod"]
 
 
 
-def Initiative_text():
-    mod = q.pc.Initiative
-    return f"{'+' if mod >= 0 else '-'}{abs(mod)}"
 
 
 # Spell bullshit
@@ -66,37 +63,21 @@ def spells_prepared():
     return num
 
 
-def valid_class():
-    cdata = q.db.Core
-    class_exception_map = {1: ["Cleric", "Warlock"], 2: ["Wizard"]}
-    return cdata.L >= 3 or cdata.C in class_exception_map.get(cdata.L, [])
-
-def valid_spellclass(): return q.db.Core.C in list_Spellcast or q.db.Core.SC in list_Spellcast
-
-def valid_s_spellclass(cat):
-    cdata = q.db.Core
-    if cat == "Class":
-        return cdata.C in list_Spellcast
-    elif cat == "Subclass":
-        return cdata.SC in list_Spellcast
 
 
 
 
 
-def prof_color( cat, item): return c_item_true if item in q.pc.Prof[cat] else c_item_false
+def prof_color(cat, item): return c_item_true if item in q.dbm.Collect_Prof[cat] else c_item_false
 
 
 def condition_color( item): return c_item_true if q.db.Condition[item] else c_item_false
 
 
-def skill_text( skill):
-    mod = q.db.Skill[skill]["Mod"]
+def skill_text(mod):
     return f"{'+' if mod >= 0 else '-'}{abs(mod)}"
 
 
-# def dc_val( atr):
-#     return 8 + kAtr()[atr]["Mod"] + vPB()
 
 def item_slot(item):
     backpack = q.db.Inventory.Closet
@@ -181,7 +162,9 @@ class weapon_action_shield:
         self.Category = "Shield"
         base = item_data.AC
         tier = item_data.Tier
-        if "Shield" in q.pc.Prof["Armor"]: self.AC = base + tier
+        cdata = q.dbm.Collect_Prof
+        
+        if "Shield" in cdata["Armor"]: self.AC = base + tier
         else: self.AC = 0
 
 class weapon_action_weapon:
@@ -447,34 +430,50 @@ Fighter_Combat_Superiority_Use = [0,0,0,4,4,4,4,5,5,5,5,5,5,5,5,6,6,6,6,6,6]
 Fighter_Combat_Superiority_Select = [0,0,0,3,3,3,3,5,5,5,7,7,7,7,7,9,9,9,9,9,9]
 
 
+class Spell_Class_Data:
+    def __init__(self, casting_class):
+        level = q.db.Core.L
+        pb = q.db.Core.PB
+        dMSL = {
+            "Wizard": [0,1,1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,8,9,9,9], 
+            "Eldrich Knight": [0,0,0,1,1,1,1,2,2,2,2,2,2,3,3,3,3,3,3,4,4]
+        }
+        dCA = {
+            "Wizard": [0,3,3,3,4,4,4,4,4,4,5,5,5,5,5,5,5,5,5,5,5],
+            "Eldrich Knight": [0,0,0,2,2,2,2,2,2,2,3,3,3,3,3,3,3,3,3,3,3]
+        }
+        dSA = {
+            "Wizard": [0,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40,42,44],
+            "Eldrich Knight": [0,0,0,3,4,4,4,5,6,6,7,8,8,9,10,10,11,11,11,12,13]
+        }
+        dCAbil = {
+            "Wizard": "INT",
+            "Eldrich Knight": "INT"
+        }
+        dCList = {
+            "Wizard": "Wizard",
+            "Eldrich Knight": "Wizard"
+        }
+        dSlot = {
+            "Wizard": [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],[0, 2, 0, 0, 0, 0, 0, 0, 0, 0],[0, 3, 0, 0, 0, 0, 0, 0, 0, 0],[0, 4, 2, 0, 0, 0, 0, 0, 0, 0],[0, 4, 3, 0, 0, 0, 0, 0, 0, 0],[0, 4, 3, 2, 0, 0, 0, 0, 0, 0],[0, 4, 3, 3, 0, 0, 0, 0, 0, 0],[0, 4, 3, 3, 1, 0, 0, 0, 0, 0],[0, 4, 3, 3, 2, 0, 0, 0, 0, 0],[0, 4, 3, 3, 3, 1, 0, 0, 0, 0],[0, 4, 3, 3, 3, 2, 0, 0, 0, 0],[0, 4, 3, 3, 3, 2, 1, 0, 0, 0],[0, 4, 3, 3, 3, 2, 1, 0, 0, 0],[0, 4, 3, 3, 3, 2, 1, 1, 0, 0],[0, 4, 3, 3, 3, 2, 1, 1, 0, 0],[0, 4, 3, 3, 3, 2, 1, 1, 1, 0],[0, 4, 3, 3, 3, 2, 1, 1, 1, 0],[0, 4, 3, 3, 3, 2, 1, 1, 1, 1],[0, 4, 3, 3, 3, 3, 1, 1, 1, 1],[0, 4, 3, 3, 3, 3, 2, 1, 1, 1],[0, 4, 3, 3, 3, 3, 2, 2, 1, 1]],
+            "Eldrich Knight": [[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,2,0,0,0],[0,3,0,0,0],[0,3,0,0,0],[0,3,0,0,0],[0,4,2,0,0],[0,4,2,0,0],[0,4,2,0,0],[0,4,3,0,0],[0,4,3,0,0],[0,4,3,0,0],[0,4,3,2,0],[0,4,3,2,0],[0,4,3,2,0],[0,4,3,3,0],[0,4,3,3,0],[0,4,3,3,0],[0,4,3,3,1],[0,4,3,3,1]]
+        }
 
-max_spell_Level = {
-    "Wizard": [0,1,1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,8,9,9,9], 
-    "Eldrich Knight": [0,0,0,1,1,1,1,2,2,2,2,2,2,3,3,3,3,3,3,4,4]
-}
-cantrips_available = {
-    "Wizard": [0,3,3,3,4,4,4,4,4,4,5,5,5,5,5,5,5,5,5,5,5],
-    "Eldrich Knight": [0,0,0,2,2,2,2,2,2,2,3,3,3,3,3,3,3,3,3,3,3]
-}
+        
+        self.MSL = dMSL[casting_class][level]
+        self.CA = dCA[casting_class][level]
+        self.SA = dSA[casting_class][level]
+        self.CAbil = dCAbil[casting_class]
+        self.CList = dCList[casting_class]
+        self.Slot = dSlot[casting_class][level]
 
-spells_available = {
-    "Wizard": [],
-    "Eldrich Knight": [0,0,0,3,4,4,4,5,6,6,7,8,8,9,10,10,11,11,11,12,13]
-}
+        self.Mod = q.db.Atr[self.CAbil]["Mod"]
+        self.DC  = 8 + pb + self.Mod
+        self.ATK = f"{'+' if (pb + self.Mod) >= 0 else ''}{pb + self.Mod}"
+        self.PA = self.Mod + Level
+        
+        
 
-casting_abil = {
-    "Wizard": "INT",
-    "Eldrich Knight": "INT"
-}
-
-casting_class = {
-    "Wizard": "Wizard",
-    "Eldrich Knight": "Wizard"
-}
-spell_slots = {
-    "Wizard": [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],[0, 2, 0, 0, 0, 0, 0, 0, 0, 0],[0, 3, 0, 0, 0, 0, 0, 0, 0, 0],[0, 4, 2, 0, 0, 0, 0, 0, 0, 0],[0, 4, 3, 0, 0, 0, 0, 0, 0, 0],[0, 4, 3, 2, 0, 0, 0, 0, 0, 0],[0, 4, 3, 3, 0, 0, 0, 0, 0, 0],[0, 4, 3, 3, 1, 0, 0, 0, 0, 0],[0, 4, 3, 3, 2, 0, 0, 0, 0, 0],[0, 4, 3, 3, 3, 1, 0, 0, 0, 0],[0, 4, 3, 3, 3, 2, 0, 0, 0, 0],[0, 4, 3, 3, 3, 2, 1, 0, 0, 0],[0, 4, 3, 3, 3, 2, 1, 0, 0, 0],[0, 4, 3, 3, 3, 2, 1, 1, 0, 0],[0, 4, 3, 3, 3, 2, 1, 1, 0, 0],[0, 4, 3, 3, 3, 2, 1, 1, 1, 0],[0, 4, 3, 3, 3, 2, 1, 1, 1, 0],[0, 4, 3, 3, 3, 2, 1, 1, 1, 1],[0, 4, 3, 3, 3, 3, 1, 1, 1, 1],[0, 4, 3, 3, 3, 3, 2, 1, 1, 1],[0, 4, 3, 3, 3, 3, 2, 2, 1, 1]],
-    "Eldrich Knight": [[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,2,0,0,0],[0,3,0,0,0],[0,3,0,0,0],[0,3,0,0,0],[0,4,2,0,0],[0,4,2,0,0],[0,4,2,0,0],[0,4,3,0,0],[0,4,3,0,0],[0,4,3,0,0],[0,4,3,2,0],[0,4,3,2,0],[0,4,3,2,0],[0,4,3,3,0],[0,4,3,3,0],[0,4,3,3,0],[0,4,3,3,1],[0,4,3,3,1]]
-}
 
 
 inventory_equip_L = ["Face","Throat","Body","Hands","Waist","Feet","Armor","Hand_1","Hand_2","Ring_1","Ring_2"]

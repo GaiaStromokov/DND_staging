@@ -3,11 +3,11 @@ from manager.components.Background_comp import bBackground
 from manager.components.Class_comp import bClass
 from manager.components.Milestone_comp import bMilestone
 from manager.components.Race_comp import bRace
-from manager.components.Equipment_comp import Bazaar
+
 import q
 import Sheet.get as get
 from colorist import *
-
+dbm = q.dbm
 class Character():
     def __init__(self):
         pass
@@ -36,7 +36,6 @@ class Character():
     def Atr(self):
         dClass = self.Class.Atr
         dMilestone = self.Milestone.Atr
-        print(dMilestone)
         dAtr = q.db.Atr
         for atr in get.list_Atr:
             vBase = dAtr[atr].get("Base", 0)
@@ -226,11 +225,3 @@ class Character():
         
 
 
-
-def init_pc():
-    if q.db is None:
-        red("[init_pc] ERROR : Not loaded")
-        return
-    q.pc = Character()
-    q.w = Bazaar()
-    green("[init_pc] - player now exists")

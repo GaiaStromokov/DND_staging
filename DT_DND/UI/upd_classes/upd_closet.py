@@ -44,7 +44,7 @@ class upd_closet:
         
         return get.iName(equipped) if equipped in self.backpack else ""
     
-    def whole(self):
+    def Whole(self):
         self.load_data()
         for slot_name, source, select_tag in self.get_slots():
             

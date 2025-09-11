@@ -152,13 +152,13 @@ class sett:
 
     def Spell_Learn(self, spell, level):
         cspell = q.db.Spell["Book"][level]
-        sdata = q.pc.Class.spell_data
+        sdata = q.qbm.dspell
         if level == 0: self._Toggle_Cantrip(spell, cspell, sdata['cantrips_available'])
         else:          self._Toggle_Spell(spell, cspell, sdata['spells_available'])
 
     def Spell_Prepare(self, spell, level):
         cspell = q.db.Spell["Prepared"][level]
-        sdata = q.pc.Class.spell_data
+        sdata = q.qbm.dspell
         self._Toggle_Prepare(spell, cspell, sdata['prepared_available'])
         
     def Spell_Cast(self, level):

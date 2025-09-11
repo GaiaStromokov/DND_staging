@@ -1,23 +1,24 @@
 import q
 import Sheet.get as get
 
-import json
-
 def Fgen(name): q.db.Race.Abil.setdefault(name, {})
 
     
 def Fuse_1(name, num):
+    name = name.replace(" ", "_")
     q.db.Race.Abil.setdefault(name, {})
     past = q.db.Race.Abil.get(name, {}).get("Use", [False])
     q.db.Race.Abil[name] = {"Use": (past + [False] * num)[:num]}
 
 def Fuse_2(index, name, num):
+    name = name.replace(" ", "_")
     q.db.Race.Abil[index].setdefault(name, {})
     past = q.db.Race.Abil.get(index, {}).get(name, {}).get("Use", [False])
     q.db.Race.Abil[index][name] = {"Use": (past + [False] * num)[:num]}
     
     
 def fSelect_1(name, num):
+    name = name.replace(" ", "_")
     q.db.Race.Abil.setdefault(name, {})
     past = q.db.Race.Abil.get(name, {}).get("Select", [])
     q.db.Race.Abil[name]["Select"] = (past + [""] * num)[:num]
@@ -27,16 +28,6 @@ def fSelect_1(name, num):
 
 class bRace:
     def __init__(self):
-        self.Speed = {"Walk": 0, "Climb": 0, "Swim": 0, "Fly": 0, "Burrow": 0}
-        self.Vision = {"Dark": 0, "Blind": 0, "Tremor": 0, "Tru": 0}
-        self.Skill = []
-        self.Weapon = []
-        self.Armor = []
-        self.Tool = []
-        self.Lang = []
-        self.Initiative = 0
-        self.HP = 0
-        self.SavingThrow = []
         if get.Race(): self.cRace = globals()[get.Race()](self)
         if get.Subrace() and get.Subrace() != "Empty":  self.cSubrace = globals()[f"{get.Race()}_{get.Subrace()}"](self)
             
@@ -44,11 +35,16 @@ class bRace:
         self.cRace.Upd()
         if get.Subrace() and get.Subrace() != "Empty": self.cSubrace.Upd()
 
+    @property
+    def data(self): return q.dbm.Stats.R
+
+    @property
+    def Level(self): return q.dbm.Core.g.L
+
 
 class Empty:
     def __init__(self, p):
-        self.p = p
-        self.p.Speed["Walk"] = 30
+        p.data.Speed["Walk"] = 30
     
 
     def Upd(self):
@@ -56,16 +52,16 @@ class Empty:
         
 class Human:
     def __init__(self, p):
-        self.p = p
-        self.p.Lang.extend(["Common"])
-        self.p.Speed["Walk"] = 30
+
+        p.data.Prof.Lang.extend(["Common"])
+        p.data.Speed["Walk"] = 30
 
     def Upd(self):
         pass
 
 class Human_Standard:
     def __init__(self, p):
-        self.p = p
+        pass
 
 
     def Upd(self):
@@ -73,18 +69,18 @@ class Human_Standard:
 
 class Human_Variant:
     def __init__(self, p):
-        self.p = p
+        pass
 
     def Upd(self):
         pass
 
 class Elf:
     def __init__(self, p):
-        self.p = p
-        self.p.Vision["Dark"] = 60
-        self.p.Speed["Walk"] = 30
-        self.p.Skill.extend(["Perception"])
-        self.p.Lang.extend( ["Common", "Elvish"])
+
+        p.data.Vision["Dark"] = 60
+        p.data.Speed["Walk"] = 30
+        p.data.Prof.Skill.extend(["Perception"])
+        p.data.Prof.Lang.extend( ["Common", "Elvish"])
 
 
     def Upd(self):
@@ -92,8 +88,7 @@ class Elf:
 
 class Elf_High:
     def __init__(self, p):
-        self.p = p
-        self.p.Weapon.extend(["Longsword", "Shortsword", "Shortbow", "Longbow"])
+        p.data.Prof.Weapon.extend(["Longsword", "Shortsword", "Shortbow", "Longbow"])
 
 
     def Upd(self):
@@ -101,220 +96,186 @@ class Elf_High:
 
 class Elf_Wood:
     def __init__(self, p):
-        self.p = p
-        self.p.Speed["Walk"] = 35
-        self.p.Weapon.extend(["Shortbow", "Longsword", "Shortsword", "Longbow"]) 
+
+        p.data.Speed["Walk"] = 35
+        p.data.Prof.Weapon.extend(["Shortbow", "Longsword", "Shortsword", "Longbow"]) 
 
     def Upd(self):
         pass
 
 class Elf_Drow:
     def __init__(self, p):
-        self.p = p
-        self.p.Vision["Dark"] = 120
-        self.p.Weapon.extend(["Rapier", "Shortsword", "Hand Crossbow"])
+        p.data.Vision["Dark"] = 120
+        p.data.Prof.Weapon.extend(["Rapier", "Shortsword", "Hand Crossbow"])
 
 
     
     def Upd(self):
-        level = q.db.Core.L
-        Fgen("Drow_Magic")
-        if level >= 1: Fuse_2("Drow_Magic", "Dancing Lights", 1)
-        if level >= 3: Fuse_2("Drow_Magic", "Faerie Fire", 1)
+        level = self.p.Level
+        Fgen("Drow Magic")
+        if level >= 1: Fuse_2("Drow Magic", "Dancing Lights", 1)
+        if level >= 3: Fuse_2("Drow Magic", "Faerie Fire", 1)
 
 
 class Elf_Shadar_Kai:
     def __init__(self, p):
-        self.p = p
+        pass
 
-
-    
     def Upd(self): 
-        Fuse_1("Blessing_of_the_Raven_Queen", q.db.Core.PB)
+        Fuse_1("Blessing of the Raven Queen", q.db.Core.PB)
 
 class Dwarf:
     def __init__(self, p):
-        self.p = p
-        self.p.Vision["Dark"] = 60
-        self.p.Speed["Walk"] = 30
-        self.p.Weapon.extend(["Battleaxe", "Handaxe", "Light Hammer", "Warhammer"])
-        self.p.Lang.extend(["Common", "Dwarvish"])
 
+        p.data.Vision["Dark"] = 60
+        p.data.Speed["Walk"] = 30
+        p.data.Prof.Weapon.extend(["Battleaxe", "Handaxe", "Light Hammer", "Warhammer"])
+        p.data.Prof.Lang.extend(["Common", "Dwarvish"])
 
-
-    
     def Upd(self):
         pass
 
 class Dwarf_Hill:
     def __init__(self, p):
-        self.p = p
-
-
+        pass
     
     def Upd(self): 
         self.p.HP = q.db.Core.L
 
 class Dwarf_Mountain:
     def __init__(self, p):
-        self.p = p
         self.p.Armor.extend(["Light", "Medium"])
 
-
-    
     def Upd(self):
         pass
 
 class Halfling:
     def __init__(self, p):
-        self.p = p
-        self.p.Speed["Walk"] = 25
-        self.p.Skill.extend(["Stealth"])
-        self.p.Lang.extend(["Common", "Halfling"])
 
+        p.data.Speed["Walk"] = 25
+        p.data.Prof.Skill.extend(["Stealth"])
+        p.data.Prof.Lang.extend(["Common", "Halfling"])
 
-    
     def Upd(self):
         pass
 
 class Halfling_Lightfoot:
     def __init__(self, p):
-        self.p = p
-        
-
+        pass
     
     def Upd(self):
         pass
 
 class Halfling_Stout:
     def __init__(self, p):
-        self.p = p
-
-
+        pass
     
     def Upd(self):
         pass
 
 class Gnome:
     def __init__(self, p):
-        self.p = p
-        self.p.Speed["Walk"] = 25
-        self.p.Vision["Dark"] = 60
-        self.p.Lang.extend(["Common", "Gnomish"])
+        p.data.Speed["Walk"] = 25
+        p.data.Vision["Dark"] = 60
+        p.data.Prof.Lang.extend(["Common", "Gnomish"])
 
-
-    
     def Upd(self):
         pass
 
 class Gnome_Forest:
     def __init__(self, p):
-        self.p = p
-
-
-    
+        pass
     def Upd(self):
         pass
 
 class Gnome_Rock:
     def __init__(self, p):
-        self.p = p
-        self.p.Tool.extend("Tinker")
+        p.data.Tool.extend("Tinker")
 
-
-    
     def Upd(self):
         pass
 
 class Dragonborn:
     def __init__(self, p):
-        self.p = p
-        self.p.Speed["Walk"] = 30
-        self.p.Lang.extend(["Common", "Draconic"])
+        p.data.Speed["Walk"] = 30
+        p.data.Prof.Lang.extend(["Common", "Draconic"])
 
-
-    
     def Upd(self):
         pass
 
 class Dragonborn_Black:
     def __init__(self, p):
-        self.p = p
-
-
+        pass
     
     def Upd(self):
-        Fuse_1("Breath_Weapon", 1)
+        Fuse_1("Breath Weapon", 1)
 
 class Dragonborn_Blue:
     def __init__(self, p):
-        self.p = p
-
-
+        pass
     
     def Upd(self):
-        Fuse_1("Breath_Weapon", 1)
+        Fuse_1("Breath Weapon", 1)
 
 class Dragonborn_Brass:
     def __init__(self, p):
-        self.p = p
-        Fuse_1("Breath_Weapon", 1)
+        Fuse_1("Breath Weapon", 1)
 
 class Dragonborn_Bronze:
     def __init__(self, p):
-        self.p = p
-
+        pass
+    
     def Upd(self):
-        Fuse_1("Breath_Weapon", 1)
+        Fuse_1("Breath Weapon", 1)
 
 class Dragonborn_Copper:
     def __init__(self, p):
-        self.p = p
-
+        pass
     def Upd(self):
-        Fuse_1("Breath_Weapon", 1)
+        Fuse_1("Breath Weapon", 1)
 
 class Dragonborn_Gold:
     def __init__(self, p):
-        self.p = p
-        
-        Fuse_1("Breath_Weapon", 1)
+        pass
+
+    def Upd(self):
+        Fuse_1("Breath Weapon", 1)
 
 class Dragonborn_Green:
     def __init__(self, p):
-        self.p = p
-
+        pass
+    
     def Upd(self):
-        Fuse_1("Breath_Weapon", 1)
+        Fuse_1("Breath Weapon", 1)
 
 class Dragonborn_Red:
     def __init__(self, p):
-        self.p = p
-
+        pass
+    
     def Upd(self):
-        Fuse_1("Breath_Weapon", 1)
+        Fuse_1("Breath Weapon", 1)
 
 class Dragonborn_Silver:
     def __init__(self, p):
-        self.p = p
-
+        pass
+    
     def Upd(self):
-        Fuse_1("Breath_Weapon", 1)
+        Fuse_1("Breath Weapon", 1)
 
 class Dragonborn_White:
     def __init__(self, p):
-        self.p = p
-
+        pass
+    
     def Upd(self):
-        Fuse_1("Breath_Weapon", 1)
+        Fuse_1("Breath Weapon", 1)
 
 class Half_Orc:
     def __init__(self, p):
-        self.p = p
-        self.p.Vision["Dark"] = 60
-        self.p.Speed["Walk"] = 30
-        self.p.Skill.extend(["Intimidation"])
-        self.p.Lang.extend(["Common", "Orc"])
+
+        p.data.Vision["Dark"] = 60
+        p.data.Speed["Walk"] = 30
+        p.data.Prof.Skill.extend(["Intimidation"])
+        p.data.Prof.Lang.extend(["Common", "Orc"])
         
 
 
@@ -322,107 +283,88 @@ class Half_Orc:
 
     
     def Upd(self):
-        Fgen("Relentless_Endurance")
-        Fuse_1("Relentless_Endurance", 1)
-        Fgen("Savage_Attacks")
+        Fgen("Relentless Endurance")
+        Fuse_1("Relentless Endurance", 1)
+        Fgen("Savage Attacks")
 
 class HalfOrc_Standard:
     def __init__(self, p):
-        self.p = p
-
-
+        pass
     
     def Upd(self):
         pass
 
 class Tiefling:
     def __init__(self, p):
-        self.p = p
-        self.p.Vision["Dark"] = 60
-        self.p.Speed["Walk"] = 30
-        self.p.Lang.extend(["Common", "Infernal"]) 
+        p.data.Vision["Dark"] = 60
+        p.data.Speed["Walk"] = 30
+        p.data.Prof.Lang.extend(["Common", "Infernal"]) 
 
-
-
-    
     def Upd(self):
         pass
 
 class Tiefling_Asmodeus:
     def __init__(self, p):
         self.p = p
-
-
     
     def Upd(self):
-        Fgen("Infernal_Legacy")
-        level = q.db.Core.L
-        if level >= 1: Fuse_2("Infernal_Legacy", "Thaumaturgy", 1)
-        if level >= 3: Fuse_2("Infernal_Legacy", "Hellish Rebuke", 1)
-        if level >= 5: Fuse_2("Infernal_Legacy", "Darkness", 1)
+        Fgen("Infernal Legacy")
+        level = self.p.Level
+        if level >= 1: Fuse_2("Infernal Legacy", "Thaumaturgy", 1)
+        if level >= 3: Fuse_2("Infernal Legacy", "Hellish Rebuke", 1)
+        if level >= 5: Fuse_2("Infernal Legacy", "Darkness", 1)
 
 class Tiefling_Baalzebul:
     def __init__(self, p):
         self.p = p
-
-
-
     
     def Upd(self):
-        Fgen("Legacy_of_Maladomini")
-        level = q.db.Core.L
-        if level >= 1: Fuse_2("Legacy_of_Maladomini", "Thaumaturgy", 1)
-        if level >= 3: Fuse_2("Legacy_of_Maladomini", "Ray of Sickness", 1)
-        if level >= 5: Fuse_2("Legacy_of_Maladomini", "Crown of Madness", 1)
+        Fgen("Legacy of Maladomini")
+        level = self.p.Level
+        if level >= 1: Fuse_2("Legacy of Maladomini", "Thaumaturgy", 1)
+        if level >= 3: Fuse_2("Legacy of Maladomini", "Ray of Sickness", 1)
+        if level >= 5: Fuse_2("Legacy of Maladomini", "Crown of Madness", 1)
 
 class Tiefling_Dispater:
     def __init__(self, p):
         self.p = p
-
-
     
     def Upd(self):
-        Fgen("Legacy_of_Dis")
-        level = q.db.Core.L
-        if level >= 1: Fuse_2("Legacy_of_Dis", "Thaumaturgy", 1)
-        if level >= 3: Fuse_2("Legacy_of_Dis", "Disguise Self", 1)
-        if level >= 5: Fuse_2("Legacy_of_Dis", "Detect Thoughts", 1)
+        Fgen("Legacy of Dis")
+        level = self.p.Level
+        if level >= 1: Fuse_2("Legacy of Dis", "Thaumaturgy", 1)
+        if level >= 3: Fuse_2("Legacy of Dis", "Disguise Self", 1)
+        if level >= 5: Fuse_2("Legacy of Dis", "Detect Thoughts", 1)
 
 class Tiefling_Fierna:
     def __init__(self, p):
         self.p = p
-
-
     
     def Upd(self):
-        Fgen("Legacy_of_Minauros")
-        level = q.db.Core.L
-        if level >= 1: Fuse_2("Legacy_of_Minauros", "Mage Hand", 1)
-        if level >= 3: Fuse_2("Legacy_of_Minauros", "Tensers Floating Disk", 1)
-        if level >= 5: Fuse_2("Legacy_of_Minauros", "Arcane Lock", 1)
+        Fgen("Legacy of Phlegethos")
+        level = self.p.Level
+        if level >= 1: Fuse_2("Legacy of Phlegethos", "Mage Hand", 1)
+        if level >= 3: Fuse_2("Legacy of Phlegethos", "Tensers Floating Disk", 1)
+        if level >= 5: Fuse_2("Legacy of Phlegethos", "Arcane Lock", 1)
 
 class Tiefling_Glasya:
     def __init__(self, p):
         self.p = p
-
-
     
     def Upd(self):
-        Fgen("Legacy_of_Cania")
-        level = q.db.Core.L
-        if level >= 1: Fuse_2("Legacy_of_Cania", "Mage Hand", 1)
-        if level >= 3: Fuse_2("Legacy_of_Cania", "Burning Hands", 1)
-        if level >= 5: Fuse_2("Legacy_of_Cania", "Flame Blade", 1)
+        Fgen("Legacy of Malbolge")
+        level = self.p.Level
+        if level >= 1: Fuse_2("Legacy of Malbolge", "Mage Hand", 1)
+        if level >= 3: Fuse_2("Legacy of Malbolge", "Burning Hands", 1)
+        if level >= 5: Fuse_2("Legacy of Malbolge", "Flame Blade", 1)
 
 class Tiefling_Levistus:
     def __init__(self, p):
         self.p = p
-
-
     
     def Upd(self):
         Fgen("Legacy_of_Stygia")
-        level = q.db.Core.L
+        level = self.p.Level
         if level >= 1: Fuse_2("Legacy_of_Stygia", "Ray of Frost", 1)
         if level >= 3: Fuse_2("Legacy_of_Stygia", "Armor of Agathys", 1)
         if level >= 5: Fuse_2("Legacy_of_Stygia", "Darkness", 1)
@@ -430,63 +372,48 @@ class Tiefling_Levistus:
 class Tiefling_Mammon:
     def __init__(self, p):
         self.p = p
-
-
     
     def Upd(self):
-        Fgen("Legacy_of_Minauros")
-        level = q.db.Core.L
-        if level >= 1: Fuse_2("Legacy_of_Minauros", "Mage Hand", 1)
-        if level >= 3: Fuse_2("Legacy_of_Minauros", "Tensers Floating Disk", 1)
-        if level >= 5: Fuse_2("Legacy_of_Minauros", "Arcane Lock", 1)
+        Fgen("Legacy of Minauros")
+        level = self.p.Level
+        if level >= 1: Fuse_2("Legacy of Minauros", "Mage Hand", 1)
+        if level >= 3: Fuse_2("Legacy of Minauros", "Tensers Floating Disk", 1)
+        if level >= 5: Fuse_2("Legacy of Minauros", "Arcane Lock", 1)
 
 class Tiefling_Mephistopheles:
     def __init__(self, p):
         self.p = p
-
-
-    
     def Upd(self):
-        Fgen("Legacy_of_Cania")
-        level = q.db.Core.L
-        if level >= 1: Fuse_2("Legacy_of_Cania", "Mage Hand", 1)
-        if level >= 3: Fuse_2("Legacy_of_Cania", "Burning Hands", 1)
-        if level >= 5: Fuse_2("Legacy_of_Cania", "Flame Blade", 1)
+        Fgen("Legacy of Cania")
+        level = self.p.Level
+        if level >= 1: Fuse_2("Legacy of Cania", "Mage Hand", 1)
+        if level >= 3: Fuse_2("Legacy of Cania", "Burning Hands", 1)
+        if level >= 5: Fuse_2("Legacy of Cania", "Flame Blade", 1)
 
 class Tiefling_Zariel:
     def __init__(self, p):
         self.p = p
-
-
-    
     def Upd(self):
-        Fgen("Legacy_of_Avernus")
-        level = q.db.Core.L
-        if level >= 1: Fuse_2("Legacy_of_Avernus", "Thaumaturgy", 1)
-        if level >= 3: Fuse_2("Legacy_of_Avernus", "Searing Smite", 1)
-        if level >= 5: Fuse_2("Legacy_of_Avernus", "Branding Smite", 1)
+        Fgen("Legacy of Avernus")
+        level = self.p.Level
+        if level >= 1: Fuse_2("Legacy of Avernus", "Thaumaturgy", 1)
+        if level >= 3: Fuse_2("Legacy of Avernus", "Searing Smite", 1)
+        if level >= 5: Fuse_2("Legacy of Avernus", "Branding Smite", 1)
             
 class Harengon:
     def __init__(self, p):
         self.p = p
-        self.p.Speed["Walk"] = 30
-        self.p.Skill.extend(["Perception"])
-        self.p.Lang.extend(["Common"])
+        p.data.Speed["Walk"] = 30
+        p.data.Prof.Skill.extend(["Perception"])
+        p.data.Prof.Lang.extend(["Common"])
 
-
-
-
-    
     def Upd(self):
-        Fgen("Rabbit_Hop")
-        Fuse_1("Rabbit_Hop", q.db.Core.PB)
-        self.p.Initiative = q.db.Core.PB
+        Fgen("Rabbit Hop")
+        Fuse_1("Rabbit Hop", q.db.Core.PB)
+        self.p.data.Combat.Initiative = q.db.Core.PB
 
 class Harengon_Standard:
     def __init__(self, p):
-        self.p = p
-
-
-    
+        pass
     def Upd(self):
         pass

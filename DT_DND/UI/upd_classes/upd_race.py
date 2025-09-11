@@ -5,7 +5,7 @@ class upd_race:
     def __init__(self):
         self.parent = tag.rfeature.main()
 
-    def whole(self):
+    def Whole(self):
         self.sub()
         self.main()
         

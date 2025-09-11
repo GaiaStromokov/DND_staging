@@ -5,7 +5,7 @@ class upd_milestone:
     def __init__(self):
         self.parent = tag.mfeature.main()
 
-    def whole(self):
+    def Whole(self):
         self.sub()
         self.main()
 
@@ -14,7 +14,7 @@ class upd_milestone:
         cdata = q.db.Milestone
         item_clear(tag.mfeature.sub())
         with group(parent=tag.mfeature.sub()):
-            for i in range(q.pc.milestone_count):
+            for i in range(q.dbm.milestone_count):
                 with group(horizontal=True):
                     add_text(f"Milestone {i}: ", color=c_h1)
                     data = cdata["Select"][i]
@@ -31,7 +31,6 @@ class upd_milestone:
 
     def main(self):
         item_clear(self.parent)
-
         for feat in q.db.Milestone["Feat"]:
             if feat:
                 method_name = feat.replace(' ', '_')

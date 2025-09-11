@@ -4,7 +4,7 @@ class upd_backpack():
     def __init__(self):
         pass
 
-    def whole(self):
+    def Whole(self):
         self.fill_backpack()
         self.populate_backpack()
         

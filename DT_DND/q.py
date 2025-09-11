@@ -13,9 +13,9 @@ def _load_json_data(file_path):
 
 db = _load_json_data(get_path('dist', 'db.json'))
 
-pc = None
 w = None
 cbh = None
+dbm = None
 
 def EXIT_save_json():
     if db:

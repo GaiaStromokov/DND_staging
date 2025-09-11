@@ -2,8 +2,6 @@ from ui.upd_helper_import import *
 from ui.upd_class_import import *
 sett = sett()
 
-
-
 class backend_populate:
     def __init__(self):
         self.ACTION = upd_actions()
@@ -20,43 +18,43 @@ class backend_populate:
     def Startup(self):
         self.Static()
         self.Dynamic()
-        self.BAZAAR.whole()
+        self.BAZAAR.Whole()
     
     def All(self):
         self.Static()
         self.Dynamic()
     
     def Dynamic(self):
-        self.RACE.whole()
-        self.CLASS.whole()
-        self.BACKGROUND.whole()
-        self.MILESTONE.whole()
+        self.RACE.Whole()
+        self.CLASS.Whole()
+        self.BACKGROUND.Whole()
+        self.MILESTONE.Whole()
         self.Inventory()
 
     def Race(self): 
         self.Generic()
-        self.RACE.whole()
-        self.MILESTONE.whole()
+        self.RACE.Whole()
+        self.MILESTONE.Whole()
 
     def Class(self):
         self.Generic()
-        self.CLASS.whole()
-        self.SPELL.whole()
+        self.CLASS.Whole()
+        self.SPELL.Whole()
 
     def Background(self): 
         self.Generic()
-        self.BACKGROUND.whole()
+        self.BACKGROUND.Whole()
 
     def Atr(self):
         self.Generic()
         self.ACTION.weapon()
-        self.RACE.whole()
-        self.CLASS.whole()
-        self.MILESTONE.whole()
-        self.SPELL.whole()
+        self.RACE.Whole()
+        self.CLASS.Whole()
+        self.MILESTONE.Whole()
+        self.SPELL.Whole()
 
     def Spell(self): 
-        self.SPELL.whole()
+        self.SPELL.Whole()
 
     def Arcane_Ward(self):
         pass
@@ -65,16 +63,16 @@ class backend_populate:
         self.Atr()
     
     def Generic(self):
-        self.SHEET.core()
-        self.SHEET.skills()
-        self.SHEET.health()
-        self.SHEET.initiative()
-        self.SHEET.vision()
-        self.SHEET.speed()
-        self.SHEET.prof()
-        self.SHEET.attributes()
-        self.SHEET.ac()
-        self.SHEET.character()
+        self.SHEET.Core()
+        self.SHEET.Skills()
+        self.SHEET.Health()
+        self.SHEET.Initiative()
+        self.SHEET.Vision()
+        self.SHEET.Speed()
+        self.SHEET.Prof()
+        self.SHEET.Attributes()
+        self.SHEET.AC()
+        self.SHEET.Char()
         
     def Static(self):
         self.Generic()
@@ -91,24 +89,24 @@ class backend_populate:
     def Inventory(self): 
         self.Backpack()
         self.Closet()
-        self.ACTION.whole()
+        self.ACTION.Whole()
         
     def Backpack(self): 
-        self.BACKPACK.whole()
+        self.BACKPACK.Whole()
         
     def Inventory_Modify(self): 
-        self.BACKPACK.whole()
-        self.ACTION.whole()
-        self.CLOSET.whole()
+        self.BACKPACK.Whole()
+        self.ACTION.Whole()
+        self.CLOSET.Whole()
         self.SHEET.ac()
         
     def Closet(self): 
-        self.ACTION.whole()
-        self.CLOSET.whole()
+        self.ACTION.Whole()
+        self.CLOSET.Whole()
         self.Armor()
 
     def Armor(self): 
-        self.SHEET.ac()
+        self.SHEET.AC()
         
 class backend_stage:
     def __init__(self, populate):
@@ -141,250 +139,221 @@ class backend_stage:
         self.stage_map[source]()
         
     def check_Class(self): 
-        if get.valid_class() == False: 
+        check = q.dbm.Class.g.Validate()
+        if check == False: 
             sett.Core_Subclass("")
 
-    def Core_Level(self, sender, data, user_data):
-        math = int(q.db.Core.L + user_data[0])
-        if math not in [0, 21]:
-            sett.Core_Level(math)
-            self.check_Class()
-            q.pc.new_Level()
-            self.populate_fields("All")
+    def Core_Level(self, sender, inp, user_data):
+        level = q.dbm.Core.g.L
+        addition = user_data[0]
+        math = max(1, min(int(level + addition), 20))
+        q.dbm.Core.s.L(math)
+        self.populate_fields("All")
 
-    def Core_Race(self, sender, data, user_data):
-        old_obj = q.db.Core.R
-        if old_obj != data:
-            green(f"[stage_Race] - changing race to {data}")
-            sett.Core_Race(data)
-            sett.Core_Subrace("")
-            q.pc.new_Race()
+    def Core_Race(self, sender, inp, user_data):
+        old_obj = q.dbm.Core.g.R
+        if old_obj != inp:
+            green(f"[stage_Race] - changing race to {inp}")
+            q.dbm.Core.s.R(inp)
             self.populate_fields("Race")
         else: 
             red(f"[stage_Race] - race not changed")
 
-    def Core_Subrace(self, sender, data, user_data):
-        old_obj = q.db.Core.SR
-        if old_obj != data:
-            green(f"[stage_Subrace] - changing subrace to {data}")
-            sett.Core_Subrace(data)
-            q.pc.new_Race()
+    def Core_Subrace(self, sender, inp, user_data):
+        old_obj = q.dbm.Core.g.SR
+        if old_obj != inp:
+            green(f"[stage_Subrace] - changing subrace to {inp}")
+            q.dbm.Core.s.SR(inp)
             self.populate_fields("Race")
         else:
             red(f"[stage_Subrace] - subrace not changed")
 
-    def Core_Class(self, sender, data, user_data):
-        old_obj = q.db.Core.C
-        if old_obj != data:
-            green(f"[stage_Class] - changing class to {data}")
-            sett.Core_Class(data)
-            sett.Core_Subclass("")
-            q.pc.new_Class()
+    def Core_Class(self, sender, inp, user_data):
+        old_obj = q.dbm.Core.g.C
+        if old_obj != inp:
+            green(f"[stage_Class] - changing class to {inp}")
+            q.dbm.Core.s.C(inp)
             self.populate_fields("Class")
         else: 
             red(f"[stage_Class] - class not changed")
 
-    def Core_Subclass(self, sender, data, user_data):
-        old_obj = q.db.Core.SC
-        if old_obj != data:
-            green(f"[stage_Subclass] - changing subclass to {data}")
-            sett.Core_Subclass(data)
-            q.pc.new_Class()
+    def Core_Subclass(self, sender, inp, user_data):
+        old_obj = q.dbm.Core.g.SC
+        if old_obj != inp:
+            green(f"[stage_Subclass] - changing subclass to {inp}")
+            q.dbm.Core.s.SC(inp)
             self.populate_fields("Class")
         else: 
             red(f"[stage_Subclass] - subclass not changed")
 
-    def Core_Background(self, sender, data, user_data):
-        old_obj = q.db.Core.BG
-        if old_obj != data:
-            green(f"[stage_Background] - changing background to {data}")
-            sett.Core_Background(data)
-            q.pc.new_Background()
+    def Core_Background(self, sender, inp, user_data):
+        old_obj = q.dbm.Core.g.BG
+        if old_obj != inp:
+            green(f"[stage_Background] - changing background to {inp}")
+            q.dbm.Core.s.BG(inp)
             self.populate_fields("Background")
         else: 
             red(f"[stage_Background] - background not changed")
 
-    def Atr_Base_Modify(self, sender, data, user_data):
-        key = user_data[0]
-        sett.Atr_Modify(key, data)
-        q.pc.update_Atr()
+    def Atr_Base_Modify(self, sender, inp, user_data):
+        stat = user_data[0]
+        q.dbm.Atr.s.Base.Modify(stat, inp)
         self.populate_fields("Atr")
 
-    def Race_Asi_Modify(self, sender, data, user_data):
-        print(f"Race Asi Modify: {data}, {user_data}")
+    def Race_Asi_Modify(self, sender, inp, user_data):
+        print(f"Race Asi Modify: {inp}, {user_data}")
         key = user_data[0]
-        if key == "Clear":  sett.Race_Asi_Clear()
-        else: sett.Race_Asi_Modify(key, data)
-        sett.Race_Asi_Finalize()
-        q.pc.update_Atr()
+        if key == "Clear": q.dbm.Race.s.Asi.Clear()
+        else: q.dbm.Race.s.Asi.Modify(key, inp)
         self.populate_fields("Atr")
 
-    def Race_Abil_Use(self, sender, data, user_data):
+    def Race_Abil_Use(self, sender, inp, user_data):
         key, index = user_data
-        sett.Race_Abil_Use(key, index, data)
+        q.dbm.Race.s.Abil.Use(key, index, inp)
 
-    def Race_Spell_Use(self, sender, data, user_data):
+    def Race_Spell_Use(self, sender, inp, user_data):
         key, spell = user_data
-        sett.Race_Spell_Use(key, spell, data)
+        q.dbm.Race.s.Spell.Use(key, spell, inp)
 
-    def Race_Spell_Select(self, sender, data, user_data):
+    def Race_Spell_Select(self, sender, inp, user_data):
         key = user_data[0]
-        sett.Race_Spell_Select(key, data)
+        q.dbm.Race.s.Spell.Select(key, inp)
         self.populate_fields("Race")
 
-    def Milestone_Top_Select(self, sender, data, user_data):
+    def Milestone_Top_Select(self, sender, inp, user_data):
+        print(sender, inp, user_data)
         index = user_data[0]
-        if data == "Clear": sett.Milestone_Top_Clear(index)
-        else: sett.Milestone_Top_Modify(index, data)
-        sett.Milestone_Asi_Finalize()
-        q.pc.update_Milestone_Feat()
+        if inp == "Clear": q.dbm.Milestone.s.Top.Clear(index)
+        else: q.dbm.Milestone.s.Top.Modify(index, inp)
         self.populate_fields("All")
 
-    def Milestone_Feat_Select(self, sender, data, user_data):
+    def Milestone_Feat_Select(self, sender, inp, user_data):
         index = user_data[0]
-        feat = data
-        if data == "Clear": sett.Milestone_Feat_Clear(index)
-        else: sett.Milestone_Feat_Select(index, feat)
-        sett.Milestone_Asi_Finalize()
-        q.pc.update_Milestone_Feat()
+        feat = inp
+        if inp == "Clear": q.dbm.Milestone.s.Feat.Clear(index)
+        else: q.dbm.Milestone.s.Feat.Select(index, feat)
         self.populate_fields("Milestone")
         
         
-    def Milestone_Feat_Modify(self, sender, data, user_data):
+    def Milestone_Feat_Modify(self, sender, inp, user_data):
         script, feat, index = user_data
-        sett.Milestone_Feat_Modify(data, script, feat, index)
-        q.pc.update_Milestone_Feat()
+        q.dbm.Milestone.s.Feat.Modify(inp, script, feat, index)
         self.populate_fields("Milestone")
 
 
 
-    def Milestone_Feat_Use(self, sender, data, user_data):
+    def Milestone_Feat_Use(self, sender, inp, user_data):
         feat, index = user_data
-        sett.Milestone_Feat_Use(feat, index, data)
+        q.dbm.Milestone.s.Feat.Use(feat, index, inp)
 
-    def Milestone_Asi_Select(self, sender, data, user_data):
+    def Milestone_Asi_Select(self, sender, inp, user_data):
         key, index = user_data
-        if data == "Clear": sett.Milestone_Asi_Clear(key, index)
-        else: sett.Milestone_Asi_Modify(key, index, data)
-        sett.Milestone_Asi_Finalize()
-        q.pc.update_Atr()
+        if inp == "Clear": q.dbm.Milestone.s.Asi.Clear(key, index) 
+        else: q.dbm.Milestone.s.Asi.Modify(key, index, inp) 
         self.populate_fields("Atr")
 
-    def Class_Use(self, sender, data, user_data):
+    def Class_Use(self, sender, inp, user_data):
         key, index = user_data
-        sett.Class_Abil_Use(key, index, data)
+        q.dbm.Class.s.Abil.Use(key, index, inp) 
 
-    def Class_Skill_Select(self, sender, data, user_data):
-        
+
+    def Class_Skill_Select(self, sender, inp, user_data):
         script = user_data[0]
-        if script == "Clear": sett.Class_Skill_Select_Clear()
-        else: sett.Class_Skill_Select_Modify(script, data)
-        q.pc.update_Class_Select()
+        if script == "Clear": q.dbm.Class.s.Skill_Select.Clear()
+        else: q.dbm.Class.s.Skill_Select.Modify(script, inp)
         self.populate_fields("Class")
 
-    def Class_Abil_Select(self, sender, data, user_data):
+
+    def Class_Abil_Select(self, sender, inp, user_data):
         key, index = user_data
-        sett.Class_Abil_Select(key, index, data)
-        q.pc.update_Class_Select()
+        q.dbm.Class.s.Abil.Select(key, index, inp)
         self.populate_fields("Class")
 
-    def Spell_Learn(self, sender, data, user_data):
+    def Spell_Learn(self, sender, inp, user_data):
         spell, level = user_data
-        sett.Spell_Learn(spell, level)
-        q.pc.update_Spell_Learn()
+        q.dbm.Spell.s.Learn(spell, level)
         self.populate_fields("Spell")
 
-    def Spell_Prepare(self, sender, data, user_data):
+    def Spell_Prepare(self, sender, inp, user_data):
         spell, level = user_data
-        sett.Spell_Prepare(spell, level)
-        q.pc.update_Spell_Prepare()
+        q.dbm.Spell.s.Prepare(spell, level)
         self.populate_fields("Spell")
 
-    def Spell_Cast(self, sender, data, user_data):
+    def Spell_Cast(self, sender, inp, user_data):
         level = user_data[0]
-        sett.Spell_Cast(level)
-        q.pc.update_Spell_Cast()
+        q.dbm.Spell.s.Cast(level)
         self.populate_fields("Spell")
 
-    def Background_Prof_Select(self, sender, data, user_data):
-        if data == "Clear": 
-            sett.Background_Prof_Clear()
-        else:
-            cat, index = user_data
-            sett.Background_Prof_Modify(cat, index, data)
-        q.pc.update_Background_Prof()
+    def Background_Prof_Select(self, sender, inp, user_data):
+        cat, index = user_data
+        if inp == "Clear": q.dbm.Background.s.Prof.Clear()
+        else: q.dbm.Background.s.Prof.Select(cat, index, inp)
         self.populate_fields("Background Prof Select")
 
-    def Long_Rest(self, sender, data, user_data):
-        sett.Rest_Long_Rest()
+    def Long_Rest(self, sender, inp, user_data):
+        q.dbm.Rest.s.Long()
         self.populate_fields("Long Rest")
 
-    def Player_Health_Mod(self, sender, data, user_data):
+    def Player_Health_Mod(self, sender, inp, user_data):
         place, delta = user_data
-        if place == "Temp": 
-            sett.Combat_Health_Temp(delta)
-        else: 
-            sett.Combat_Health_Hp(delta)
+        if place == "Temp":q.dbm.Health.s.Temp(delta)
+        else: q.dbm.Health.s.Hp(delta)
         self.populate_fields("HP")
 
-    def Player_Health_Set(self, sender, data, user_data):
-        sett.Combat_Health_Player(data)
-        q.pc.recalculate_stats()
+    def Player_Health_Set(self, sender, inp, user_data):
+        delta = inp
+        q.dbm.Health.s.Player(delta)
         self.populate_fields("HP")
 
-    def Class_Wizard_Abjuration_Arcane_Ward(self, sender, data, user_data):
+    def Class_Wizard_Abjuration_Arcane_Ward(self, sender, inp, user_data):
         num = user_data[0]
-        sett.Combat_Wizard_Arcane_Ward(num)
+        q.dbm.Class.s.Wizard.Arcane_Ward(num)
         self.populate_fields("Arcane Ward")
 
-    def Player_Prof_Select(self, sender, data, user_data):
+    def Player_Prof_Select(self, sender, inp, user_data):
         sett.Proficiency_Player_Modify() 
         q.pc.recalculate_stats()
         self.populate_fields("Generic")
 
-    def Player_Condition_Modify(self, sender, data, user_data):
+    def Player_Condition_Modify(self, sender, inp, user_data):
         index = user_data[0]
-        sett.Combat_Condition_Modify(index, data)
+        q.dbm.Class.s.Condition.Modify(inp)
         self.populate_fields("Condition")
 
-    def Info_Char_Input(self, sender, data, user_data):
+    def Info_Char_Input(self, sender, inp, user_data):
         name = user_data[0]
-        sett.Info_Char_Modify(name, data)
+        q.dbm.Info.s.Char.Modify(name, inp)
         self.populate_fields("Characteristic")
 
-    def Info_Desc_Input(self, sender, data, user_data):
+    def Info_Desc_Input(self, sender, inp, user_data):
         name = user_data[0]
-        sett.Info_Desc_Modify(name, data)
+        q.dbm.Info.s.Desc.Modify(name, inp)
+        sett.Info_Desc_Modify(name, inp)
         self.populate_fields("Description")
 
-    def Inventory_Bazaar_Item_Add(self, sender, data, user_data):
+    def Inventory_Bazaar_Item_Add(self, sender, inp, user_data):
         cat, item = user_data
+        q.dbm.Inventory.s.Backpack.Add(cat, item)
         sett.Inventory_Backpack_Add(cat, item)
         self.populate_fields("Bazaar Add Item")
 
-    def Inventory_Backpack_Item_Modify(self, sender, data, user_data):
+    def Inventory_Backpack_Item_Modify(self, sender, inp, user_data):
         item, delta = user_data
-        if delta == "Clear": 
-            value = sett.Inventory_Item_Clear(item)
-        else: 
-            value = sett.Inventory_Item_Modify(item, delta)
+        if delta == "Clear": value = q.dbm.Inventory.s.Backpack.Clear(item)
+        else:  value = q.dbm.Inventory.s.Backpack.Modify(item, delta)
         print(f"Value: {value}")
-        if value == 0: 
-            self.populate_fields("Backpack Delete Item")
-        else: 
-            self.populate_fields("Backpack Modify Item")
+        if value == 0: self.populate_fields("Backpack Delete Item")
+        else:  self.populate_fields("Backpack Modify Item")
 
-    def Closet_Item_Equip(self, sender, data, user_data):
+    def Closet_Item_Equip(self, sender, inp, user_data):
         cat = user_data[0]
         delta = user_data[1]
         
-        if delta == "Clear":
-            sett.Closet_Equip_Clear(cat)
+        if delta == "Clear": q.dbm.Closet.s.Equip.Clear(cat)
         elif delta == "Modify":
-            package = data.replace(' + ', 'PPP').replace(' ', '_')
-            sett.Closet_Equip_Modify(cat, package)
-        else:
-            red("error")
+            package = inp.replace(' + ', 'PPP').replace(' ', '_')
+            q.dbm.Closet.s.Equip.Modify(cat, package)
+        else: red("error")
 
         if cat == "Armor":
             q.pc.sum_AC()
@@ -419,7 +388,7 @@ class backend_input:
             "Spell Cast": self.Stage.Spell_Cast,
             "Background Prof Select": self.Stage.Background_Prof_Select,
             "Long Rest": self.Stage.Long_Rest,
-            "Player Health Mod": self.Stage.Player_Health_Mod,
+            "HP": self.Stage.Player_Health_Mod,
             "Player Health Set": self.Stage.Player_Health_Set,
             "Arcane Ward": self.Stage.Class_Wizard_Abjuration_Arcane_Ward,
             "Player Prof Input": self.Stage.Player_Prof_Select,
@@ -445,6 +414,9 @@ class backend_manager:
         self.Stage = backend_stage(self.Populate)
         self.Input = backend_input(self.Stage)
 
+
+
     def get_callback_handler(self): return self.Input.callback
     
-    def Start(self): self.Populate.Startup()
+    def Start(self): 
+        self.Populate.Startup()

@@ -5,24 +5,47 @@ from colorist import *
 
 
 from ui.call_back_handler import backend_manager
-from manager.character import init_pc
+
+from manager.character import Character
+from manager.dbm import dbm
+from manager.components.Equipment_comp import Bazaar
+
+
 from ui.init_ui import init_ui
 from path_helper import get_path
 
 
+def init_bullshit():
+    if q.db is None:
+        red("[init_pc] ERROR : Not loaded")
+        return
+
+
+    
+    green("[init_pc] - player now exists")
+    
+    
 def on_exit_callback():
     q.EXIT_save_json()
     save_init_file(get_path("utils", "config_save.ini"))
     stop_dearpygui()
 
+
 def startup():
-    backend = backend_manager()
-    q.cbh = backend.get_callback_handler()
-    init_pc()
-    q.pc.start_configuration()
-    init_ui()
-    backend.Start()
+    inst_dbm = dbm()
+    inst_backend = backend_manager()
+    inst_bazaar = Bazaar()
     
+    q.dbm = inst_dbm
+    q.cbh = inst_backend.get_callback_handler()
+    q.w = inst_bazaar
+
+
+    q.dbm.Manager.startup()
+    init_ui()
+    inst_backend.Start()
+    
+
 
 
 def main():

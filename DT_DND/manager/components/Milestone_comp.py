@@ -1,9 +1,9 @@
 import q
 from Sheet.get import *
 
-def gen_abil(name: str):
-    an, tn = name, name.replace(" ", "_")
-    return an, tn 
+def tgen(name: str):
+    tn = name.replace(" ", "_")
+    return tn 
 
 
 dict_Feat_Count = {
@@ -24,23 +24,32 @@ def Fselect_1(name, num):
 def Fuse_1(name, num):
     past = q.db.Milestone["Data"].get(name, {}).get("Use", [])
     q.db.Milestone["Data"][name]["Use"] = (past + [False] * num)[:num]
+
+def Add_Stat(name, val):
+    q.dbm.Stats.M.Atr[name] += val
+
+def Add_Init(val):
+    q.dbm.Stats.M.Combat.Initiative += val
+
+def Add_Weapon(items):
+    q.dbm.Stats.M.Prof.Weapon.extend(items)
+def Add_Armor(items):
+    q.dbm.Stats.M.Prof.Armor.extend(items)
+
+def Add_HP(val):
+    q.dbm.Stats.M.Combat.HP += val
+
+def Add_Speed(cat, val):
+    q.dbm.Stats.M.Speed[cat] += val
+
+def Select_Atr(name):
+    select = q.db.Milestone["Data"][name]["Select"][0]
+    if select: q.dbm.Stats.Atr[select] += 1
     
 class bMilestone():
     def __init__(self):
         self.Upd()
 
-    def set_all(self):
-        self.Atr = {"STR": 0, "DEX": 0, "CON": 0, "INT": 0, "WIS": 0, "CHA": 0}
-        self.Speed = {"Walk": 0, "Climb": 0, "Swim": 0, "Fly": 0, "Burrow": 0}
-        self.Vision = {"Dark": 0, "Blind": 0, "Tremor": 0, "Tru": 0}
-        self.Skill = []
-        self.Weapon = []
-        self.Armor = []
-        self.Tool = []
-        self.Lang = []
-        self.Initiative = 0
-        self.HP = 0
-        self.SavingThrow = []
 
     def Upd(self):
         self.Count()
@@ -48,37 +57,42 @@ class bMilestone():
         self.Create()
 
     def Count(self):
-        num = dict_Feat_Count[q.db.Core.C][q.db.Core.L]
-        if q.db.Core.SR in race_bonus_Feat_L:
+        num = dict_Feat_Count[q.dbm.Core.g.C][q.dbm.Core.g.L]
+        if q.dbm.Core.g.SR in race_bonus_Feat_L:
             num += 1
-        q.pc.milestone_count = num
+        q.dbm.milestone_count = num
 
     def Clear(self):
-        count = q.pc.milestone_count
+        count = q.dbm.milestone_count
         cdata = q.db.Milestone
-        
+        parent = q.dbm.Milestone.Data
+
         for i in range(count, len(cdata["Select"])):
             cdata["Select"][i] = ""
             cdata["Feat"][i] = ""
             cdata["Asi"][i] = ["", ""]
         current_feats = set(cdata["Feat"])
-        for attr in list(vars(q.pc)):
+        for attr in list(vars(parent)):
             if attr.startswith("Feat_"):
                 feat = attr[5:]
-                if feat not in current_feats: delattr(q.pc, attr)
+                if feat not in current_feats:
+                    delattr(parent, attr)
         for key in list(cdata["Data"].keys()):
-            if key not in cdata["Feat"]: cdata["Data"].pop(key)
-        self.set_all()
+            if key not in current_feats:
+                cdata["Data"].pop(key)
+        q.dbm.Milestone.Reset
+
     
-    
+        
     def Create(self):
         for feat in q.db.Milestone["Feat"]:
-            if feat: setattr(q.pc, f"Feat_{feat.replace(' ', '')}", globals()[feat.replace(' ', '')](self))
+            if feat:
+                name = feat.replace(' ', '_')
+                setattr(q.dbm.Milestone.Data, f"Feat_{name}", globals()[name](self))
 
 
-    def select_atr(self, name):
-        select = q.db.Milestone["Data"][name]["Select"][0]
-        if select: self.Atr[select] += 1
+
+
 
 
 class Empty():
@@ -87,17 +101,17 @@ class Empty():
         
 class Actor():
     def __init__(self, p):
-        p.Atr["CHA"] += 1
+        Add_Stat("CHA", 1)
 
 class Alert():
     def __init__(self, p):
-        p.Initiative += 5
+        Add_Init(5)
 
 class Athlete():
     def __init__(self, p):
-        _ ,feat = gen_abil("Athlete") 
+        feat = tgen("Athlete") 
         Fselect_1(feat, 1)
-        p.select_atr(feat)
+        Select_Atr(feat)
 
 
 class Charger():
@@ -108,7 +122,7 @@ class Crossbow_Expert():
     def __init__(self, p):
         pass
     
-class classensive_Duelist():
+class Defensive_Duelist():
     def __init__(self, p):
         pass
 class Dual_Wielder():
@@ -121,11 +135,11 @@ class Dungeon_Delver():
     
 class Durable():
     def __init__(self, p):
-        p.Atr["CON"] += 1
+        Add_Stat("CON", 1)
 
 class Elemental_Adept():
     def __init__(self, p):
-        _ ,feat = gen_abil("Elemental Adept") 
+        feat = tgen("Elemental Adept") 
         Fselect_1(feat, 1)
 
 class Grappler():
@@ -139,30 +153,30 @@ class Healer():
         pass
 class HeavilyArmored():
     def __init__(self, p):
-        p.Atr["STR"] += 1
-        p.Armor.extend(["Heavy"])
+        Add_Stat("STR", 1)
+        Add_Armor(["Heavy"])
 
 class Heavy_Armor_Master():
     def __init__(self, p):
-        p.Atr["STR"] += 1
+        Add_Stat("STR", 1)
 
 class Inspiring_Leader():
     def __init__(self, p):
         pass
 class Keen_Mind():
     def __init__(self, p):
-        p.Atr["INT"] += 1
+        Add_Stat("STR", 1)
 
 class Lightly_Armored():
     def __init__(self, p):
-        _ ,feat = gen_abil("Lightly Armored") 
-        p.Armor.extend(["Light"])
+        feat = tgen("Lightly Armored") 
+        Add_Armor(["Light"])
         Fselect_1(feat, 1)
-        p.select_atr(feat)
+        Select_Atr(feat)
 
 class Lucky():
     def __init__(self, p):
-        _ ,feat = gen_abil("Lucky") 
+        feat = tgen("Lucky") 
         Fuse_1(feat, 3)
 
 class MageSlayer():
@@ -173,14 +187,14 @@ class MediumArmorMaster():
         pass
 class Mobile():
     def __init__(self, p):
-        p.Speed["Walk"] += 10
+        Add_Speed("Walk", 10)
 
 class Moderately_Armored():
     def __init__(self, p):
-        _ ,feat = gen_abil("Moderately_Armored") 
-        p.Armor.extend(["Medium", "Shield"])
+        feat = tgen("Moderately_Armored") 
+        Add_Armor(["Medium", "Shield"])
         Fselect_1(feat, 1)
-        p.select_atr(feat)
+        Select_Atr(feat)
 
 class Mounted_Combatant():
     def __init__(self, p):
@@ -190,7 +204,7 @@ class Polearm_Master():
         pass
 class Resilient():
     def __init__(self, p):
-        _ ,feat = gen_abil("Resilient") 
+        feat = tgen("Resilient") 
         Fselect_1(feat, 1)
 
 class Savage_Attacker():
@@ -213,16 +227,17 @@ class Tavern_Brawler():
         pass
 class Tough():
     def __init__(self, p):
-        p.HP += q.db.Core.L * 2
+        Add_HP(q.dbm.Core.g.L * 2)
+
 
 class War_Caster():
     def __init__(self, p):
         pass
 class Weapon_Master():
     def __init__(self, p):
-        _ ,feat = gen_abil("Weapon Master") 
+        feat = tgen("Weapon Master") 
         Fselect_1(feat, 4)
         collection = []
         for i in q.db.Milestone["Data"][feat]["Select"]:
             if i: collection.append(i)
-            p.Weapon.extend(collection)
+        Add_Weapon(collection)

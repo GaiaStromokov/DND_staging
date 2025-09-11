@@ -179,7 +179,7 @@ def init_window_initiatives():
         add_button(label="Init", enabled=False, width=sz.wMbtn, tag=tag.init.label())
         add_button(label="", enabled=False, width=sz.wMbtn, tag=tag.init.val())
     with tooltip(tag.init.label()):
-        for source in ["Dex", "Race", "Class"]:
+        for source in ["Dex", "Race", "Class", "Feat"]:
             with group(horizontal=True):
                 add_button(label=source, enabled=False, width=40)
                 add_button(label="", enabled=False, width=25, tag=tag.init.source(source))
