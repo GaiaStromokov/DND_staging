@@ -52,9 +52,11 @@ class bMilestone():
 
 
     def Upd(self):
+        q.dbm.Milestone.Reset
         self.Count()
         self.Clear()
         self.Create()
+        print(q.dbm.milestone_count)
 
     def Count(self):
         num = dict_Feat_Count[q.dbm.Core.g.C][q.dbm.Core.g.L]

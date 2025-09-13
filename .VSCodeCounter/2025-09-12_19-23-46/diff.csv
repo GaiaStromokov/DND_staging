@@ -1,0 +1,11 @@
+"filename", "language", "JSON", "Python", "comment", "blank", "total"
+"c:\Users\gaiam\Documents\DND_staging\DT_DND\dist\db.json", "JSON", -42, 0, 0, 0, -42
+"c:\Users\gaiam\Documents\DND_staging\DT_DND\manager\components\Class_comp.py", "Python", 0, 0, -10, -2, -12
+"c:\Users\gaiam\Documents\DND_staging\DT_DND\manager\components\Milestone_comp.py", "Python", 0, 2, 0, 0, 2
+"c:\Users\gaiam\Documents\DND_staging\DT_DND\manager\components\Race_comp.py", "Python", 0, 1, 0, 0, 1
+"c:\Users\gaiam\Documents\DND_staging\DT_DND\manager\dbm.py", "Python", 0, 8, 0, 1, 9
+"c:\Users\gaiam\Documents\DND_staging\DT_DND\ui\upd_classes\upd_class.py", "Python", 0, 39, 0, -14, 25
+"c:\Users\gaiam\Documents\DND_staging\DT_DND\ui\upd_classes\upd_milestone.py", "Python", 0, 1, 0, 0, 1
+"c:\Users\gaiam\Documents\DND_staging\DT_DND\ui\upd_classes\upd_race.py", "Python", 0, -5, -4, 1, -8
+"c:\Users\gaiam\Documents\DND_staging\DT_DND\ui\upd_helper\utility_func.py", "Python", 0, 4, 0, 3, 7
+"Total", "-", -42, 50, -14, -11, -17

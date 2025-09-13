@@ -4,35 +4,23 @@ from colorist import *
 db = q.db
 
 
-def Fgen(name): db.Class.Abil.setdefault(name, {})
-    
-    
+def Fgen(name): db.Class.Abil.setdefault(name.replace(" ", "_"), {})
 def Fuse_1(name, num):
+    name = name.replace(" ", "_")
     cdata = db.Class.Abil
     cdata.setdefault(name, {})
     past = cdata.get(name, {}).get("Use", [False])
     cdata[name]["Use"] = (past + [False] * num)[:num]
 
 def Fselect_1(name, num):
+    name = name.replace(" ", "_")
     cdata = db.Class.Abil
     cdata.setdefault(name, {})
     past = cdata.get(name, {}).get("Select", [])
     cdata[name]["Select"] = (past + [""] * num)[:num]
 
-def remove_ability(name): db.Class.Abil.pop(name, None)
+def remove_ability(name): db.Class.Abil.pop(name.replace(" ", "_"), None)
 
-
-
-# "Caster": "",
-# "MSL": 0,
-# "CA": 0,
-# "SA": 0,
-# "PA": 0,
-# "Slots": [[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0]],
-# "Abil": "",
-# "DC": 0,
-# "Mod": 0,
-# "Atk": ""
 def Spell_Setter(self, Caster):
     cSpell = g.Spell_Class_Data(Caster)
     q.dbm.dSpell = {

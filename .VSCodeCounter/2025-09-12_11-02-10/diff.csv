@@ -1,0 +1,17 @@
+"filename", "language", "Python", "JSON", "comment", "blank", "total"
+"c:\Users\gaiam\Documents\DND_staging\DT_DND\Sheet\get.py", "Python", -13, 0, -2, -1, -16
+"c:\Users\gaiam\Documents\DND_staging\DT_DND\dist\db.json", "JSON", 0, 58, 0, 0, 58
+"c:\Users\gaiam\Documents\DND_staging\DT_DND\main.py", "Python", -2, 0, 0, 0, -2
+"c:\Users\gaiam\Documents\DND_staging\DT_DND\manager\character.py", "Python", -1, 0, 0, 0, -1
+"c:\Users\gaiam\Documents\DND_staging\DT_DND\manager\components\Background_comp.py", "Python", -2, 0, 0, -3, -5
+"c:\Users\gaiam\Documents\DND_staging\DT_DND\manager\components\Class_comp.py", "Python", 2, 0, 0, -2, 0
+"c:\Users\gaiam\Documents\DND_staging\DT_DND\manager\components\Milestone_comp.py", "Python", 5, 0, 0, 10, 15
+"c:\Users\gaiam\Documents\DND_staging\DT_DND\manager\components\Race_comp.py", "Python", -17, 0, 0, -55, -72
+"c:\Users\gaiam\Documents\DND_staging\DT_DND\manager\dbm.py", "Python", 80, 0, 0, 9, 89
+"c:\Users\gaiam\Documents\DND_staging\DT_DND\q.py", "Python", -1, 0, 0, 0, -1
+"c:\Users\gaiam\Documents\DND_staging\DT_DND\ui\call_back_handler.py", "Python", -33, 0, 0, -14, -47
+"c:\Users\gaiam\Documents\DND_staging\DT_DND\ui\upd_classes\upd_milestone.py", "Python", 0, 0, 0, -1, -1
+"c:\Users\gaiam\Documents\DND_staging\DT_DND\ui\upd_classes\upd_race.py", "Python", 35, 0, 0, -4, 31
+"c:\Users\gaiam\Documents\DND_staging\DT_DND\ui\upd_classes\upd_sheet.py", "Python", 4, 0, 0, 1, 5
+"c:\Users\gaiam\Documents\DND_staging\DT_DND\ui\upd_helper_import.py", "Python", 1, 0, 0, -1, 0
+"Total", "-", 58, 58, -2, -61, 53

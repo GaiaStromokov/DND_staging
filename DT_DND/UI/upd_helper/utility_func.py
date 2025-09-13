@@ -4,6 +4,13 @@ from colorist import *
 from access_data.color_reference import *
 import Sheet.get as get
 
+
+def tgen(name: str):
+    n = name.replace("_", " ")
+    t = name.replace(" ", "_")
+    return n, t
+
+
 def gen_abil(name: str):
     an = name
     tn = name.replace(" ", "_")

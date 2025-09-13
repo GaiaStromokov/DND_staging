@@ -169,7 +169,7 @@ class sett:
                 break
     #---
     def Rest_Long(self):
-        if valid_spellclass():
+        if q.dbm.Spell.Validate:
             for level in range(1, 10):
                 if level in q.db.Spell["Slot"]:
                     q.db.Spell["Slot"][level] = [False] * len(q.db.Spell["Slot"][level])

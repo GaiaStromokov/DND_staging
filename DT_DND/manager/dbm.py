@@ -125,30 +125,34 @@ class dbm:
         def Recalculate_Stats(self):
             self.p.Atr.Collect()
             self.p.Health.Collect()
-            self.p.Combat.Armor.Collect()
+            self.p.Armor.Collect()
             
-        def Update_Spells(self):
-            pass
-        
         @Access
         class New:
             def Level(self):
-                pass
+                q.dbm.rRace.Upd()
+                q.dbm.rClass.Upd()
+                q.dbm.rMilestone.Upd()
+                q.dbm.Manager.Recalculate_Stats()
+                q.dbm.Manager.Upd.Spells()
             def Race(self):
+                q.dbm.Race.Reset
                 q.dbm.Race.s.Abil.Wipe()
                 q.dbm.rRace = bRace()
                 q.dbm.rRace.Upd()
                 q.dbm.rMilestone.Upd()
                 q.dbm.Manager.Recalculate_Stats()
             def Class(self):
+                q.dbm.Class.Reset
                 q.dbm.Class.s.Abil.Wipe()
                 q.dbm.Spell.Wipe()
                 q.dbm.rClass = bClass()
                 q.dbm.rClass.Upd()
                 q.dbm.rMilestone.Upd()
                 q.dbm.Manager.Recalculate_Stats()
-                q.dbm.Manager.Update_Spells()
+                q.dbm.Manager.Upd.Spells()
             def Background(self):
+                q.dbm.Background.Reset
                 q.dbm.Background.Wipe()
                 q.dbm.Background = bBackground()
                 q.dbm.Manager.Recalculate_Stats()
@@ -159,7 +163,7 @@ class dbm:
                 q.dbm.Atr.Collect()
                 q.dbm.rMilestone.Upd()
                 q.dbm.Manager.Recalculate_Stats()
-                q.dbm.Manager.Update_Spells()           
+                q.dbm.Manager.Upd.Spells()          
             
             def Class_Select(self):
                 q.dbm.rClass.Upd()
@@ -171,6 +175,7 @@ class dbm:
                 q.dbm.Manager.Recalculate_Stats()
             def Spells(self):
                 if q.dbm.Spell.Validate: q.dbm.rClass.Spell_config()
+                
             def Milestone_Feat(self):
                 q.dbm.Manager.Upd.Atr()
 
@@ -271,8 +276,9 @@ class dbm:
                     q.dbm.Atr.Collect()
     @Access
     class Class:
-        def reset(self): self.p.Stats["C"] = defaultStat()
-
+        @property
+        def Reset(self): self.p.Stats.C = defaultStat()
+        
         def Validate(self):
             Level = db.Core.L
             Class = db.Core.C
@@ -320,7 +326,8 @@ class dbm:
                     
     @Access
     class Race:
-        def reset(self): self.p.Stats["R"] = defaultStat()
+        @property
+        def Reset(self): self.p.Stats["R"] = defaultStat()
         @Access
         class g: 
             def data(self): return db.Race
@@ -394,8 +401,7 @@ class dbm:
         def Reset(self): self.p.Stats["M"] = defaultStat()
 
         @Access
-        class Data:
-            pass
+        class Data: pass
         @Access
         class g: pass
         @Access
@@ -582,7 +588,6 @@ class dbm:
         class g:
             @property
             def Visual(self):
-                print(q.dbm.Stats.M)
                 data = q.dbm.Collect_Initiative
                 DEX = q.dbm.Atr.g.Mod("DEX")
                 math = data + DEX
@@ -594,6 +599,28 @@ class dbm:
 
     @Access
     class Armor:
+        def Collect(self):
+            dex_mod = q.dbm.Atr.g.Mod("DEX")
+            base_ac = 10
+            dex = dex_mod
+            shield_bonus = 0
+
+            armor = q.db.Inventory.Closet["Armor"]
+            if armor:
+                item = q.w.dItem(armor)
+                prof = item.Base in self.Prof["Armor"]
+                if prof:
+                    base_ac = item.AC
+                    dex = min(dex_mod, item.Dex_Max)
+            h2data  = q.db.Inventory.Closet["Hand_2"]
+            if h2data:
+                hand_2 = get.weapon_action_handler(h2data)   
+                if hand_2.Category == "Shield":
+                    shield_bonus = hand_2.AC
+            q.db.AC.Base = base_ac
+            q.db.AC.Dex = dex
+            q.db.AC.Shield = shield_bonus
+            q.db.AC.Sum = base_ac + dex + shield_bonus
         @Access
         class g:
             @property
@@ -610,32 +637,6 @@ class dbm:
 
     @Access
     class Combat:
-        
-        @Access
-        class Armor:
-            def Collect(self):
-                dex_mod = q.dbm.Atr.g.Mod("DEX")
-                base_ac = 10
-                dex = dex_mod
-                shield_bonus = 0
-
-                armor = q.db.Inventory.Closet["Armor"]
-                if armor:
-                    item = q.w.dItem(armor)
-                    prof = item.Base in self.Prof["Armor"]
-                    if prof:
-                        base_ac = item.AC
-                        dex = min(dex_mod, item.Dex_Max)
-                h2data  = q.db.Inventory.Closet["Hand_2"]
-                if h2data:
-                    hand_2 = get.weapon_action_handler(h2data)   
-                    if hand_2.Category == "Shield":
-                        shield_bonus = hand_2.AC
-                q.db.AC.Base = base_ac
-                q.db.AC.Dex = dex
-                q.db.AC.Shield = shield_bonus
-                q.db.AC.Sum = base_ac + dex + shield_bonus
-
         @Access
         class g: pass
         @Access
@@ -733,12 +734,9 @@ class dbm:
                     item = q.w.dItem(name)
                     item_type = item.Slot
 
-                    if item_type == "Weapon": 
-                        self.Weapon(cat, name, item, closet, backpack)
-                    elif item_type == "Armor": 
-                        self.Armor(cat, name, item, closet)
-                    elif item_type == "Shield": 
-                        self.Shield(cat, name, item, closet)
+                    if item_type == "Weapon":  self.Weapon(cat, name, item, closet, backpack)
+                    elif item_type == "Armor": self.Armor(cat, name, item, closet)
+                    elif item_type == "Shield":  self.Shield(cat, name, item, closet)
 
                 def Weapon(self, cat, name, item, closet, backpack):
                     two_handed = "Two-handed" in item.Prop
@@ -754,18 +752,13 @@ class dbm:
                             closet["Hand_1"], closet["Hand_2"] = name, ""
                             return
                         if h2 == name:
-                            if versatile or owned_count(name) > 1: 
-                                closet["Hand_1"] = name
-                        else: 
-                            closet["Hand_1"] = name
+                            if versatile or owned_count(name) > 1: closet["Hand_1"] = name
+                        else: closet["Hand_1"] = name
                     elif cat == "Hand_2":
-                        if h1 and "Two-handed" in q.w.dItem(h1).Prop: 
-                            return
+                        if h1 and "Two-handed" in q.w.dItem(h1).Prop: return
                         if h1 == name:
-                            if versatile or owned_count(name) > 1: 
-                                closet["Hand_2"] = name
-                        else: 
-                            closet["Hand_2"] = name
+                            if versatile or owned_count(name) > 1: closet["Hand_2"] = name
+                        else: closet["Hand_2"] = name
 
                 def Armor(self, cat, name, item, closet):
                     str_mod = db.Atr["STR"]["Mod"]

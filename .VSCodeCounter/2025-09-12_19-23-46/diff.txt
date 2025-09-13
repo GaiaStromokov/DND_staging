@@ -1,0 +1,42 @@
+Date : 2025-09-12 19:23:46
+Directory : c:\Users\gaiam\Documents\DND_staging
+Total : 9 files,  8 codes, -14 comments, -11 blanks, all -17 lines
+
+Languages
++----------+------------+------------+------------+------------+------------+
+| language | files      | code       | comment    | blank      | total      |
++----------+------------+------------+------------+------------+------------+
+| Python   |          8 |         50 |        -14 |        -11 |         25 |
+| JSON     |          1 |        -42 |          0 |          0 |        -42 |
++----------+------------+------------+------------+------------+------------+
+
+Directories
++----------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                             | files      | code       | comment    | blank      | total      |
++----------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                |          9 |          8 |        -14 |        -11 |        -17 |
+| DT_DND                                                                           |          9 |          8 |        -14 |        -11 |        -17 |
+| DT_DND\dist                                                                      |          1 |        -42 |          0 |          0 |        -42 |
+| DT_DND\manager                                                                   |          4 |         11 |        -10 |         -1 |          0 |
+| DT_DND\manager (Files)                                                           |          1 |          8 |          0 |          1 |          9 |
+| DT_DND\manager\components                                                        |          3 |          3 |        -10 |         -2 |         -9 |
+| DT_DND\ui                                                                        |          4 |         39 |         -4 |        -10 |         25 |
+| DT_DND\ui\upd_classes                                                            |          3 |         35 |         -4 |        -13 |         18 |
+| DT_DND\ui\upd_helper                                                             |          1 |          4 |          0 |          3 |          7 |
++----------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++----------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| filename                                                                         | language | code       | comment    | blank      | total      |
++----------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| c:\Users\gaiam\Documents\DND_staging\DT_DND\dist\db.json                         | JSON     |        -42 |          0 |          0 |        -42 |
+| c:\Users\gaiam\Documents\DND_staging\DT_DND\manager\components\Class_comp.py     | Python   |          0 |        -10 |         -2 |        -12 |
+| c:\Users\gaiam\Documents\DND_staging\DT_DND\manager\components\Milestone_comp.py | Python   |          2 |          0 |          0 |          2 |
+| c:\Users\gaiam\Documents\DND_staging\DT_DND\manager\components\Race_comp.py      | Python   |          1 |          0 |          0 |          1 |
+| c:\Users\gaiam\Documents\DND_staging\DT_DND\manager\dbm.py                       | Python   |          8 |          0 |          1 |          9 |
+| c:\Users\gaiam\Documents\DND_staging\DT_DND\ui\upd_classes\upd_class.py          | Python   |         39 |          0 |        -14 |         25 |
+| c:\Users\gaiam\Documents\DND_staging\DT_DND\ui\upd_classes\upd_milestone.py      | Python   |          1 |          0 |          0 |          1 |
+| c:\Users\gaiam\Documents\DND_staging\DT_DND\ui\upd_classes\upd_race.py           | Python   |         -5 |         -4 |          1 |         -8 |
+| c:\Users\gaiam\Documents\DND_staging\DT_DND\ui\upd_helper\utility_func.py        | Python   |          4 |          0 |          3 |          7 |
+| Total                                                                            |          |          8 |        -14 |        -11 |        -17 |
++----------------------------------------------------------------------------------+----------+------------+------------+------------+------------+

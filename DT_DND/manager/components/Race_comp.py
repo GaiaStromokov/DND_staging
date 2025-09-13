@@ -1,7 +1,7 @@
 import q
 import Sheet.get as get
 
-def Fgen(name): q.db.Race.Abil.setdefault(name, {})
+def Fgen(name): q.db.Race.Abil.setdefault(name.replace(" ", "_"), {})
 
     
 def Fuse_1(name, num):
@@ -11,6 +11,7 @@ def Fuse_1(name, num):
     q.db.Race.Abil[name] = {"Use": (past + [False] * num)[:num]}
 
 def Fuse_2(index, name, num):
+    index = index.replace(" ", "_")
     name = name.replace(" ", "_")
     q.db.Race.Abil[index].setdefault(name, {})
     past = q.db.Race.Abil.get(index, {}).get(name, {}).get("Use", [False])
@@ -105,7 +106,8 @@ class Elf_Wood:
 
 class Elf_Drow:
     def __init__(self, p):
-        p.data.Vision["Dark"] = 120
+        self.p = p
+        p.data.Vision["Dark"]= 120
         p.data.Prof.Weapon.extend(["Rapier", "Shortsword", "Hand Crossbow"])
 
 
@@ -122,7 +124,7 @@ class Elf_Shadar_Kai:
         pass
 
     def Upd(self): 
-        Fuse_1("Blessing of the Raven Queen", q.db.Core.PB)
+        Fuse_1("Blessing of the Raven Queen", q.dbm.Core.g.PB)
 
 class Dwarf:
     def __init__(self, p):
@@ -137,14 +139,14 @@ class Dwarf:
 
 class Dwarf_Hill:
     def __init__(self, p):
-        pass
-    
+        self.p = p
+
     def Upd(self): 
-        self.p.HP = q.db.Core.L
+        self.p.data.Combat.HP = q.dbm.Core.g.L
 
 class Dwarf_Mountain:
     def __init__(self, p):
-        self.p.Armor.extend(["Light", "Medium"])
+        p.data.Prof.Armor.extend(["Light", "Medium"])
 
     def Upd(self):
         pass

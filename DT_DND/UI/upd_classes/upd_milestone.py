@@ -6,6 +6,7 @@ class upd_milestone:
         self.parent = tag.mfeature.main()
 
     def Whole(self):
+        print("we doing this")
         self.sub()
         self.main()
 

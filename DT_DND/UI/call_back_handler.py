@@ -78,7 +78,7 @@ class backend_populate:
         self.Generic()
 
     def HP(self): 
-        self.SHEET.health()
+        self.SHEET.Health()
         
     def Condition(self):
         self.SHEET.conditions()

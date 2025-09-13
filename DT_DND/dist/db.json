@@ -1,9 +1,9 @@
 {
     "Core": {
-        "L": 4,
+        "L": 2,
         "PB": 2,
-        "R": "Empty",
-        "SR": "",
+        "R": "Dwarf",
+        "SR": "Mountain",
         "C": "Fighter",
         "SC": "",
         "BG": "Empty"
@@ -154,17 +154,17 @@
             ""
         ],
         "Abil": {
-            "Fighting Style": {
+            "Fighting_Style": {
                 "Select": [
                     ""
                 ]
             },
-            "Second Wind": {
+            "Second_Wind": {
                 "Use": [
                     false
                 ]
             },
-            "Action Surge": {
+            "Action_Surge": {
                 "Use": [
                     false
                 ]
@@ -180,7 +180,7 @@
     },
     "Milestone": {
         "Select": [
-            "Feat",
+            "",
             "",
             "",
             "",
@@ -190,7 +190,7 @@
             ""
         ],
         "Feat": [
-            "Empty",
+            "",
             "",
             "",
             "",
@@ -233,10 +233,7 @@
                 ""
             ]
         ],
-        "Data": {
-            "Alert": {},
-            "Empty": {}
-        }
+        "Data": {}
     },
     "Background": {
         "Prof": {},

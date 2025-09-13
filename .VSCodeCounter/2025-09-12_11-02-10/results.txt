@@ -1,0 +1,75 @@
+Date : 2025-09-12 11:02:10
+Directory : c:\Users\gaiam\Documents\DND_staging
+Total : 36 files,  14671 codes, 79 comments, 1149 blanks, all 15899 lines
+
+Languages
++----------+------------+------------+------------+------------+------------+
+| language | files      | code       | comment    | blank      | total      |
++----------+------------+------------+------------+------------+------------+
+| Python   |         33 |     11,272 |         79 |      1,090 |     12,441 |
+| JSON     |          2 |      3,058 |          0 |          0 |      3,058 |
+| Ini      |          1 |        341 |          0 |         59 |        400 |
++----------+------------+------------+------------+------------+------------+
+
+Directories
++-----------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                              | files      | code       | comment    | blank      | total      |
++-----------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                 |         36 |     14,671 |         79 |      1,149 |     15,899 |
+| DT_DND                                                                            |         36 |     14,671 |         79 |      1,149 |     15,899 |
+| DT_DND (Files)                                                                    |          3 |         78 |         13 |         32 |        123 |
+| DT_DND\Sheet                                                                      |          2 |        588 |         40 |        164 |        792 |
+| DT_DND\access_data                                                                |          2 |      6,626 |          0 |         17 |      6,643 |
+| DT_DND\dist                                                                       |          2 |      3,058 |          0 |          0 |      3,058 |
+| DT_DND\manager                                                                    |          8 |      1,705 |         11 |        417 |      2,133 |
+| DT_DND\manager (Files)                                                            |          2 |        847 |          1 |        142 |        990 |
+| DT_DND\manager\components                                                         |          6 |        858 |         10 |        275 |      1,143 |
+| DT_DND\ui                                                                         |         18 |      2,275 |         15 |        460 |      2,750 |
+| DT_DND\ui (Files)                                                                 |          4 |        774 |          0 |        107 |        881 |
+| DT_DND\ui\upd_classes                                                             |         11 |      1,336 |         15 |        308 |      1,659 |
+| DT_DND\ui\upd_helper                                                              |          3 |        165 |          0 |         45 |        210 |
+| DT_DND\utils                                                                      |          1 |        341 |          0 |         59 |        400 |
++-----------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++-----------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| filename                                                                          | language | code       | comment    | blank      | total      |
++-----------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| c:\Users\gaiam\Documents\DND_staging\DT_DND\Sheet\get.py                          | Python   |        360 |         26 |        120 |        506 |
+| c:\Users\gaiam\Documents\DND_staging\DT_DND\Sheet\set.py                          | Python   |        228 |         14 |         44 |        286 |
+| c:\Users\gaiam\Documents\DND_staging\DT_DND\access_data\Grimoir.py                | Python   |      6,581 |          0 |          2 |      6,583 |
+| c:\Users\gaiam\Documents\DND_staging\DT_DND\access_data\color_reference.py        | Python   |         45 |          0 |         15 |         60 |
+| c:\Users\gaiam\Documents\DND_staging\DT_DND\dist\db.json                          | JSON     |        468 |          0 |          0 |        468 |
+| c:\Users\gaiam\Documents\DND_staging\DT_DND\dist\item_comp.json                   | JSON     |      2,590 |          0 |          0 |      2,590 |
+| c:\Users\gaiam\Documents\DND_staging\DT_DND\main.py                               | Python   |         43 |          1 |         26 |         70 |
+| c:\Users\gaiam\Documents\DND_staging\DT_DND\manager\character.py                  | Python   |        172 |          0 |         56 |        228 |
+| c:\Users\gaiam\Documents\DND_staging\DT_DND\manager\components\Background_comp.py | Python   |         74 |          0 |         41 |        115 |
+| c:\Users\gaiam\Documents\DND_staging\DT_DND\manager\components\Class_comp.py      | Python   |        199 |         10 |         51 |        260 |
+| c:\Users\gaiam\Documents\DND_staging\DT_DND\manager\components\Equipment_comp.py  | Python   |         70 |          0 |         20 |         90 |
+| c:\Users\gaiam\Documents\DND_staging\DT_DND\manager\components\Milestone_comp.py  | Python   |        195 |          0 |         49 |        244 |
+| c:\Users\gaiam\Documents\DND_staging\DT_DND\manager\components\Race_comp.py       | Python   |        308 |          0 |        112 |        420 |
+| c:\Users\gaiam\Documents\DND_staging\DT_DND\manager\components\registry.py        | Python   |         12 |          0 |          2 |         14 |
+| c:\Users\gaiam\Documents\DND_staging\DT_DND\manager\dbm.py                        | Python   |        675 |          1 |         86 |        762 |
+| c:\Users\gaiam\Documents\DND_staging\DT_DND\path_helper.py                        | Python   |         11 |         12 |          2 |         25 |
+| c:\Users\gaiam\Documents\DND_staging\DT_DND\q.py                                  | Python   |         24 |          0 |          4 |         28 |
+| c:\Users\gaiam\Documents\DND_staging\DT_DND\ui\call_back_handler.py               | Python   |        350 |          0 |         73 |        423 |
+| c:\Users\gaiam\Documents\DND_staging\DT_DND\ui\init_ui.py                         | Python   |        402 |          0 |         28 |        430 |
+| c:\Users\gaiam\Documents\DND_staging\DT_DND\ui\upd_class_import.py                | Python   |         10 |          0 |          3 |         13 |
+| c:\Users\gaiam\Documents\DND_staging\DT_DND\ui\upd_classes\upd_actions.py         | Python   |         58 |          0 |         13 |         71 |
+| c:\Users\gaiam\Documents\DND_staging\DT_DND\ui\upd_classes\upd_background.py      | Python   |         46 |          0 |          9 |         55 |
+| c:\Users\gaiam\Documents\DND_staging\DT_DND\ui\upd_classes\upd_backpack.py        | Python   |         48 |          6 |         13 |         67 |
+| c:\Users\gaiam\Documents\DND_staging\DT_DND\ui\upd_classes\upd_bazaar.py          | Python   |         70 |          0 |         13 |         83 |
+| c:\Users\gaiam\Documents\DND_staging\DT_DND\ui\upd_classes\upd_class.py           | Python   |        306 |          0 |         77 |        383 |
+| c:\Users\gaiam\Documents\DND_staging\DT_DND\ui\upd_classes\upd_closet.py          | Python   |         44 |          0 |         10 |         54 |
+| c:\Users\gaiam\Documents\DND_staging\DT_DND\ui\upd_classes\upd_inventory.py       | Python   |          0 |          0 |          1 |          1 |
+| c:\Users\gaiam\Documents\DND_staging\DT_DND\ui\upd_classes\upd_milestone.py       | Python   |        267 |          0 |         59 |        326 |
+| c:\Users\gaiam\Documents\DND_staging\DT_DND\ui\upd_classes\upd_race.py            | Python   |        257 |          4 |         72 |        333 |
+| c:\Users\gaiam\Documents\DND_staging\DT_DND\ui\upd_classes\upd_sheet.py           | Python   |         96 |          5 |         21 |        122 |
+| c:\Users\gaiam\Documents\DND_staging\DT_DND\ui\upd_classes\upd_spell.py           | Python   |        144 |          0 |         20 |        164 |
+| c:\Users\gaiam\Documents\DND_staging\DT_DND\ui\upd_helper\size_class.py           | Python   |         45 |          0 |         22 |         67 |
+| c:\Users\gaiam\Documents\DND_staging\DT_DND\ui\upd_helper\tag_class.py            | Python   |         32 |          0 |          6 |         38 |
+| c:\Users\gaiam\Documents\DND_staging\DT_DND\ui\upd_helper\utility_func.py         | Python   |         88 |          0 |         17 |        105 |
+| c:\Users\gaiam\Documents\DND_staging\DT_DND\ui\upd_helper_import.py               | Python   |         12 |          0 |          3 |         15 |
+| c:\Users\gaiam\Documents\DND_staging\DT_DND\utils\config_save.ini                 | Ini      |        341 |          0 |         59 |        400 |
+| Total                                                                             |          |     14,671 |         79 |      1,149 |     15,899 |
++-----------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
