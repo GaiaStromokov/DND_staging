@@ -1,5 +1,6 @@
 import q
 import Sheet.get as g
+from box import Box
 from colorist import *
 db = q.db
 
@@ -21,10 +22,10 @@ def Fselect_1(name, num):
 
 def remove_ability(name): db.Class.Abil.pop(name.replace(" ", "_"), None)
 
-def Spell_Setter(self, Caster):
+def Spell_Setter(Caster):
     cSpell = g.Spell_Class_Data(Caster)
-    q.dbm.dSpell = {
-        "Caster": cSpell.Caster,
+    q.dbm.dSpell = Box({
+        "Caster": cSpell.CList,
         "MSL": cSpell.MSL,
         "CA": cSpell.CA,
         "SA": cSpell.SA,
@@ -34,7 +35,7 @@ def Spell_Setter(self, Caster):
         "DC": cSpell.DC,
         "Mod": cSpell.Mod,
         "Atk": cSpell.ATK
-    }
+    })
     past = db.Spell["Slot"]
     for index,val in enumerate(cSpell.Slot): db.Spell.Slot[index] = (past[index] + [False] * val)[:val]
     
@@ -42,22 +43,27 @@ def Spell_Setter(self, Caster):
 
 class bClass():
     def __init__(self):
-        
-        if db.Core.C: self.cClass = globals()[db.Core.C]()
-        if db.Core.SC: self.cSubclass = globals()[f"{db.Core.C}_{db.Core.SC}"]()
+        Class = q.dbm.Core.g.C
+        Subclass  = q.dbm.Core.g.SC
+        if Class: self.cClass = globals()[Class]()
+        if Subclass: self.cSubclass = globals()[f"{Class}_{Subclass}"]()
 
     def pre_Upd(self):
         self.cClass.pre_Upd()
-        if db.Core.SC: self.cSubclass.pre_Upd()
+        if q.dbm.Core.g.SC: self.cSubclass.pre_Upd()
         
         
     def Upd(self):
         self.cClass.Upd()
-        if db.Core.SC: self.cSubclass.Upd()
+        if q.dbm.Core.g.SC: self.cSubclass.Upd()
     
-    def Spell_config(self):      
-        if db.Core.SC in g.list_Spellcast: Spell_Setter(db.Core.SC)
-        elif db.Core.C in g.list_Spellcast: Spell_Setter(db.Core.C)
+    def Spell_config(self): 
+        Class = q.dbm.Core.g.C
+        Subclass  = q.dbm.Core.g.SC     
+        print(Class)
+        print(Subclass)
+        if Subclass in g.list_Spellcast: Spell_Setter(Subclass)
+        elif Class in g.list_Spellcast: Spell_Setter(Class)
         
 
     def __repr__(self):
@@ -67,12 +73,12 @@ class bClass():
 
     
     
-class Empty():
+class Empty:
     def __init__(self): pass
     def pre_Upd(self): pass
     def Upd(self): pass
     
-class Fighter():
+class Fighter:
     def __init__(self):
         cdata = q.dbm.Stats.C
         cdata.Combat.HD = 10
@@ -102,7 +108,7 @@ class Fighter():
         
 
 
-class Fighter_Champion():
+class Fighter_Champion:
     def Upd(self):
         level = q.dbm.Core.g.L
         if level >= 3: Fgen("Improved Critical")
@@ -117,7 +123,7 @@ class Fighter_Champion():
         if level >= 18: Fgen("Survivor")
         else: remove_ability("Survivor")
 
-class Fighter_Battle_Master():
+class Fighter_Battle_Master:
     def Upd(self):
         level = db.Core.L
         if level >= 3:
@@ -134,7 +140,7 @@ class Fighter_Battle_Master():
             remove_ability("Combat Superiority")
             remove_ability("Relentless")
 
-class Fighter_Eldrich_Knight():
+class Fighter_Eldrich_Knight:
     def Upd(self):
         level = q.dbm.Core.g.L
         if level >= 3: Fgen("Weapon Bond")
@@ -151,7 +157,7 @@ class Fighter_Eldrich_Knight():
         else: remove_ability("Improved War Magic")
         
 
-class Fighter_Samuri():
+class Fighter_Samuri:
     def Upd(self):
         level = q.dbm.Core.g.L
         if level >= 3: 
@@ -173,7 +179,7 @@ class Fighter_Samuri():
 
 
 
-class Wizard():
+class Wizard:
     def __init__(self):
         cdata = q.dbm.Stats.C
         cdata.Combat.HD = 6

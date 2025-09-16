@@ -182,7 +182,8 @@ class Gnome:
         p.data.Prof.Lang.extend(["Common", "Gnomish"])
 
     def Upd(self):
-        pass
+        Fgen("Natural Illusionist")
+        Fuse_2("Natural Illusionist", "Minor Illusion", 0)
 
 class Gnome_Forest:
     def __init__(self, p):
@@ -192,7 +193,7 @@ class Gnome_Forest:
 
 class Gnome_Rock:
     def __init__(self, p):
-        p.data.Tool.extend("Tinker")
+        p.data.Prof.Tool.extend("Tinker")
 
     def Upd(self):
         pass
@@ -221,6 +222,9 @@ class Dragonborn_Blue:
 
 class Dragonborn_Brass:
     def __init__(self, p):
+        pass
+    
+    def Upd(self):
         Fuse_1("Breath Weapon", 1)
 
 class Dragonborn_Bronze:

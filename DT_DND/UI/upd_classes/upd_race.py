@@ -23,28 +23,28 @@ class upd_race:
                 func()
 
     def standard(self, name, descriptions):
-        a,t = tgen(name)
-        t_header = tag.rfeature.header(t)
-        desc_tags = [tag.rfeature.text(t, f"{i+1}") for i, _ in enumerate(descriptions)]
+        gen = tgen(name)
+        t_header = tag.rfeature.header(gen.tag)
+        desc_tags = [tag.rfeature.text(gen.tag, f"{i+1}") for i, _ in enumerate(descriptions)]
 
         with group(parent=self.parent):
-            add_text(a, color=c_h1, tag=t_header)
+            add_text(gen.name, color=c_h1, tag=t_header)
             for i, desc in enumerate(descriptions):
                 add_text(desc, color=c_text, wrap=sz.wrap, tag=desc_tags[i])
 
     def standard_choice(self, name, items_list):
-        a,t = tgen(name)
-        blue(t)
-        selection = q.db.Race.Abil[t]["Select"][0]
-        t_header = tag.rfeature.header(t)
-        t_label = tag.rfeature.label(t)
-        t_tooltip = tag.rfeature.tooltip(t)
-        t_popup = tag.rfeature.popup(t)
-        t_select = tag.rfeature.select(t)
+        gen = tgen(name)
+        blue(gen.tag)
+        selection = q.db.Race.Abil[gen.tag]["Select"][0]
+        t_header = tag.rfeature.header(gen.tag)
+        t_label = tag.rfeature.label(gen.tag)
+        t_tooltip = tag.rfeature.tooltip(gen.tag)
+        t_popup = tag.rfeature.popup(gen.tag)
+        t_select = tag.rfeature.select(gen.tag)
 
         with group(parent=self.parent):
             with group(horizontal=True):
-                add_text(a, color=c_h1, tag=t_header)
+                add_text(gen.name, color=c_h1, tag=t_header)
                 add_text(selection, color=c_h2, tag=t_label)
             
             item_delete(t_tooltip)
@@ -53,36 +53,38 @@ class upd_race:
 
             item_delete(t_popup)
             with popup(t_header, mousebutton=mvMouseButton_Left, tag=t_popup):
-                add_combo(items=items_list, default_value=selection, width=120, no_arrow_button=True, user_data=["Race Spell Select", t], callback=q.cbh, tag=t_select)
+                add_combo(items=items_list, default_value=selection, width=120, no_arrow_button=True, user_data=["Race Spell Select", gen.tag], callback=q.cbh, tag=t_select)
 
     def standard_spell_list(self, name):
-        a,t = tgen(name)
-        cdata = q.db.Race.Abil[t]
-        t_header = tag.rfeature.header(t)
+        gen = tgen(name)
+        cdata = q.db.Race.Abil[gen.tag]
+        t_header = tag.rfeature.header(gen.tag)
 
         with group(parent=self.parent):
-            add_text(a, color=c_h1, tag=t_header)
+            add_text(gen.name, color=c_h1, tag=t_header)
             for spell in cdata.keys():
-                t_label = tag.rfeature.label(t, spell)
-                t_tooltip = tag.rfeature.tooltip(t, spell)
+                t_label = tag.rfeature.label(gen.tag, spell)
+                t_tooltip = tag.rfeature.tooltip(gen.tag, spell)
                 with group(horizontal=True):
                     spell_name = spell.replace("_", " ")
                     add_text(spell_name, color=c_h2, tag=t_label)
                     if "Use" in cdata[spell]:
-                        t_toggle = tag.rfeature.toggle(t, spell)
-                        add_checkbox(default_value=cdata[spell]["Use"][0], enabled=True, user_data=["Race Spell Use", t, spell], callback=q.cbh, tag=t_toggle)
+                        t_toggle = tag.rfeature.toggle(gen.tag, spell)
+                        add_checkbox(default_value=cdata[spell]["Use"][0], enabled=True, user_data=["Race Spell Use", gen.tag, spell], callback=q.cbh, tag=t_toggle)
                 
                 item_delete(t_tooltip)
                 with tooltip(t_label, tag=t_tooltip):
                     spell_detail(spell)
 
     def dragonborn_features(self, damage_type):
+        level = q.dbm.Core.g.L
+        pb = q.dbm.Core.g.PB
         save_map = {"Acid": "DEX", "Lightning": "DEX", "Fire": "DEX", "Poison": "CON", "Cold": "CON"}
         dnum_map = [0, 2, 2, 2, 2, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 5, 5, 5, 5, 5]
-        dnum = dnum_map[q.db.Core.L] if q.db.Core.L < len(dnum_map) else 5
+        dnum = dnum_map[level] if level < len(dnum_map) else 5
         
         save_ability = save_map.get(damage_type, "DEX")
-        dc = 8 + q.db.Core.PB + q.db.Atr[save_ability]['Mod']
+        dc = 8 + pb + q.dbm.Atr.g.Mod(save_ability)
 
         Draconic_Resistance_descriptions = [f"You have resistance to {damage_type} damage."]
         
@@ -95,17 +97,17 @@ class upd_race:
         self.standard_toggle("Breath Weapon", Breath_Weapon_descriptions)
 
     def standard_toggle(self, name, descriptions):
-        a,t = tgen(name)
-        t_header = tag.rfeature.header(t)
-        desc_tags = [tag.rfeature.text(t, f"{i+1}") for i, _ in enumerate(descriptions)]
-        use_data = q.db.Race.Abil[t]["Use"]
+        gen = tgen(name)
+        t_header = tag.rfeature.header(gen.tag)
+        desc_tags = [tag.rfeature.text(gen.tag, f"{i+1}") for i, _ in enumerate(descriptions)]
+        use_data = q.db.Race.Abil[gen.tag]["Use"]
 
         with group(parent=self.parent):
             with group(horizontal=True):
-                add_text(a, color=c_h1, tag=t_header)
+                add_text(gen.name, color=c_h1, tag=t_header)
                 for idx, val in enumerate(use_data):
-                    t_toggle = tag.rfeature.toggle(t, idx)
-                    add_checkbox(default_value=val, enabled=True, user_data=["Race Use", t, idx], callback=q.cbh, tag=t_toggle)
+                    t_toggle = tag.rfeature.toggle(gen.tag, idx)
+                    add_checkbox(default_value=val, enabled=True, user_data=["Race Use", gen.tag, idx], callback=q.cbh, tag=t_toggle)
             
             for i, desc in enumerate(descriptions):
                 add_text(desc, color=c_text, wrap=sz.wrap, tag=desc_tags[i])
@@ -198,30 +200,32 @@ class upd_race:
         self.standard(swsb, swsb_d)
 
 
-        a, t = tgen("Natural Illusionist")
-        cdata = q.db.Race.Abil[t]
+        gen = tgen("Natural Illusionist")
+        cdata = q.db.Race.Abil[gen.tag]
         with group(parent=self.parent):
-            add_text(a, color=c_h1, wrap=sz.gwrap)
-            for spell in cdata.keys():
-                t_label = tag.rfeature.label(t, spell)
-                t_tooltip = tag.rfeature.tooltip(t, spell)
-                add_text(spell, color=c_h2, tag=t_label)
+            with group(horizontal=True):
+                add_text(gen.name, color=c_h1, wrap=sz.wrap)
+                for spell in cdata.keys():
+                    sgen = tgen(spell)
+                    t_label = tag.rfeature.label(gen.tag, sgen.tag)
+                    t_tooltip = tag.rfeature.tooltip(gen.tag, sgen.tag)
+                    add_text(sgen.name, color=c_h2, tag=t_label)
 
-                item_delete(t_tooltip)
-                with tooltip(t_label, tag=t_tooltip):
-                    spell_detail(spell)
+                    item_delete(t_tooltip)
+                    with tooltip(t_label, tag=t_tooltip):
+                        spell_detail(sgen.name)
                     
     def Gnome_Rock(self):
-        a, t = tgen("Tinker")
-        t_header = tag.rfeature.header(t)
-        t_tooltip = tag.rfeature.tooltip(t)
+        gen = tgen("Tinker")
+        t_header = tag.rfeature.header(gen.tag)
+        t_tooltip = tag.rfeature.tooltip(gen.tag)
         description = "Using tinker's tools, you can spend 1 hour and 10 gp worth of materials to construct a Tiny clockwork device (AC 5, 1 hp)..."
 
         with group(parent=self.parent):
-            add_text(a, color=c_h1, tag=t_header)
+            add_text(gen.name, color=c_h1, tag=t_header)
             item_delete(t_tooltip)
             with tooltip(t_header, tag=t_tooltip):
-                add_text(a, color=c_h1)
+                add_text(gen.name, color=c_h1)
                 add_text(description, color=c_text, wrap=300)
 
         al = "Artificers Lore"
@@ -261,7 +265,7 @@ class upd_race:
     def Dragonborn_White(self):
         self.dragonborn_features("Cold")
         
-    def HalfOrc(self):
+    def Half_Orc(self):
         re = "Relentless Endurance"
         re_d = ["When you are reduced to 0 hit points but not killed outright, you can drop to 1 hit point instead. You can't use this feature again until you finish a long rest."]
         self.standard_toggle(re, re_d)
@@ -270,7 +274,7 @@ class upd_race:
         sa_d = ["When you score a critical hit with a melee weapon attack, you can roll one of the weapon's damage dice one additional time and add it to the extra damage of the critical hit."]
         self.standard(sa, sa_d)
 
-    def HalfOrc_Standard():
+    def Half_Orc_Standard():
         pass
 
     def Tiefling(self):

@@ -184,16 +184,25 @@ class dbm:
     class Core:
         @Access
         class g:
+            @property
             def Visual(self):
-                return {
-                    "Level": db.Core.L,
-                    "PB": db.Core.PB,
-                    "Class": db.Core.C.replace("_", " "),
-                    "Subclass": db.Core.SC.replace("_", " "),
-                    "Race": db.Core.R.replace("_", ""),
-                    "Subrace": db.Core.SR.replace("_", " "),
-                    "Background": db.Core.BG.replace("_", " ")
-                }
+                data = q.db.Core
+                return Box({
+                    "Level": data.L,
+                    "PB": data.PB,
+                    "tRace": data.R,
+                    "tSubrace": data.SR,
+                    "tClass": data.C,
+                    "tSubclass": data.SC,
+                    "tBackground": data.BG,
+                    "nRace": data.R.replace("_", " "),
+                    "nSubrace": data.SR.replace("_", " "),
+                    "nClass": data.C.replace("_", " "),
+                    "nSubclass": data.SC.replace("_", " "),
+                    "nBackground": data.BG.replace("_", " "),
+                    })
+                    
+
             @property
             def L(self):  return db.Core.L
             @property
@@ -291,14 +300,17 @@ class dbm:
                 return {
                     "Level": data.L,
                     "PB": data.PB,
-                    "Race": data.R.replace("_", ""),
-                    "Subrace": data.SR.replace("_", ""),
-                    "Class": data.C.replace("_", ""),
-                    "Subclass": data.SC.replace("_", ""),
-                    "Background": data.BG.replace("_", "")
+                    "Race": [data.R, data.R.replace("_", " ")],
+                    "Subrace": [data.SR, data.SR.replace("_", " ")],
+                    "Class": [data.C, data.C.replace("_", " ")],
+                    "Subclass": [data.SC, data.SC.replace("_", " ")],
+                    "Background": [data.BG, data.BG.replace("_", " ")]
                 }
+            @property
             def Data(self): return db.Class
-            def Abil(self): db.Class["Abil"]
+            @property
+            def Abil(self): return db.Class["Abil"]
+            @property
             def Skill_Select(self): return db.Class["Skill Select"]
             
 
@@ -330,7 +342,9 @@ class dbm:
         def Reset(self): self.p.Stats["R"] = defaultStat()
         @Access
         class g: 
-            def data(self): return db.Race
+            @property
+            def Data(self): return db.Race
+            @property
             def Abil(self): db.Race["Abil"]
         @Access
         class s: 
@@ -378,6 +392,7 @@ class dbm:
             db.Background={"Prof": {}, "Equipment": {}}
         @Access
         class g: 
+            @property
             def Data(self): return db.Background
         @Access
         class s: 
@@ -534,14 +549,14 @@ class dbm:
         class s:
             def Learn(self, spell, level):
                 cspell = db.Spell["Book"][level]
-                sdata = q.qbm.dspell
-                if level == 0: self.p._Toggle_Cantrip(spell, cspell, sdata['cantrips_available'])
-                else:          self.p._Toggle_Spell(spell, cspell, sdata['spells_available'])
+                sdata = q.dbm.dSpell
+                if level == 0: self.p._Toggle_Cantrip(spell, cspell, sdata.CA)
+                else:          self.p._Toggle_Spell(spell, cspell, sdata.SA)
 
             def Prepare(self, spell, level):
                 cspell = db.Spell["Prepared"][level]
-                sdata = q.qbm.dspell
-                self.p._Toggle_Prepare(spell, cspell, sdata['prepared_available'])
+                sdata = q.dbm.dSpell
+                self.p._Toggle_Prepare(spell, cspell, sdata.PA)
                 
             def Cast(self, level):
                 slots = db.Spell["Slot"][level]
@@ -658,10 +673,9 @@ class dbm:
         @Access
         class s:
             def Long(self):
-                if get.valid_spellclass():
-                    for level in range(1, 10):
-                        if level in db.Spell["Slot"]:
-                            db.Spell["Slot"][level] = [False] * len(db.Spell["Slot"][level])
+                for level in range(1, 10):
+                    if level in db.Spell["Slot"]:
+                        db.Spell["Slot"][level] = [False] * len(db.Spell["Slot"][level])
 
             def Short(self):
                 pass

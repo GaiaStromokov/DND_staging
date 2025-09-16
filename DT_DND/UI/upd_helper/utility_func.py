@@ -5,10 +5,10 @@ from access_data.color_reference import *
 import Sheet.get as get
 
 
-def tgen(name: str):
-    n = name.replace("_", " ")
-    t = name.replace(" ", "_")
-    return n, t
+class tgen:
+    def __init__(self, name: str):
+        self.name = name.replace("_", " ")
+        self.tag = name.replace(" ", "_")
 
 
 def gen_abil(name: str):

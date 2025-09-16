@@ -6,15 +6,15 @@ class upd_sheet:
         pass
 
     def Core(self):
-        cdata = q.dbm.Core.g.Visual()
+        cdata = q.dbm.Core.g.Visual
         
-        configure_item(tag.core.val("Level"), label=cdata["Level"])
-        configure_item(tag.core.val("PB"), label = f"PB: +{cdata["PB"]}")
-        configure_item(tag.core.select("Race"), items=get.list_Race, default_value=cdata["Race"])
-        configure_item(tag.core.select("Subrace"), items=get.option_Race[cdata["Race"]], default_value=cdata["Subrace"])
-        configure_item(tag.core.select("Class"), items=get.list_Class, default_value=cdata["Class"])
-        configure_item(tag.core.select("Subclass"), items=get.option_Class[cdata["Class"]] if q.dbm.Class.Validate else [], default_value=cdata["Subclass"])
-        configure_item(tag.core.select("Background"), items=get.list_Background, default_value=cdata["Background"])
+        configure_item(tag.core.val("Level"), label=cdata.Level)
+        configure_item(tag.core.val("PB"), label = f"PB: +{cdata.PB}")
+        configure_item(tag.core.select("Race"), items=get.list_Race, default_value=cdata.nRace)
+        configure_item(tag.core.select("Subrace"), items=get.option_Race[cdata.nRace], default_value=cdata.nSubrace)
+        configure_item(tag.core.select("Class"), items=get.list_Class, default_value=cdata.nClass)
+        configure_item(tag.core.select("Subclass"), items=get.option_Class[cdata.nClass] if q.dbm.Class.Validate else [], default_value=cdata.nSubclass)
+        configure_item(tag.core.select("Background"), items=get.list_Background, default_value=cdata.nBackground)
             
     def Attributes(self):
         data=q.db.Atr

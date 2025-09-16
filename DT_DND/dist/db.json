@@ -1,11 +1,11 @@
 {
     "Core": {
-        "L": 2,
+        "L": 1,
         "PB": 2,
-        "R": "Dwarf",
-        "SR": "Mountain",
-        "C": "Fighter",
-        "SC": "",
+        "R": "Elf",
+        "SR": "Drow",
+        "C": "Wizard",
+        "SC": "Abjuration",
         "BG": "Empty"
     },
     "Atr": {
@@ -154,17 +154,8 @@
             ""
         ],
         "Abil": {
-            "Fighting_Style": {
-                "Select": [
-                    ""
-                ]
-            },
-            "Second_Wind": {
-                "Use": [
-                    false
-                ]
-            },
-            "Action_Surge": {
+            "Spellcasting": {},
+            "Arcane_Recovery": {
                 "Use": [
                     false
                 ]
@@ -176,7 +167,15 @@
             "",
             ""
         ],
-        "Abil": {}
+        "Abil": {
+            "Drow_Magic": {
+                "Dancing_Lights": {
+                    "Use": [
+                        false
+                    ]
+                }
+            }
+        }
     },
     "Milestone": {
         "Select": [
@@ -242,7 +241,10 @@
     "Spell": {
         "Slot": [
             [],
-            [],
+            [
+                true,
+                true
+            ],
             [],
             [],
             [],
@@ -254,7 +256,11 @@
         ],
         "Book": [
             [],
-            [],
+            [
+                "Find Familiar",
+                "Jump",
+                "Distort Value"
+            ],
             [],
             [],
             [],
@@ -266,7 +272,9 @@
         ],
         "Prepared": [
             [],
-            [],
+            [
+                "Distort Value"
+            ],
             [],
             [],
             [],

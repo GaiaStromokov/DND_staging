@@ -29,6 +29,7 @@ class backend_populate:
         self.CLASS.Whole()
         self.BACKGROUND.Whole()
         self.MILESTONE.Whole()
+        self.SPELL.Whole()
         self.Inventory()
 
     def Race(self): 

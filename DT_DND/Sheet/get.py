@@ -470,7 +470,7 @@ class Spell_Class_Data:
         self.Mod = q.db.Atr[self.CAbil]["Mod"]
         self.DC  = 8 + pb + self.Mod
         self.ATK = f"{'+' if (pb + self.Mod) >= 0 else ''}{pb + self.Mod}"
-        self.PA = self.Mod + Level
+        self.PA = self.Mod + level
         
         
 
