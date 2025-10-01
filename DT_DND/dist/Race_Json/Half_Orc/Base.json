@@ -1,0 +1,27 @@
+{
+    "Speed": {
+        "Walk": 30
+    },
+    "Vision": {
+        "Dark": 60
+    },
+    "Prof": {
+        "Skill": ["Intimidation"],
+        "Lang": ["Common", "Orc"]
+    },
+    "Features": [
+        {
+            "Name": "Relentless Endurance",
+            "Level": 1,
+            "Type": ["Use"],
+            "Uses": 1,
+            "Desc": ["When you are reduced to 0 hit points but not killed outright, you can drop to 1 hit point instead."]
+        },
+        {
+            "Name": "Savage Attacks",
+            "Level": 1,
+            "Type": ["Passive"],
+            "Desc": ["On melee weapon crit, roll weapon's damage dice and add to damage."]
+        }
+    ]
+}

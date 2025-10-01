@@ -1,20 +1,20 @@
 {
     "Core": {
-        "L": 1,
-        "PB": 2,
-        "R": "Elf",
-        "SR": "Drow",
-        "C": "Wizard",
-        "SC": "Abjuration",
+        "L": 20,
+        "PB": 6,
+        "R": "Dwarf",
+        "SR": "Hill",
+        "C": "Fighter",
+        "SC": "Empty",
         "BG": "Empty"
     },
     "Atr": {
         "STR": {
-            "Base": 14,
+            "Base": 10,
             "Rasi": 0,
             "Milestone": 0,
-            "Val": 14,
-            "Mod": 2,
+            "Val": 10,
+            "Mod": 0,
             "ST": 0
         },
         "DEX": {
@@ -70,8 +70,8 @@
         "Race": 0,
         "Class": 0,
         "Feat": 0,
-        "Sum": 30,
-        "Current": 30
+        "Sum": 50,
+        "Current": 50
     },
     "AC": {
         "Base": 10,
@@ -154,9 +154,29 @@
             ""
         ],
         "Abil": {
-            "Spellcasting": {},
-            "Arcane_Recovery": {
+            "Fighting_Style": {
+                "Select": [
+                    ""
+                ]
+            },
+            "Second_Wind": {
                 "Use": [
+                    false
+                ]
+            },
+            "Action_Surge": {
+                "Use": [
+                    false,
+                    false
+                ]
+            },
+            "Extra_Attack": {
+                "Amount": 3
+            },
+            "Indomitable": {
+                "Use": [
+                    false,
+                    false,
                     false
                 ]
             }
@@ -167,15 +187,7 @@
             "",
             ""
         ],
-        "Abil": {
-            "Drow_Magic": {
-                "Dancing_Lights": {
-                    "Use": [
-                        false
-                    ]
-                }
-            }
-        }
+        "Abil": {}
     },
     "Milestone": {
         "Select": [
@@ -257,9 +269,12 @@
         "Book": [
             [],
             [
-                "Find Familiar",
-                "Jump",
-                "Distort Value"
+                "Distort Value",
+                "Charm Person",
+                "False Life",
+                "Chromatic Orb",
+                "Catapult",
+                "Magic Missile"
             ],
             [],
             [],
@@ -273,7 +288,7 @@
         "Prepared": [
             [],
             [
-                "Distort Value"
+                "Find Familiar"
             ],
             [],
             [],
@@ -424,11 +439,40 @@
             "Waist": "",
             "Feet": "",
             "Armor": "",
-            "Hand_1": "",
+            "Hand_1": "Greatsword",
             "Hand_2": "",
             "Ring_1": "",
             "Ring_2": ""
         },
-        "Backpack": {}
+        "Backpack": {
+            "Club": [
+                "Weapon",
+                2
+            ],
+            "Lance": [
+                "Weapon",
+                2
+            ],
+            "Longsword": [
+                "Weapon",
+                4
+            ],
+            "Greatsword": [
+                "Weapon",
+                2
+            ],
+            "Halberd": [
+                "Weapon",
+                2
+            ],
+            "Glaive": [
+                "Weapon",
+                1
+            ],
+            "Trident": [
+                "Weapon",
+                1
+            ]
+        }
     }
 }

@@ -1,0 +1,18 @@
+{
+    "Speed": {
+    },
+    "Vision": {
+    },
+    "Prof": {
+    },
+    "Features": [
+        {
+            "Name": "Dwarven Toughness",
+            "Level": 1,
+            "Type": ["HP"],
+            "HP": "LEVEL",
+            "Desc": ["Your hit point maximum increases by 1, and it increases by 1 every time you gain a level."]
+        }
+    ]
+
+}

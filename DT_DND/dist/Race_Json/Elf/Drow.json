@@ -1,0 +1,21 @@
+{
+    "Speed": {
+    },
+    "Vision": {
+        "Dark": 120
+    },
+    "Prof": {
+        "Weapon": ["Rapier", "Shortsword", "Hand Crossbow"]
+    },
+    "Features": [
+        {
+            "Name": "Drow Magic",
+            "Level": 1,
+            "Type": ["Spell"],
+            "Given": {
+                "1": "Dancing Lights",
+                "3": "Faerie Fire"
+            }
+        }
+    ]
+}

@@ -1,0 +1,17 @@
+{
+    "Speed": {},
+    "Vision": {},
+    "Prof": {},
+    "Features": [
+        {
+            "Name": "Legacy of Dis",
+            "Level": 1,
+            "Type": ["Spell"],
+            "Given": {
+                "1": "Thaumaturgy",
+                "3": "Disguise Self",
+                "5": "Detect Thoughts"
+            }
+        }
+    ]
+}

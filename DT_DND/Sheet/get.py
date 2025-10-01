@@ -2,7 +2,7 @@
 import q
 from access_data.color_reference import *
 from colorist import *
-from access_data.Grimoir import *
+from Handbook.Grimoir import *
 
 def dt(idx): return idx.replace("_"," ")
 # # Core values
@@ -169,9 +169,10 @@ class weapon_action_shield:
 
 class weapon_action_weapon:
     def __init__(self, item, item_data):
+        prof_data = q.dbm.Collect_Prof
         tier = item_data.Tier
         mod = self._gam(item_data)
-        prof_bonus = q.db.Core.PB if item in q.pc.Prof["Weapon"] else 0
+        prof_bonus = q.db.Core.PB if item in prof_data.Weapon else 0
 
         self.Name = iName(item)
         self.Category = "Weapon"

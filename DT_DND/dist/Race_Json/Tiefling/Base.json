@@ -1,0 +1,12 @@
+{
+    "Speed": {
+        "Walk": 30
+    },
+    "Vision": {
+        "Dark": 60
+    },
+    "Prof": {
+        "Lang": ["Common", "Infernal"]
+    },
+    "Features": []
+}

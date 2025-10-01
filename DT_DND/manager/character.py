@@ -1,6 +1,6 @@
 
 from manager.components.Background_comp import bBackground
-from manager.components.Class_comp import bClass
+from manager.components.Class_comp_prev import bClass
 from manager.components.Milestone_comp import bMilestone
 from manager.components.Race_comp import bRace
 

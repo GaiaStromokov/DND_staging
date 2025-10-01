@@ -1,0 +1,17 @@
+{
+    "Speed": {},
+    "Vision": {},
+    "Prof": {},
+    "Features": [
+        {
+            "Name": "Legacy of Avernus",
+            "Level": 1,
+            "Type": ["Spell"],
+            "Given": {
+                "1": "Thaumaturgy",
+                "3": "Searing Smite",
+                "5": "Branding Smite"
+            }
+        }
+    ]
+}

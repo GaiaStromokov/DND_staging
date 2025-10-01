@@ -1,0 +1,12 @@
+{
+    "Speed": {
+        "Walk": 30
+    },
+    "Vision": {
+    },
+    "Prof": {
+        "Lang": ["Common"]
+    },
+    "Features": [
+    ]
+}

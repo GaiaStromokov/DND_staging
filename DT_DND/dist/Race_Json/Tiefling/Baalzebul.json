@@ -1,0 +1,17 @@
+{
+    "Speed": {},
+    "Vision": {},
+    "Prof": {},
+    "Features": [
+        {
+            "Name": "Legacy of Maladomini",
+            "Level": 1,
+            "Type": ["Spell"],
+            "Given": {
+                "1": "Thaumaturgy",
+                "3": "Ray of Sickness",
+                "5": "Crown of Madness"
+            }
+        }
+    ]
+}

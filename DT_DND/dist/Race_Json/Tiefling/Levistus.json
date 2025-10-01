@@ -1,0 +1,17 @@
+{
+    "Speed": {},
+    "Vision": {},
+    "Prof": {},
+    "Features": [
+        {
+            "Name": "Legacy of Stygia",
+            "Level": 1,
+            "Type": ["Spell"],
+            "Given": {
+                "1": "Ray of Frost",
+                "3": "Armor of Agathys",
+                "5": "Darkness"
+            }
+        }
+    ]
+}

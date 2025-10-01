@@ -1,0 +1,36 @@
+{
+    "Features": [
+        {
+            "Level": 3,
+            "Name": "Improved Critical",
+            "Type": ["Passive"],
+            "Desc": ["Your weapon attacks score a critical hit on a roll of 19 or 20."]
+        },
+        {
+            "Level": 7,
+            "Name": "Remarkable Athlete",
+            "Type": ["Passive"],
+            "Desc": ["You can add PB_o2 to any Str, Dex, or Con check you make that doesn't already use your proficiency bonus.", "when you make a running long jump, the distance you can cover increases by a number of feet equal to STR"]
+        },
+        {
+            "Level": 10,
+            "Name": "Fighting Style",
+            "Type": ["Selection"],
+            "Choices": 2,
+            "Options": "Fighting_Style_Dict"
+        },
+        {
+            "Level": 15,
+            "Name": "Superior Critical",
+            "Type": ["Passive"],
+            "Replaces": "Improved Critical",
+            "Desc": ["Your weapon attacks score a critical hit on a roll of 18-20."]
+        },
+        {
+            "Level": 18,
+            "Name": "Survivor",
+            "Type": ["Passive"],
+            "Desc": ["At the start of each of your turns, you regain CON_5 hit points if you have no more than half of your hit points left. You don't gain this benefit if you have 0 hit points."]
+        }
+    ]
+}

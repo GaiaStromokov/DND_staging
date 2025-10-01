@@ -1,0 +1,17 @@
+{
+    "Speed": {},
+    "Vision": {},
+    "Prof": {},
+    "Features": [
+        {
+            "Name": "Infernal Legacy",
+            "Level": 1,
+            "Type": ["Spell"],
+            "Given": {
+                "1": "Thaumaturgy",
+                "3": "Hellish Rebuke",
+                "5": "Darkness"
+            }
+        }
+    ]
+}

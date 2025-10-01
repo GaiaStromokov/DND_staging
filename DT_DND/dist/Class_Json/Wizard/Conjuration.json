@@ -1,0 +1,31 @@
+{
+    "Features": [
+        {
+            "Level": 2,
+            "Name": "Conjuration Savant",
+            "Type": ["Passive"]
+        },
+        {
+            "Level": 2,
+            "Name": "Minor Conjuration",
+            "Type": ["Passive"]
+        },
+        {
+            "Level": 6,
+            "Name": "Benign Transportation",
+            "Type": ["Use"],
+            "Use": [0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+            "Recharge": ["Long"]
+        },
+        {
+            "Level": 10,
+            "Name": "Focused Conjuration",
+            "Type": ["Passive"]
+        },
+        {
+            "Level": 14,
+            "Name": "Durable Summons",
+            "Type": ["Passive"]
+        }
+    ]
+}

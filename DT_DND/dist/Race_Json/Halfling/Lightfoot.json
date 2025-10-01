@@ -1,0 +1,13 @@
+{
+    "Speed": {},
+    "Vision": {},
+    "Prof": {},
+    "Features": [
+        {
+            "Name": "Naturally Stealthy",
+            "Level": 1,
+            "Type": ["Passive"],
+            "Desc": ["You can attempt to hide even when you are obscured only by a creature that is at least one size larger than you."]
+        }
+    ]
+}

@@ -1,0 +1,17 @@
+{
+    "Speed": {},
+    "Vision": {},
+    "Prof": {},
+    "Features": [
+        {
+            "Name": "Legacy of Minauros",
+            "Level": 1,
+            "Type": ["Spell"],
+            "Given": {
+                "1": "Mage Hand",
+                "3": "Tensers Floating Disk",
+                "5": "Arcane Lock"
+            }
+        }
+    ]
+}

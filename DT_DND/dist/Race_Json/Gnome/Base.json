@@ -1,0 +1,27 @@
+{
+    "Speed": {
+        "Walk": 25
+    },
+    "Vision": {
+        "Dark": 60
+    },
+    "Prof": {
+        "Lang": ["Common", "Gnomish"]
+    },
+    "Features": [
+        {
+            "Name": "Gnome Cunning",
+            "Level": 1,
+            "Type": ["Passive"],
+            "Desc": ["You have advantage on all Intelligence, Wisdom, and Charisma saving throws against magic."]
+        },
+        {
+            "Name": "Natural Illusionist",
+            "Level": 1,
+            "Type": ["Spell"],
+            "Given": {
+                "1": "Minor Illusion"
+            }
+        }
+    ]
+}

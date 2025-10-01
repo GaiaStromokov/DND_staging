@@ -11,13 +11,13 @@ class upd_milestone:
 
 
     def sub(self):
-        cdata = q.db.Milestone
+        data = q.db.Milestone
         item_clear(tag.mfeature.sub())
         with group(parent=tag.mfeature.sub()):
-            for i in range(q.dbm.milestone_count):
+            for i in range(int(q.dbm.milestone_count)):
                 with group(horizontal=True):
                     add_text(f"Milestone {i}: ", color=c_h1)
-                    data = cdata["Select"][i]
+                    Select = data.Select[i]
                     add_combo(items=["Feat", "Asi", "Clear"], default_value=data,  width=50, no_arrow_button=True, user_data=["Milestone Top Select", i], callback=q.cbh, tag=tag.mfeature.select("top", i))
                     if data == "Feat":
                         cdata = cdata["Feat"][i]

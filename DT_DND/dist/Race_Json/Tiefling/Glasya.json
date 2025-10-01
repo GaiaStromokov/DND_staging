@@ -1,0 +1,17 @@
+{
+    "Speed": {},
+    "Vision": {},
+    "Prof": {},
+    "Features": [
+        {
+            "Name": "Legacy of Malbolge",
+            "Level": 1,
+            "Type": ["Spell"],
+            "Given": {
+                "1": "Mage Hand",
+                "3": "Burning Hands",
+                "5": "Flame Blade"
+            }
+        }
+    ]
+}

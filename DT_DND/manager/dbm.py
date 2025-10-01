@@ -2,7 +2,7 @@ import q
 import Sheet.get as get
 from access_data.color_reference import *
 from colorist import *
-from access_data.Grimoir import *
+from Handbook.Grimoir import *
 
 from manager.components.Background_comp import bBackground
 from manager.components.Class_comp import bClass
@@ -111,7 +111,7 @@ class dbm:
         def startup(self):
             self.Init_schema()
             self.p.rRace.Upd()
-            self.p.rClass.Upd()
+            self.p.rClass.Refresh()
             self.Recalculate_Stats()
             self.Upd.Spells()
 
@@ -122,6 +122,7 @@ class dbm:
             self.p.rBackground = bBackground()
             self.p.rMilestone = bMilestone()
             
+            q.dbm.Class.Protect
         def Recalculate_Stats(self):
             self.p.Atr.Collect()
             self.p.Health.Collect()
@@ -146,8 +147,7 @@ class dbm:
                 q.dbm.Class.Reset
                 q.dbm.Class.s.Abil.Wipe()
                 q.dbm.Spell.Wipe()
-                q.dbm.rClass = bClass()
-                q.dbm.rClass.Upd()
+                q.dbm.rClass.Refresh()
                 q.dbm.rMilestone.Upd()
                 q.dbm.Manager.Recalculate_Stats()
                 q.dbm.Manager.Upd.Spells()
@@ -223,10 +223,9 @@ class dbm:
             def L(self, value):
                 Level = value
                 PB = (Level - 1) // 4 + 2
-                
                 db.Core.L = Level
                 db.Core.PB = PB
-                q.dbm.Class.Validate
+                q.dbm.Class.Protect
                 q.dbm.Manager.New.Level()
             def R(self, value): 
                 db.Core.R = value.replace(" ", "_")
@@ -287,16 +286,23 @@ class dbm:
     class Class:
         @property
         def Reset(self): self.p.Stats.C = defaultStat()
-        
+
+        @property
         def Validate(self):
             Level = db.Core.L
             Class = db.Core.C
             class_exception_map = {1: ["Cleric", "Warlock"], 2: ["Wizard"]}
             return Level >= 3 or Class in class_exception_map.get(Level, [])
+
+        @property
+        def Protect(self):
+            if not q.dbm.Class.Validate:
+                q.dbm.Core.s.SC("Empty")
+        
         @Access
         class g: 
             def Visual(self):
-                data = q.db.Core
+                data = db.Core
                 return {
                     "Level": data.L,
                     "PB": data.PB,
@@ -335,6 +341,13 @@ class dbm:
                     q.dbm.Manager.Upd.Class_Select()
                 def Wipe(self):
                     db.Class.Abil = {}
+
+            @Access
+            class Wizard:
+                def Arcane_Ward(self, num):
+                    ward_data = db.Class["Abil"]["Arcane_Ward"]["HP"]
+                    new_hp = ward_data["Current"] + num
+                    ward_data["Current"] = max(0, min(new_hp, ward_data["Max"]))
                     
     @Access
     class Race:
@@ -524,12 +537,13 @@ class dbm:
             elif current_prep < max_known: spell_list.append(spell)
         @Access
         class g: 
+            @property
+            def Slots(self): return db.Spell.Slot
             @Access
             class Cantrip:
                 def Known(self): return len(db.Spell.Book[0])
             @Access
             class Spell:
-                
                 def Known(self):
                     cdata = db.Spell.Book
                     num = 0
@@ -653,15 +667,8 @@ class dbm:
     @Access
     class Combat:
         @Access
-        class g: pass
-        @Access
-        class s: 
-            @Access
-            class Wizard:
-                def Arcane_Ward(self, num):
-                    ward_data = db.Class["Abil"]["Arcane Ward"]["HP"]
-                    new_hp = ward_data["Current"] + num
-                    ward_data["Current"] = max(0, min(new_hp, ward_data["Max"]))
+        class g:
+            
             @Access
             class Condition:
                 def Modify(self, index, data):

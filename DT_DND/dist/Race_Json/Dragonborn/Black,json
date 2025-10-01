@@ -1,0 +1,17 @@
+{
+    "Speed": {
+    },
+    "Vision": {
+    },
+    "Prof": {
+    },
+    "Features": [
+        {
+            "Name": "Breath Weapon",
+            "Level": 1,
+            "Type": ["Use"],
+            "Uses": 1
+        }
+    ]
+
+}

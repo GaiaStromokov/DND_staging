@@ -15,7 +15,6 @@ class upd_sheet:
         configure_item(tag.core.select("Class"), items=get.list_Class, default_value=cdata.nClass)
         configure_item(tag.core.select("Subclass"), items=get.option_Class[cdata.nClass] if q.dbm.Class.Validate else [], default_value=cdata.nSubclass)
         configure_item(tag.core.select("Background"), items=get.list_Background, default_value=cdata.nBackground)
-            
     def Attributes(self):
         data=q.db.Atr
         for atr in get.list_Atr:

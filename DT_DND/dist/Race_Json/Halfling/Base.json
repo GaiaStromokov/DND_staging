@@ -1,0 +1,30 @@
+{
+    "Speed": {
+        "Walk": 25
+    },
+    "Vision": {},
+    "Prof": {
+        "Skill": ["Stealth"],
+        "Lang": ["Common", "Halfling"]
+    },
+    "Features": [
+        {
+            "Name": "Lucky",
+            "Level": 1,
+            "Type": ["Passive"],
+            "Desc": ["When you roll a 1 for an attack roll, ability check, or saving throw, you can reroll the die and must use the new roll."]
+        },
+        {
+            "Name": "Brave",
+            "Level": 1,
+            "Type": ["Passive"],
+            "Desc": ["You have advantage on saving throws against being frightened."]
+        },
+        {
+            "Name": "Halfling Nimbleness",
+            "Level": 1,
+            "Type": ["Passive"],
+            "Desc": ["You can move through the space of any creature that is of a size larger than yours."]
+        }
+    ]
+}

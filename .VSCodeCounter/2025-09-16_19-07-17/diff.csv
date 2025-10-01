@@ -1,0 +1,13 @@
+"filename", "language", "Ini", "Python", "JSON", "comment", "blank", "total"
+"c:\Users\gaiam\Documents\DND_staging\DT_DND\Sheet\get.py", "Python", 0, 1, 0, 0, 0, 1
+"c:\Users\gaiam\Documents\DND_staging\DT_DND\dist\db.json", "JSON", 0, 0, 42, 0, 0, 42
+"c:\Users\gaiam\Documents\DND_staging\DT_DND\manager\components\Class_comp.py", "Python", 0, 0, 0, 0, 24, 24
+"c:\Users\gaiam\Documents\DND_staging\DT_DND\manager\components\Race_comp.py", "Python", 0, 3, 0, 0, 1, 4
+"c:\Users\gaiam\Documents\DND_staging\DT_DND\manager\dbm.py", "Python", 0, 12, 0, 0, 2, 14
+"c:\Users\gaiam\Documents\DND_staging\DT_DND\ui\call_back_handler.py", "Python", 0, 1, 0, 0, 0, 1
+"c:\Users\gaiam\Documents\DND_staging\DT_DND\ui\upd_classes\upd_class.py", "Python", 0, 1, 0, 0, 0, 1
+"c:\Users\gaiam\Documents\DND_staging\DT_DND\ui\upd_classes\upd_milestone.py", "Python", 0, -1, 0, 0, 0, -1
+"c:\Users\gaiam\Documents\DND_staging\DT_DND\ui\upd_classes\upd_race.py", "Python", 0, 4, 0, 0, 0, 4
+"c:\Users\gaiam\Documents\DND_staging\DT_DND\ui\upd_classes\upd_spell.py", "Python", 0, 0, 0, 12, 2, 14
+"c:\Users\gaiam\Documents\DND_staging\DT_DND\utils\config_save.ini", "Ini", 13, 0, 0, 0, 2, 15
+"Total", "-", 13, 21, 42, 12, 31, 119

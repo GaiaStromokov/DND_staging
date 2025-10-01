@@ -1,0 +1,13 @@
+{
+    "Speed": {},
+    "Vision": {},
+    "Prof": {},
+    "Features": [
+        {
+            "Name": "Speak with Small Beasts",
+            "Level": 1,
+            "Type": ["Passive"],
+            "Desc": ["Through sounds and gestures, you can communicate simple ideas with Small or smaller beasts."]
+        }
+    ]
+}

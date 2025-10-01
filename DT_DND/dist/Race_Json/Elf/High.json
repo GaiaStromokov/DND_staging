@@ -1,0 +1,16 @@
+{
+    "Speed": {},
+    "Vision": {},
+    "Prof": {
+        "Weapon": ["Longsword", "Shortsword", "Shortbow", "Longbow"]
+    },
+    "Features": [
+        {
+            "Name": "Cantrip",
+            "Level": 1,
+            "Type": ["Selection", "Spell"],
+            "Choices": 1,
+            "Options": ["Wizard"]
+        }
+    ]
+}

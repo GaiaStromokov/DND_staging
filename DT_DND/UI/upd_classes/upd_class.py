@@ -70,7 +70,7 @@ class upd_class:
             with popup(t_header, mousebutton=mvMouseButton_Left, tag=t_popup):
                 for idx, value in enumerate(cdata["Select"]):
                     t_select = tag.cfeature.select(gen.tag, idx)
-                    add_combo(items=get.list_Fighting_Styles, default_value=value, width=80, no_arrow_button=True, callback=q.cbh, user_data=["Class Select", gen.tag, idx], tag=t_select)
+                    add_combo(items=get.list_Fighting_Styles, default_value=value, width=80, no_arrow_button=True, callback=q.cbh, user_data=["Class Abil Select", gen.tag, idx], tag=t_select)
 
             for item in cdata["Select"]:
                 if item != "":
@@ -82,23 +82,23 @@ class upd_class:
 
     def Fighter(self):
         data = q.dbm.Class.g.Abil
-
-        ca = "Fighting Style"
+        
+        ca = "Fighting_Style"
         if ca in data:
             self.standard_multi_choice(ca)
 
-        ca = "Second Wind"
+        ca = "Second_Wind"
         if ca in data:
             level = q.dbm.Core.g.L
             descriptions = [f"(bonus) regain 1d10+{level} HP"]
             self.standard_toggle(ca, descriptions)
 
-        ca = "Action Surge"
+        ca = "Action_Surge"
         if ca in data:
             descriptions = ["(free) take one additional action."]
             self.standard_toggle(ca, descriptions)
 
-        ca = "Extra Attack"
+        ca = "Extra_Attack"
         if ca in data:
             level = q.dbm.Core.g.L
             extra_attack_num_map = [0,0,0,0,1,1,1,1,1,1,2,2,2,2,2,2,2,3,3,3,4]
@@ -112,19 +112,19 @@ class upd_class:
             self.standard_toggle(ca, descriptions)
 
     def Fighter_Champion(self):
-        data = q.dbm.Class.Abil
+        data = q.dbm.Class.g.Abil
 
-        ca = "Improved Critical"
+        ca = "Improved_Critical"
         if ca in data:
             descriptions = ["Your weapon attacks score a critical hit on a roll of 19 or 20."]
             self.standard(ca, descriptions)
 
-        ca = "Superior Critical"
+        ca = "Superior_Critical"
         if ca in data:
             descriptions = ["Your weapon attacks score a critical hit on a roll of 18-20."]
             self.standard(ca, descriptions)
 
-        ca = "Remarkable Athlete"
+        ca = "Remarkable_Athlete"
         if ca in data:
             descriptions = [f"You can add half your proficiency bonus (rounded up) to any Strength, Dexterity, or Constitution check you make that doesn't already use your proficiency bonus. In addition, when you make a running long jump, the distance you can cover increases by a number of feet equal to your Strength modifier."]
             self.standard(ca, descriptions)
@@ -137,7 +137,7 @@ class upd_class:
     def Fighter_BattleMaster(self):
         data = q.dbm.Class.Abil
 
-        ca = "Combat Superiority"
+        ca = "Combat_Superiority"
         if ca in data:
             gen = tgen(ca)
             cdata = data[gen.name]
@@ -153,7 +153,7 @@ class upd_class:
                     with popup(t_header, mousebutton=mvMouseButton_Left, tag=t_popup):
                         for idx, value in enumerate(cdata["Select"]):
                             t_select = tag.cfeature.select(gen.tag, idx)
-                            add_combo(items=get.list_Maneuvers, default_value=value, width=80, no_arrow_button=True, callback=q.cbh, user_data=["Class Select", gen.tag, idx], tag=t_select)
+                            add_combo(items=get.list_Maneuvers, default_value=value, width=80, no_arrow_button=True, callback=q.cbh, user_data=["Class Abil Select", gen.tag, idx], tag=t_select)
                         for idx, value in enumerate(cdata["Use"]):
                             t_toggle = tag.cfeature.toggle(gen.tag, idx)
                             add_checkbox(default_value=value, enabled=True, callback=q.cbh, user_data=["Class Use", gen.tag, idx], tag=t_toggle)
@@ -168,7 +168,7 @@ class upd_class:
                         with tooltip(t_item, tag=t_tooltip):
                             add_text(get.dict_Maneuver_map[item], color=c_text, wrap=sz.wrap)
 
-        ca = "Student of War"
+        ca = "Student_of_War"
         if ca in data:
             gen = tgen(ca)
             cdata = data[gen.tag]
@@ -179,7 +179,7 @@ class upd_class:
                 add_text(gen.name, color=c_h1, tag=t_header)
                 item_delete(t_popup)
                 with popup(t_header, mousebutton=mvMouseButton_Left, tag=t_popup):
-                    add_combo(items=get.list_Student_of_War_Profs, default_value=cdata["Select"][0], width=80, no_arrow_button=True, callback=q.cbh, user_data=["Class Select", gen.tag, 0], tag=t_select)
+                    add_combo(items=get.list_Student_of_War_Profs, default_value=cdata["Select"][0], width=80, no_arrow_button=True, callback=q.cbh, user_data=["Class Abil Select", gen.tag, 0], tag=t_select)
 
         ca = "Relentless"
         if ca in data:
@@ -189,7 +189,7 @@ class upd_class:
     def Fighter_EldritchKnight(self):
         data = q.db.Class["Abil"]
 
-        ca = "Weapon Bond"
+        ca = "Weapon_Bond"
         if ca in data:
             gen = tgen(ca)
             t_header = tag.cfeature.header(gen.tag)
@@ -206,22 +206,22 @@ class upd_class:
                     for desc in descriptions:
                         add_text(desc, color=c_text, wrap=sz.wrap)
 
-        ca = "War Magic"
+        ca = "War_Magic"
         if ca in data:
             descriptions = ["When you use your action to cast a cantrip, you can make one weapon attack as a bonus action."]
             self.standard(ca, descriptions)
 
-        ca = "Improved War Magic"
+        ca = "Improved_War_Magic"
         if ca in data:
             descriptions = ["When you use your action to cast a spell, you can make one weapon attack as a bonus action."]
             self.standard(ca, descriptions)
 
-        ca = "EldritchStrike"
+        ca = "Eldritch_Strike"
         if ca in data:
             descriptions = ["When you hit a creature with a weapon attack, that creature has disadvantage on the next saving throw it makes against a spell you cast before the end of your next turn."]
             self.standard(ca, descriptions)
 
-        ca = "Arcane Charge"
+        ca = "Arcane_Charge"
         if ca in data:
             descriptions = ["When you use your Action Surge, you can teleport up to 30 feet to an unoccupied space you can see. You can teleport before or after the additional action."]
             self.standard(ca, descriptions)
@@ -229,7 +229,7 @@ class upd_class:
     def Fighter_Samurai(self):
         data = q.db.Class["Abil"]
 
-        ca = "Bonus Proficiency"
+        ca = "Bonus_Proficiency"
         if ca in data:
             gen = tgen(ca)
             cdata = data[gen.tag]
@@ -240,7 +240,7 @@ class upd_class:
                 add_text(gen.name, color=c_h1, tag=t_header)
                 item_delete(t_popup)
                 with popup(t_header, mousebutton=mvMouseButton_Left, tag=t_popup):
-                    add_combo(items=get.list_Fighter_Samuri_Bonus_Proficiency, default_value=cdata["Select"][0], width=80, no_arrow_button=True, callback=q.cbh, user_data=["Class Select", gen.tag, 0], tag=t_select)
+                    add_combo(items=get.list_Fighter_Samuri_Bonus_Proficiency, default_value=cdata["Select"][0], width=80, no_arrow_button=True, callback=q.cbh, user_data=["Class Abil Select", gen.tag, 0], tag=t_select)
 
         ca = "Fighting_Spirit"
         if ca in data:
@@ -341,12 +341,12 @@ class upd_class:
     def Wizard_Abjuration(self):
         data = q.dbm.Class.g.Abil
 
-        ca = "Abjuration Savant"
+        ca = "Abjuration_Savant"
         if ca in data:
             descriptions = ["The gold and time you must spend to copy an abjuration spell into your spellbook is halved."]
             self.standard(ca, descriptions)
 
-        ca = "Arcane Ward"
+        ca = "Arcane_Ward"
         if ca in data:
             gen = tgen(ca)
             cdata = data[gen.tag]
@@ -364,17 +364,17 @@ class upd_class:
                     add_button(label="+", user_data=["Arcane Ward", 1], callback=q.cbh)
                 add_text(description, color=c_text, wrap=sz.wrap, tag=t_desc)
 
-        ca = "Projected Ward"
+        ca = "Projected_Ward"
         if ca in data:
             descriptions = ["(reaction) When a creature within 30 ft is hit, use your Arcane Ward to absorb the damage."]
             self.standard(ca, descriptions)
 
-        ca = "Improved Abjuration"
+        ca = "Improved_Abjuration"
         if ca in data:
             descriptions = [f"When an Abjuration spell requires you to make an ability check, add your proficiency bonus ({q.db.Core.PB}) to that check."]
             self.standard(ca, descriptions)
 
-        ca = "Spell Resistance"
+        ca = "Spell_Resistance"
         if ca in data:
             descriptions = ["Gain advantage on saving throws against spells and resistance to spell damage."]
             self.standard(ca, descriptions)
@@ -382,27 +382,27 @@ class upd_class:
     def Wizard_Conjuration(self):
         data = q.dbm.Class.g.Abil
 
-        ca = "Conjuration Savant"
+        ca = "Conjuration_Savant"
         if ca in data:
             descriptions = ["The gold and time you must spend to copy a conjuration spell into your spellbook is halved."]
             self.standard(ca, descriptions)
 
-        ca = "Minor Conjuration"
+        ca = "Minor_Conjuration"
         if ca in data:
             descriptions = ["(action) Conjure a non-magical item (up to 3ft, 10 lbs). It lasts for 1 hour or until it takes damage."]
             self.standard(ca, descriptions)
 
-        ca = "Benign Transportation"
+        ca = "Benign_Transportation"
         if ca in data:
             descriptions = ["(action) Teleport up to 30ft or swap places with a willing creature. Usable again after a long rest or casting a Level 1+ conjuration spell."]
             self.standard(ca, descriptions)
 
-        ca = "Focused Conjuration"
+        ca = "Focused_Conjuration"
         if ca in data:
             descriptions = ["Your concentration on conjuration spells can't be broken as a result of taking damage."]
             self.standard(ca, descriptions)
 
-        ca = "Durable Summons"
+        ca = "Durable_Summons"
         if ca in data:
             descriptions = ["Any creature you summon or create with a conjuration spell has 30 temporary hit points."]
             self.standard(ca, descriptions)

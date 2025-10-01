@@ -1,6 +1,5 @@
 from ui.upd_helper_import import *
 from ui.upd_class_import import *
-sett = sett()
 
 class backend_populate:
     def __init__(self):
@@ -99,7 +98,7 @@ class backend_populate:
         self.BACKPACK.Whole()
         self.ACTION.Whole()
         self.CLOSET.Whole()
-        self.SHEET.ac()
+        self.SHEET.AC()
         
     def Closet(self): 
         self.ACTION.Whole()
@@ -142,7 +141,8 @@ class backend_stage:
     def check_Class(self): 
         check = q.dbm.Class.g.Validate()
         if check == False: 
-            sett.Core_Subclass("")
+            q.dbm.Core.s.SR("")
+
 
     def Core_Level(self, sender, inp, user_data):
         level = q.dbm.Core.g.L
@@ -199,6 +199,7 @@ class backend_stage:
     def Atr_Base_Modify(self, sender, inp, user_data):
         stat = user_data[0]
         q.dbm.Atr.s.Base.Modify(stat, inp)
+        q.dbm.rClass.Spell_config()
         self.populate_fields("Atr")
 
     def Race_Asi_Modify(self, sender, inp, user_data):
@@ -312,7 +313,6 @@ class backend_stage:
         self.populate_fields("Arcane Ward")
 
     def Player_Prof_Select(self, sender, inp, user_data):
-        sett.Proficiency_Player_Modify() 
         q.pc.recalculate_stats()
         self.populate_fields("Generic")
 
@@ -329,13 +329,11 @@ class backend_stage:
     def Info_Desc_Input(self, sender, inp, user_data):
         name = user_data[0]
         q.dbm.Info.s.Desc.Modify(name, inp)
-        sett.Info_Desc_Modify(name, inp)
         self.populate_fields("Description")
 
     def Inventory_Bazaar_Item_Add(self, sender, inp, user_data):
         cat, item = user_data
         q.dbm.Inventory.s.Backpack.Add(cat, item)
-        sett.Inventory_Backpack_Add(cat, item)
         self.populate_fields("Bazaar Add Item")
 
     def Inventory_Backpack_Item_Modify(self, sender, inp, user_data):

@@ -1,0 +1,32 @@
+{
+    "Features": [
+        {
+            "Level": 2,
+            "Name": "Abjuration Savant",
+            "Type": ["Passive"]
+        },
+        {
+            "Level": 2,
+            "Name": "Arcane Ward",
+            "Type": ["Familiar", "Use"],
+            "HP": ["Level", "INT"],
+            "Use": [0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+            "Recharge": ["Long"]
+        },
+        {
+            "Level": 6,
+            "Name": "Projected Ward",
+            "Type": ["Passive"]
+        },
+        {
+            "Level": 10,
+            "Name": "Improved Abjuration",
+            "Type": ["Passive"]
+        },
+        {
+            "Level": 14,
+            "Name": "Spell Resistance",
+            "Type": ["Passive"]
+        }
+    ]
+}

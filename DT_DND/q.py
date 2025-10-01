@@ -4,14 +4,16 @@ import sys
 from colorist import *
 from path_helper import get_path
 
-def _load_json_data(file_path):
+def Load_Json(folder_path, filename):
+    file_path = get_path(folder_path, f'{filename}.json')
     try:
-        with open(file_path, 'r') as f: return Box(json.load(f))
+        with open(file_path, 'r') as f: 
+            return Box(json.load(f))
     except (FileNotFoundError, json.JSONDecodeError) as e:
         red(f"[load_json_data] - (Can't load file path) {file_path}: {e}")
         sys.exit(1)
 
-db = _load_json_data(get_path('dist', 'db.json'))
+db = Load_Json('dist', 'db')
 
 w = None
 cbh = None

@@ -63,18 +63,18 @@ class upd_race:
         with group(parent=self.parent):
             add_text(gen.name, color=c_h1, tag=t_header)
             for spell in cdata.keys():
+                sdata = tgen(spell)
                 t_label = tag.rfeature.label(gen.tag, spell)
                 t_tooltip = tag.rfeature.tooltip(gen.tag, spell)
                 with group(horizontal=True):
-                    spell_name = spell.replace("_", " ")
-                    add_text(spell_name, color=c_h2, tag=t_label)
+                    add_text(sdata.name, color=c_h2, tag=t_label)
                     if "Use" in cdata[spell]:
                         t_toggle = tag.rfeature.toggle(gen.tag, spell)
-                        add_checkbox(default_value=cdata[spell]["Use"][0], enabled=True, user_data=["Race Spell Use", gen.tag, spell], callback=q.cbh, tag=t_toggle)
+                        add_checkbox(default_value=cdata[spell]["Use"][0], enabled=True, user_data=["Race Spell Use", gen.tag, sdata.tag], callback=q.cbh, tag=t_toggle)
                 
                 item_delete(t_tooltip)
                 with tooltip(t_label, tag=t_tooltip):
-                    spell_detail(spell)
+                    spell_detail(sdata.name)
 
     def dragonborn_features(self, damage_type):
         level = q.dbm.Core.g.L

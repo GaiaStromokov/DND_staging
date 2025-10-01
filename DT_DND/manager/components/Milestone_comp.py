@@ -56,7 +56,6 @@ class bMilestone():
         self.Count()
         self.Clear()
         self.Create()
-        print(q.dbm.milestone_count)
 
     def Count(self):
         num = dict_Feat_Count[q.dbm.Core.g.C][q.dbm.Core.g.L]

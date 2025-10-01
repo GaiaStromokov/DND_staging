@@ -1,0 +1,27 @@
+{
+    "Speed": {
+        "Walk": 30
+    },
+    "Vision": {
+        "Dark": 60
+    },
+    "Prof": {
+        "Skill": ["Perception"], 
+        "Lang": ["Common", "Elvish"]
+    },
+    "Features": [
+        {
+            "Name": "Fey Ancestry",
+            "Level": 1,
+            "Type": ["Passive"],
+            "Desc": ["You have advantage on saving throws against being charmed, and magic can't put you to sleep."]
+        },
+        {
+            "Name": "Trance",
+            "Level": 1,
+            "Type": ["Passive"],
+            "Desc": ["You don't need to sleep. Instead, you meditate deeply, remaining semiconscious, for 4 hours a day."]
+        }
+        
+    ]
+}

@@ -1,0 +1,19 @@
+{
+    "Speed": {},
+    "Vision": {},
+    "Prof": {
+        "Weapon": ["Longsword", "Shortsword", "Shortbow", "Longbow"]
+    },
+    "Features": [
+        {
+            "Name": "Blessing of the Raven Queen",
+            "Level": 1,
+            "Type": ["Use"],
+            "Use": "PB",
+            "lDesc": {
+                "1": "(Bonus Action) Teleport up to 30 ft to an unoccupied space you can see. You can use this a number of times equal to your proficiency bonus, and you regain all expended uses when you finish a long rest.",
+                "3": "(Bonus Action) Teleport up to 30 ft to an unoccupied space you can see. You can use this a number of times equal to your proficiency bonus, and you regain all expended uses when you finish a long rest. Immediately after you use it, you gain resistance to all damage until the start of your next turn."
+            }
+        }
+    ]
+}

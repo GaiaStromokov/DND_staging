@@ -1,0 +1,17 @@
+{
+    "Speed": {
+        "Walk": 35
+    },
+    "Vision": {},
+    "Prof": {
+        "Weapon": ["Shortbow", "Longsword", "Shortsword", "Longbow"]
+    },
+    "Features": [
+        {
+            "Name": "Mask of the Wild",
+            "Level": 1,
+            "Type": ["Passive"],
+            "Desc": ["You can attempt to hide even when you are only lightly obscured by foliage, heavy rain, falling snow, mist, and other natural phenomena."]
+        }
+    ]
+}

@@ -1,0 +1,13 @@
+{
+    "Speed": {},
+    "Vision": {},
+    "Prof": {},
+    "Features": [
+        {
+            "Name": "Stout Resilience",
+            "Level": 1,
+            "Type": ["Passive"],
+            "Desc": ["You have advantage on saving throws against poison, and you have resistance against poison damage."]
+        }
+    ]
+}

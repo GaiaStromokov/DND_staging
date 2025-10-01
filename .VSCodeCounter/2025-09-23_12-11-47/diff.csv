@@ -1,0 +1,11 @@
+"filename", "language", "Python", "JSON", "comment", "blank", "total"
+"c:\Users\gaiam\Documents\DND_staging\DT_DND\Sheet\set.py", "Python", -228, 0, -14, -44, -286
+"c:\Users\gaiam\Documents\DND_staging\DT_DND\dist\db.json", "JSON", 0, 30, 0, 0, 30
+"c:\Users\gaiam\Documents\DND_staging\DT_DND\manager\Class_Json\Fighter.json", "JSON", 0, 48, 0, 2, 50
+"c:\Users\gaiam\Documents\DND_staging\DT_DND\manager\Class_Json\Fighter_Champion.json", "JSON", 0, 32, 0, 0, 32
+"c:\Users\gaiam\Documents\DND_staging\DT_DND\manager\components\Class_comp.py", "Python", -3, 0, 0, -3, -6
+"c:\Users\gaiam\Documents\DND_staging\DT_DND\manager\components\Class_comp_working_on.py", "Python", 74, 0, 0, 22, 96
+"c:\Users\gaiam\Documents\DND_staging\DT_DND\q.py", "Python", 1, 0, 0, 0, 1
+"c:\Users\gaiam\Documents\DND_staging\DT_DND\ui\call_back_handler.py", "Python", -1, 0, 0, 1, 0
+"c:\Users\gaiam\Documents\DND_staging\DT_DND\ui\upd_helper_import.py", "Python", -1, 0, 0, 0, -1
+"Total", "-", -158, 110, -14, -22, -84

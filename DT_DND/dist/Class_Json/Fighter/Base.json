@@ -1,0 +1,53 @@
+{
+    "HD": 10,
+    "Prof": {
+        "Armor": ["Light", "Medium", "Heavy", "Shield"],
+        "Weapon": ["Simple", "Martial"]
+    },
+    "Skills": {
+        "Choices": 2,
+        "Options": ["Acrobatics", "Animal Handling", "Athletics", "History", "Insight", "Intimidation", "Perception", "Survival"]
+    },
+    "Saving_Throw": ["STR", "CON"],
+    "Features": [
+        {
+        "Level": 1,
+        "Name": "Fighting Style",
+        "Type": ["Selection"],
+        "Choices": 1,
+        "Options": "Fighting_Style_Dict",
+        "Desc": ["(bonus) regain 1d10 + LEVEL HP"]
+        },
+        {
+        "Level": 1,
+        "Name": "Second Wind",
+        "Type": ["Use"],
+        "Use": [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+        "Recharge": ["Short", "Long"]
+        },
+        {
+        "Level": 2,
+        "Name": "Action Surge",
+        "Type": ["Use"],
+        "Use": [0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2],
+        "Recharge": ["Short", "Long"],
+        "Desc": ["(free) take NUM additional action."]
+        },
+        {
+        "Level": 5,
+        "Name": "Extra Attack",
+        "Type": ["Passive"],
+        "Amount": [0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3],
+        "Desc": ["You can attack NUM times whenever you take the Attack action on your turn."]
+        },
+        {
+        "Level": 9,
+        "Name": "Indomitable",
+        "Type": ["Use"],
+        "Use": [0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3],
+        "Recharge": ["Long"],
+        "Desc": ["You can reroll a saving throw that you fail. If you do so, you must use the new roll."]
+        }
+    ]
+}
+

@@ -1,0 +1,27 @@
+{
+    "Speed": {
+        "Walk": 30
+    },
+    "Vision": {
+        "Dark": 60
+    },
+    "Prof": {
+        "Weapon": ["Battleaxe", "Handaxe", "Light Hammer", "Warhammer"],
+        "Lang": ["Common", "Dwarvish"]
+    },
+    "Features": [
+        {
+            "Name": "Dwarven Resilience",
+            "Level": 1,
+            "Type": ["Passive"],
+            "Desc": ["You have advantage on saving throws against poison, and you have resistance against poison damage."]
+        },
+        {
+            "Name": "Stonecunning",
+            "Level": 1,
+            "Type": ["Passive"],
+            "Desc": ["When you make a History check related to the origin of stonework, add 2PB to the roll."]
+
+        }
+    ]
+}

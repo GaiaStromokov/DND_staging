@@ -1,0 +1,28 @@
+{
+    "Speed": {
+        "Walk": 30
+    },
+    "Vision": {},
+    "Combat": {
+        "Initiative": "PB"
+    },
+    "Prof": {
+        "Skill": ["Perception"],
+        "Lang": ["Common"]
+    },
+    "Features": [
+        {
+            "Name": "Lucky Footwork",
+            "Level": 1,
+            "Type": ["Passive"],
+            "Desc": ["(Reaction) On a failed Dex save, use Reaction to roll a d4 and add it to the save"]
+        },
+        {
+            "Name": "Rabbit Hop",
+            "Level": 1,
+            "Type": ["Use"],
+            "Uses": "PB",
+            "Desc": ["(Bonus) Jump 5PB feet without provoking AOO"]
+        }
+    ]
+}
